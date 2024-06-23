@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 //? Icons
 import {
@@ -16,10 +17,24 @@ import {
 //? Components
 import Link from "next/link";
 import { Avatar } from "@nextui-org/react";
+import { userToken } from "@/interfaces/Users";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState<userToken | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+      const decodeToken: userToken = jwtDecode(storedToken);
+      setUser(decodeToken);
+    }
+
+
+  }, []);
 
   const toggleExpanded = () => {
     setExpanded((prevExpanded) => !prevExpanded);
@@ -65,18 +80,6 @@ export default function Sidebar() {
           <li>
             <Link
               className={`flex gap-4 items-center py-3 px-6 rounded-md ${
-                pathname === "/admin/chats" &&
-                "bg-blue-500 text-white dark:bg-blue-600"
-              }`}
-              href="/admin/chats"
-            >
-              <MessageIcon className="w-6 h-6" />
-              <span className={`${expanded ? "" : "hidden"}`}>Chats</span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={`flex gap-4 items-center py-3 px-6 rounded-md ${
                 pathname === "/admin/posts" &&
                 "bg-blue-500 text-white dark:bg-blue-600"
               }`}
@@ -102,9 +105,9 @@ export default function Sidebar() {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold dark:text-white">Alexis Gonzales</h4>
+              <h4 className="font-semibold dark:text-white">{user?.username}</h4>
               <span className="text-xs text-gray-600 dark:text-gray-400">
-                Alexis@gamil.com
+                {user?.id}
               </span>
             </div>
             <UserIcon size={20} className="dark:text-gray-400" />

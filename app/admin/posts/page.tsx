@@ -33,9 +33,9 @@ function DashboardPosts() {
   };
 
   return (
-    <main className="grid grid-cols-3 gap-4 max-w-7xl">
+    <main className="grid grid-cols-3 gap-4 max-w-8xl">
       {loading ? (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center w-full h-screen">
           <Spinner size="lg" color="danger" />
         </div>
       ) : (
