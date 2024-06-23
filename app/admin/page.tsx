@@ -5,12 +5,8 @@ import { Card, ScrollShadow } from "@nextui-org/react";
 
 import BarChart from "./components/charts/Bar";
 import { GenderPieChart, CategoryPieChart } from "./components/charts/Pie";
-import {
-  LineChart as LineChartChats,
-  PieChart as PieChartChats,
-  RadarChart as RadarChartChats,
-} from "./components/charts/chats/charts";
-import TableTop from "./posts/components/TableUsersPosts";
+import LineChart from "./posts/components/LineChartPosts";
+import { getAllPosts } from "@/services/Posts";
 
 import Counters from "./posts/components/Counters";
 import { ChatsLineChart } from "./chats/components/firstChart";
@@ -20,9 +16,7 @@ function Dashboard() {
   return (
     <section className="grid grid-cols-8 grid-rows-6 gap-4 h-full max-h-[50em] place-content-center">
       <Card className="col-span-4 col-start-5 row-span-2 row-start-1 p-4 rounded-xl">
-        <ScrollShadow hideScrollBar>
-          <TableTop />
-        </ScrollShadow>
+        <LineChart />
       </Card>
       <Card className="flex items-center justify-between col-span-4 col-start-5 row-span-2 row-start-3 gap-4 p-4 rounded-xl">
         <Counters />
