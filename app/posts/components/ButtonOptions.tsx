@@ -28,7 +28,7 @@ function ButtonOptions({ postId }: { postId: string }) {
           isIconOnly
           color={isLiked ? "danger" : "default"}
           aria-label="Like"
-        >
+        > 
           <HeartIcon
             className={`w-6 h-6 cursor-pointer ${
               isLiked ? "fill-white" : "opacity-60"

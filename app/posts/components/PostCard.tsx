@@ -1,45 +1,58 @@
+import { useState } from "react";
+
 import {
   Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  User,
+  Avatar,
 } from "@nextui-org/react";
+
 import PostImage from "./PostImage";
 import ButtonOptions from "./ButtonOptions";
+import DeletePost from "./DeletePost";
+import ShowMore from "./ShowMore";
+
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { Post as IPost } from "@/interfaces/Post";
-import { Trash2 as TrashIcon } from "@geist-ui/icons";
-import { useState } from "react";
-import DeletePost from "./DeletePost";
+import { userToken } from "@/interfaces/Users";
 
+import { jwtDecode } from "jwt-decode";
 export default function PostCard({
   post,
   updatePosts,
+  token,
 }: {
   post: IPost;
   updatePosts: () => void;
+  token: string;
 }) {
   const [isFollow, setisFollow] = useState(false);
+  const decodeToken: userToken = jwtDecode(token);
 
   const handleFollow = () => {
     setisFollow(!isFollow);
   };
 
-
   return (
     <article className="block w-full max-w-3xl p-4 m-auto rounded-lg">
       <Card className="block w-full">
         <CardHeader className="flex justify-between gap-3 p-4">
-          <User
-            name={post.userId}
-            description={`@${post.userId}`}
-            avatarProps={{
-              isBordered: true,
-              color: "danger",
-            }}
-          />
+          <div className="flex items-center gap-3">
+            <Avatar
+              isBordered
+              size="md"
+              color="danger"
+              src={post.user.image || ""}
+            />
+            <div className="flex flex-col">
+              <strong>{post.user.username}</strong>
+              <span className="text-sm text-blue-500">
+                @{post.user.fullname || post.user.username}
+              </span>
+            </div>
+          </div>
           <div className="flex items-center justify-end gap-2">
             <Button
               color={isFollow ? "danger" : "primary"}
@@ -49,7 +62,11 @@ export default function PostCard({
             >
               {isFollow ? "Unfollow" : "Follow"}
             </Button>
-            <DeletePost updatePosts={updatePosts} postId={post._id} />
+            <ShowMore />
+            {(decodeToken.id === post.user._id ||
+              decodeToken.role === "admin") && (
+              <DeletePost updatePosts={updatePosts} postId={post._id} />
+            )}
           </div>
         </CardHeader>
         <CardBody className="flex flex-col items-center justify-center w-full">
@@ -64,7 +81,7 @@ export default function PostCard({
             />
           )}
         </CardBody>
-        <CardFooter className="flex justify-between gap-4">
+        <CardFooter className="flex flex-col gap-4">
           <ButtonOptions postId={post._id} />
         </CardFooter>
       </Card>

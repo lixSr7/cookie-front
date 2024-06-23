@@ -23,25 +23,21 @@ export const getPostById = async (id: string) => {
 };
 
 export const createPost = async (
-  user: any,
   content: string,
-  imageFile?: File | null
+  imageFile?: File | null,
+  token?: string
 ) => {
   const formData = new FormData();
   formData.append("content", content);
-  formData.append("userId", user.id);
   if (imageFile) {
     formData.append("image", imageFile);
   }
 
-  let postData = {
-    content: content,
-  }
-
   try {
-    const response = await axios.post(API_URI, postData, {
+    const response = await axios.post(API_URI, formData, {
       headers: {
-        "x-access-token": localStorage.getItem("token") || "",
+        "x-access-token": token,
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
@@ -64,24 +60,17 @@ export const deletePost = async (id: string) => {
 export const createComment = async (
   postId: string,
   content: string,
-  user: any,
   emoji?: string
 ) => {
   try {
+    const commentData = {
+      content,
+      emoji: emoji ? emoji : "none",
+    };
+    console.log(commentData);
     const response = await axios.post(
       `${API_URI}/${postId}/comments`,
-      {
-        content,
-        emoji: emoji ? emoji : "none",
-        user: {
-          userId: user.id,
-          name: user.username,
-          nickName: user.fullname || user.username,
-          image:
-            user.image ||
-            "https://www.los40.do/wp-content/uploads/2023/10/16880295953133-e1696339269651-300x300.jpeg",
-        },
-      },
+      commentData,
       {
         headers: {
           "x-access-token": localStorage.getItem("token") || "",
@@ -114,7 +103,10 @@ export const deleteComment = async (postId: string, id: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error(`Error deleting comment with id ${id} for post ${postId}:`, error);
+    console.error(
+      `Error deleting comment with id ${id} for post ${postId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -162,7 +154,10 @@ export const deleteLike = async (postId: string, id: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error(`Error deleting like with id ${id} for post ${postId}:`, error);
+    console.error(
+      `Error deleting like with id ${id} for post ${postId}:`,
+      error
+    );
     throw error;
   }
 };

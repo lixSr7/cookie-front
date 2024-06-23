@@ -14,7 +14,7 @@ import {
   Textarea,
   Spinner,
 } from "@nextui-org/react";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { createPost } from "@/services/Posts";
 import { useAuthStore } from "@/app/context/useAuthSrored";
 import { userToken } from "@/interfaces/Users";
@@ -65,24 +65,19 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isContentInvalid, setIsContentInvalid] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const { user } = useAuthStore();
+  const [token, setToken] = useState('');
 
-  const userDafault: userToken = {
-    fullname: "Alexis Gonzalez",
-    username: "DJ Zass",
-    image:
-      "https://industriamusical.com/wp-content/uploads/2022/09/Bizarrap.jpg",
-    role: "user",
-    id: "664d38bedf58852a441800fa",
-    iat: 0,
-  };
-
-  const userData = user ? user : userDafault;
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   const handleSubmit = async (content: string, imageFile?: File | null) => {
     try {
       setIsSending(true);
-      await createPost(userData, content, imageFile);
+      await createPost(content, imageFile, token);
       updatePosts();
       toast.success('success creating post')
     } catch (error) {

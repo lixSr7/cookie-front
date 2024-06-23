@@ -10,8 +10,13 @@ import { toast } from "sonner";
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
     allPosts();
   }, []);
 
@@ -43,7 +48,7 @@ function Posts() {
         ) : (
           posts.map((post: IPost) => (
             <article key={post._id}>
-               <PostCard post={post} updatePosts={allPosts} />
+              <PostCard token={token} post={post} updatePosts={allPosts} />
             </article>
           ))
         )}

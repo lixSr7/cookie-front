@@ -16,7 +16,7 @@ function PostImage({ src, alt, date }: IPostImage) {
         >
             <Image
                 alt={alt}
-                className="object-cover max-h-96"
+                className="object-cover w-full max-h-96"
                 src={src}
             />
             <CardFooter className="absolute z-10 justify-center w-40 ml-1 overflow-hidden before:bg-white/10 border-white/20 border-1 before:rounded-xl rounded-large bottom-1 shadow-small">

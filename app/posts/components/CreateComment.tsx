@@ -34,7 +34,7 @@ function CreateComment({
   const handleCreate = async () => {
     try {
       setIsSending(true);
-      await createComment(postId, content, userData, emoji);
+      await createComment(postId, content, emoji);
       setContent("");
       setEmoji("none");
       updateComment();
