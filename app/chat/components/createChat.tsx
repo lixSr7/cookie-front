@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
 import {jwtDecode} from "jwt-decode";
-import SearchUsers from '@/app/user/components/SearchUsers'; 
+import SearchUsers from '@/app/user/components/SearchUsers';
 
 interface User {
   _id: string;
-  name: string;
+  username: string;
+  role: { _id: string; name: string };
 }
 
 interface DecodedToken {
@@ -85,7 +86,7 @@ const CreateChat: React.FC = () => {
     <section>
       <div
         onClick={handleToggleModal}
-        className="flex justify-center items-center w-12 h-10 hover:bg-neutral-300 hover:transition-transform-background rounded-md cursor-pointer"
+        className="flex justify-center items-center w-12 h-10 hover:bg-neutral-300 dark:hover:bg-zinc-600 hover:transition-transform-background rounded-md cursor-pointer"
       >
         <IoChatboxEllipsesOutline />
       </div>

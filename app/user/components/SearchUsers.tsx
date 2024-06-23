@@ -6,14 +6,14 @@ import axios from "axios";
 interface User {
   _id: string;
   username: string;
-  role: { _id: string; name: string }; 
+  role: { _id: string; name: string };
 }
 
 interface SearchUsersProps {
   onUserSelect: (user: User) => void;
   selectedUsers: User[];
   searchTerm: string;
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  setSearchTerm: (term: string) => void;
 }
 
 const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, searchTerm, setSearchTerm }) => {
@@ -75,7 +75,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, 
           results.map((user) => (
             <li
               key={user._id}
-              className={`p-2 cursor-pointer ${selectedUsers.some(selectedUser => selectedUser._id === user._id) ? "bg-gray-200" : ""}`}
+              className={`p-2 cursor-pointer ${selectedUsers.some(selectedUser => selectedUser._id === user._id) ? "bg-gray-200 dark:bg-zinc-700" : ""}`}
               onClick={() => handleUserSelect(user)}
             >
               {user.username}

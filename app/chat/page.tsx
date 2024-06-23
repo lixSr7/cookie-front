@@ -68,16 +68,16 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onOpenChange={onClose}
       size="5xl"
-      className="bg-gray-100"
+      className="bg-gray-100 dark:bg-zinc-800"
     >
       <ModalContent>
         <ModalBody>
-          <article className="flex p-4 h-full max-h-[500px]">
+          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
-                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white shadow-lg rounded-md p-4">
-                    <div className="flex justify-center gap-2 mb-4">
+                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                    <div className="flex justify-center gap-2 mb-4 dark:bg-zinc-800">
                       <Input
                         radius="lg"
                         placeholder="Type to search..."
@@ -101,7 +101,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                   </section>
                 )}
                 {viewMode === "messages" && (
-                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <ScrollShadow
                       hideScrollBar
                       className="w-full h-full mb-4"
@@ -118,7 +118,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
               </>
             ) : (
               <>
-                <section className="flex flex-col w-full max-w-[300px] h-full max-h-[450px] bg-white shadow-lg rounded-md p-4">
+                <section className="flex flex-col w-full max-w-[300px] h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                   <div className="flex justify-center gap-2 mb-4">
                     <Input
                       radius="lg"
@@ -145,7 +145,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                     />
                   </ScrollShadow>
                 </section>
-                <section className="flex flex-col flex-grow h-full max-h-[450px] bg-white shadow-lg rounded-md p-4 ml-2">
+                <section className="flex flex-col flex-grow h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4 ml-2">
                   <ScrollShadow
                     hideScrollBar
                     className="w-full h-full mb-4"
@@ -160,8 +160,8 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                 </section>
               </>
             )}
-            {windowWidth <= 600 || (viewMode === "messages" && (
-              <div className="absolute p-2 bg-gray-300 rounded-lg cursor-pointer top-6 left-6 hover:bg-gray-400">
+            {windowWidth <= 500 || (viewMode === "messages" && (
+              <div className="absolute p-2 bg-gray-300 dark:bg-zinc-800 rounded-lg cursor-pointer top-6 left-6 hover:bg-gray-400">
                 <TbArrowBackUp
                   onClick={() => setViewMode("chatList")}
                   className="text-gray-600 transition-colors rounded-lg hover:text-gray-800"

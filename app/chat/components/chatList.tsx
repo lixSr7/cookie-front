@@ -107,7 +107,7 @@ export default function ChatList({ onSelectChat, searchTerm }: ChatListProps) {
               <div
                 key={chat._id}
                 onClick={() => handleSelectChat(chat._id)}
-                className={`cursor-pointer gap-3`}
+                className={`cursor-pointer mb-3`}
               >
                 <Chat chatData={{ ...chat, id: chat._id }} userId={id} onDeleteChat={handleDeleteChat} />
               </div>

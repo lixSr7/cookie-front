@@ -34,12 +34,10 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
 
   const otherUserId = users.find((user) => user !== userId) || "";
 
-  // Estado para el último mensaje
   const [lastMessage, setLastMessage] = useState<string>(() => {
     return messages.length > 0 ? messages[messages.length - 1].content : "";
   });
 
-  // Estado para el contador de mensajes no leídos
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
 
   useEffect(() => {
@@ -83,12 +81,11 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
     }
   };
 
-  // Utilizando split para obtener el nombre relevante del chat
   const names = name.split(",");
   const otherUserName = names.find((n) => n.trim() !== username.trim()) || "";
 
   return (
-    <div className="flex bg-white dark:bg-zinc-800 p-3 rounded-md shadow w-full max-w-[300px] gap-4 justify-between hover:bg-slate-200 transition-transform-background">
+    <div className="flex bg-white dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:hover:transition-transform-background p-3 rounded-md shadow w-full max-w-[300px] gap-4 justify-between hover:bg-slate-200 transition-transform-background">
       <div className="flex items-center gap-4 w-full">
         <Badge
           content={unreadMessages > 0 ? unreadMessages : ""}
