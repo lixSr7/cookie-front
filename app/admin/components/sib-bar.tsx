@@ -27,18 +27,11 @@ export default function Sidebar() {
 
   return (
     <aside className="h-screen">
-      <nav className="flex flex-col h-full bg-white border-r shadow-sm">
+      <nav className="flex flex-col h-full bg-white dark:bg-[#111111] border-r dark:border-gray-700 shadow-sm">
         <div className="flex items-center justify-between p-4 pb-2">
-          {/* <img
-            src=""
-            className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
-            }`}
-            alt=""
-          /> */}
           <button
             onClick={toggleExpanded}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+            className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             {expanded ? <ArrowLeft /> : <ArrowLeft />}
           </button>
@@ -47,51 +40,55 @@ export default function Sidebar() {
         <ul className="flex flex-col gap-4 p-3">
           <li>
             <Link
-              className={`flex gap-4 items-center py-3 px-6 rounded-md  ${
-                pathname === "/admin" && " bg-blue-500 text-white"
+              className={`flex gap-4 items-center py-3 px-6 rounded-md ${
+                pathname === "/admin" &&
+                "bg-blue-500 text-white dark:bg-blue-600"
               }`}
               href="/admin"
             >
               <ChartIcon className="w-6 h-6 opacity-80" />
-              <span className={`${expanded ? "" : "hidden"}`}>Analitycs</span>
+              <span className={`${expanded ? "" : "hidden"}`}>Analytics</span>
             </Link>
           </li>
           <li>
             <Link
-              className={`flex gap-4 items-center py-3 px-6 rounded-md  ${
-                pathname === "/admin/users" && " bg-blue-500 text-white"
+              className={`flex gap-4 items-center py-3 px-6 rounded-md ${
+                pathname === "/admin/users" &&
+                "bg-blue-500 text-white dark:bg-blue-600"
               }`}
               href="/admin/users"
             >
-              <UsersIcon className="w-6 h-6 " />
+              <UsersIcon className="w-6 h-6" />
               <span className={`${expanded ? "" : "hidden"}`}>Users</span>
             </Link>
           </li>
           <li>
             <Link
-              className={`flex gap-4 items-center py-3 px-6 rounded-md  ${
-                pathname === "/admin/chats" && " bg-blue-500 text-white"
+              className={`flex gap-4 items-center py-3 px-6 rounded-md ${
+                pathname === "/admin/chats" &&
+                "bg-blue-500 text-white dark:bg-blue-600"
               }`}
               href="/admin/chats"
             >
-              <MessageIcon className="w-6 h-6 " />
+              <MessageIcon className="w-6 h-6" />
               <span className={`${expanded ? "" : "hidden"}`}>Chats</span>
             </Link>
           </li>
           <li>
             <Link
-              className={`flex gap-4 items-center py-3 px-6 rounded-md  ${
-                pathname === "/admin/posts" && " bg-blue-500 text-white"
+              className={`flex gap-4 items-center py-3 px-6 rounded-md ${
+                pathname === "/admin/posts" &&
+                "bg-blue-500 text-white dark:bg-blue-600"
               }`}
               href="/admin/posts"
             >
-              <PictureIcon className="w-6 h-6 " />
+              <PictureIcon className="w-6 h-6" />
               <span className={`${expanded ? "" : "hidden"}`}>Posts</span>
             </Link>
           </li>
         </ul>
 
-        <div className="flex justify-center p-3 border-t">
+        <div className="flex justify-center p-3 border-t dark:border-gray-700">
           <Avatar
             color="primary"
             isBordered
@@ -105,10 +102,12 @@ export default function Sidebar() {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">Alexis Gonzales</h4>
-              <span className="text-xs text-gray-600">ALexis@gamil.com</span>
+              <h4 className="font-semibold dark:text-white">Alexis Gonzales</h4>
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                Alexis@gamil.com
+              </span>
             </div>
-            <UserIcon size={20} />
+            <UserIcon size={20} className="dark:text-gray-400" />
           </div>
         </div>
       </nav>
@@ -137,8 +136,8 @@ export function SidebarItem({
         transition-colors group
         ${
           active
-            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 text-gray-600"
+            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-800 dark:to-indigo-600 dark:text-white"
+            : "hover:bg-indigo-50 dark:hover:bg-indigo-800 text-gray-600 dark:text-gray-400"
         }
     `}
     >
@@ -162,7 +161,7 @@ export function SidebarItem({
         <div
           className={`
           absolute left-full rounded-md px-2 py-1 ml-6
-          bg-indigo-100 text-indigo-800 text-sm
+          bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-white text-sm
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}

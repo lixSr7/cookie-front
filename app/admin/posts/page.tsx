@@ -1,15 +1,22 @@
 "use client";
-import PostCard from "@/app/posts/components/PostCard";
+
 import { getAllPosts } from "@/services/Posts";
 import { ScrollShadow, Spinner } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Post as IPost } from "@/interfaces/Post";
+import PostCard from "./components/posts";
 
 function DashboardPosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [token, setToken] = useState("");
+
   useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
     allPosts();
   }, []);
 
@@ -34,7 +41,7 @@ function DashboardPosts() {
       ) : (
         posts.map((post: IPost) => (
           <article key={post._id}>
-            <PostCard post={post} updatePosts={allPosts} />
+            <PostCard token={token} post={post} updatePosts={allPosts} />
           </article>
         ))
       )}

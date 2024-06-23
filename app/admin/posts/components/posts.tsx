@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 
 import {
@@ -10,10 +10,10 @@ import {
   Avatar,
 } from "@nextui-org/react";
 
-import PostImage from "./PostImage";
-import ButtonOptions from "./ButtonOptions";
-import DeletePost from "./DeletePost";
-import ShowMore from "./ShowMore";
+import PostImage from "@/app/posts/components/PostImage";
+import ButtonOptions from "@/app/posts/components/ButtonOptions";
+import DeletePost from "@/app/posts/components/DeletePost";
+import ShowMore from "@/app/posts/components/ShowMore";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { Post as IPost } from "@/interfaces/Post";
@@ -74,13 +74,14 @@ export default function PostCard({
           <p className="w-full mb-3 text-sm text-zinc-700 dark:text-white dark:text-opacity-60 ">
             {post.content}
           </p>
-          {post.image && (
-            <PostImage
-              src={post.image}
-              alt={post.content}
-              date={formatTimeDifference(post.createdAt)}
-            />
-          )}
+          <div className="flex justify-between w-full">
+            {
+              post.image && (
+                <a href={post.image} className="text-blue-500">view image</a>
+              )
+            }
+            <strong className="text-sm text-gary-500">{formatTimeDifference(post.createdAt)}</strong>
+          </div>
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
           <ButtonOptions postId={post._id} />
