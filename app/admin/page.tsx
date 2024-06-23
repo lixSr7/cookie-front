@@ -13,6 +13,8 @@ import {
 import TableTop from "./posts/components/TableUsersPosts";
 
 import Counters from "./posts/components/Counters";
+import { ChatsLineChart } from "./chats/components/firstChart";
+import PieChart from "./chats/components/secondChart";
 
 function Dashboard() {
   return (
@@ -26,7 +28,7 @@ function Dashboard() {
         <Counters />
       </Card>
       <Card className="col-span-4 col-start-5 row-span-2 row-start-5 p-4 rounded-xl">
-        2
+        <ChatsLineChart />
       </Card>
       <Card className="col-span-4 col-start-1 row-span-3 row-start-1 p-4 rounded-xl">
         <BarChart />
@@ -35,7 +37,7 @@ function Dashboard() {
         <GenderPieChart />
       </Card>
       <Card className="col-span-2 col-start-3 row-span-3 row-start-4 p-4 rounded-xl">
-        <CategoryPieChart />
+        <PieChart />
       </Card>
     </section>
   );
