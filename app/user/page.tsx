@@ -1,37 +1,9 @@
 "use client";
-import {
-  Avatar,
-  Button,
-  ButtonGroup,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
-  Image,
-  Skeleton,
-} from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { Avatar, Button, ButtonGroup, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Card, CardBody, Image, Skeleton, } from "@nextui-org/react";
+import { FaSave, FaSearch, FaEnvelope, FaChartLine, FaBell, FaPlus, FaWrench, } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import {
-  FaSave,
-  FaSearch,
-  FaEnvelope,
-  FaChartLine,
-  FaBell,
-  FaPlus,
-  FaWrench,
-} from "react-icons/fa";
 import PageChat from "../chat/page";
 
 function PROFILE() {
@@ -51,13 +23,14 @@ function PROFILE() {
       setId(decodedToken.id);
       setProfilePic(decodedToken.image.secure_url);
       getProfile(storedToken).then((data) => setProfile(data));
+      console.log('perfil', profile);
     }
   }, []);
 
   const getProfile = async (token) => {
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/profile",
+        "https://co-api-vjvb.onrender.com/api/profile/",
         {
           method: "GET",
           headers: {
@@ -171,7 +144,7 @@ function PROFILE() {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          
+
           <div >
             <Button
               onPress={onOpen}
