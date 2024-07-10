@@ -72,7 +72,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
     >
       <ModalContent>
         <ModalBody>
-          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800">
+          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800 relative">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
@@ -160,14 +160,14 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                 </section>
               </>
             )}
-            {windowWidth <= 500 || (viewMode === "messages" && (
+            {(windowWidth <= 500 && viewMode === "messages") && (
               <div className="absolute p-2 bg-gray-300 dark:bg-zinc-800 rounded-lg cursor-pointer top-6 left-6 hover:bg-gray-400">
                 <TbArrowBackUp
                   onClick={() => setViewMode("chatList")}
                   className="text-gray-600 transition-colors rounded-lg hover:text-gray-800"
                 />
               </div>
-            ))}
+            )}
           </article>
         </ModalBody>
       </ModalContent>

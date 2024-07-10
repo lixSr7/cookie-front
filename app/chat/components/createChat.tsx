@@ -67,6 +67,7 @@ const CreateChat: React.FC = () => {
 
       if (response.ok) {
         console.log("Chat creado exitosamente");
+        clearFields();
       } else {
         const errorText = await response.text();
         console.error("Error al crear el chat:", errorText);
@@ -78,8 +79,15 @@ const CreateChat: React.FC = () => {
     handleToggleModal();
   };
 
+  const clearFields = () => {
+    setSelectedUsers([]);
+    setSearchTerm("");
+    setChatName("");
+  };
+
   const handleToggleModal = () => {
     setIsOpen(!isOpen);
+    if (isOpen) clearFields(); // Clear fields when closing the modal
   };
 
   return (

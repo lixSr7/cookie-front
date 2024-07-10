@@ -3,7 +3,7 @@ import { Avatar, Badge } from "@nextui-org/react";
 import { MdOutlineDelete } from "react-icons/md";
 import axios from "axios";
 import socket from "@/app/config/socketConfig";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 interface ChatProps {
   chatData: {
@@ -23,24 +23,23 @@ interface Message {
 const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
   const { id, name, messages, users } = chatData;
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    console.error("No token found");
-    return null;
-  }
-
-  const decodedToken: any = jwtDecode(token);
-  const username = decodedToken.username;
-
-  const otherUserId = users.find((user) => user !== userId) || "";
-
   const [lastMessage, setLastMessage] = useState<string>(() => {
     return messages.length > 0 ? messages[messages.length - 1].content : "";
   });
 
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const decodedToken: any = jwtDecode(token);
+    setUsername(decodedToken.username);
+
     const socketInstance = socket;
 
     const handleNewMessage = (message: Message, chatId: string) => {
@@ -81,7 +80,12 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
     }
   };
 
+  if (!username) {
+    return null;
+  }
+
   const names = name.split(",");
+  const otherUserId = users.find((user) => user !== userId) || "";
   const otherUserName = names.find((n) => n.trim() !== username.trim()) || "";
 
   return (
