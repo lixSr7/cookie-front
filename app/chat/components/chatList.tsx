@@ -103,17 +103,23 @@ export default function ChatList({ onSelectChat, searchTerm }: ChatListProps) {
           <SkeletonChatList />
         ) : (
           filteredChats.map((chat) => (
-            
-              <div
-                key={chat._id}
-                onClick={() => handleSelectChat(chat._id)}
-                className={`cursor-pointer mb-3`}
-              >
-                <Chat chatData={{ ...chat, id: chat._id }} userId={id} onDeleteChat={handleDeleteChat} />
-              </div>
+            <div
+              key={chat._id}
+              onClick={() => handleSelectChat(chat._id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleSelectChat(chat._id);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              className={`cursor-pointer mb-3`}
+            >
+              <Chat chatData={{ ...chat, id: chat._id }} userId={id} onDeleteChat={handleDeleteChat} />
+            </div>
           ))
         )}
-        </ScrollShadow>
+      </ScrollShadow>
     </div>
   );
 }
