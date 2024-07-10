@@ -5,33 +5,13 @@ import { usePathname } from "next/navigation";
 
 //? ================== Components =====================
 
-import {
-  Avatar,
-  Input,
-  Dropdown,
-  DropdownMenu,
-  DropdownTrigger,
-  DropdownItem,
-} from "@nextui-org/react";
+import {Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, } from "@nextui-org/react"; 
 
 import { ThemeSwitch } from "./theme-switch";
 
 import Link from "next/link";
 //?================= Icons =====================
-import {
-  MessageCircle as ChatIcon,
-  Home as HomeIcon,
-  Instagram as VideoIcon,
-  Search as SearchIcon,
-  AlertOctagon as LogOutIcon,
-  Users as FriendIcon,
-  PieChart as ChartIcon,
-  Image as PhotoIcon,
-  Heart as LikeIcon,
-  Star as StarIcon,
-  Menu as MenuIcon,
-  Sliders as OptionsIcon,
-} from "@geist-ui/icons";
+import { MessageCircle as ChatIcon, Home as HomeIcon, Instagram as VideoIcon, Search as SearchIcon, AlertOctagon as LogOutIcon, Users as FriendIcon, PieChart as ChartIcon, Image as PhotoIcon, Heart as LikeIcon, Star as StarIcon, Menu as MenuIcon, Sliders as OptionsIcon, } from "@geist-ui/icons"; 
 import PageChat from "@/app/chat/page";
 import { useState, useEffect } from "react";
 import ProfileUser from "./ProfileUser";
@@ -85,7 +65,7 @@ function NavBar() {
   const UserDefault = {
     id: "664d38bedf58852a441800fa",
     role: "user",
-    username: "Cristiano Ronaldo",
+    username: "Jhon Doe",
     fullname: "",
     image: {
       public_url: "",
@@ -127,12 +107,12 @@ function NavBar() {
               <Avatar
                 isBordered
                 size="sm"
-                color="danger"
+                color='success'
                 src={user.image?.public_url}
               />
               <div className="flex flex-col">
                 <strong className="text-sm">{user.username}</strong>
-                <span className="font-medium text-blue-500 text-small">
+                <span className="font-medium text-[#dd2525] text-[60%]">
                   @{user.fullname || user.username}
                 </span>
               </div>
@@ -143,7 +123,7 @@ function NavBar() {
               href="/posts"
               className={` flex items-center gap-2 py-2 px-6 rounded-lg ${
                 pathname === "/posts"
-                  ? "bg-danger-500 text-white"
+                  ? "bg-[#dd2525] text-white"
                   : " text-zinc-600 dark:text-white"
               }`}
             >
@@ -155,7 +135,7 @@ function NavBar() {
               onClick={() => setIsChatOpen(true)}
               className={` py-2 px-6 rounded-lg ${
                 pathname === "/Chats"
-                  ? "bg-danger-500 text-white"
+                  ? "bg-[#dd2525] text-white"
                   : " text-zinc-600 dark:text-white"
               }`}
             >
@@ -190,7 +170,7 @@ function NavBar() {
               }}
             >
               <DropdownTrigger className="grid place-content-center">
-                <button className="w-10 p-2 transition-colors duration-100 rounded-md bg-danger-500 hover:bg-danger-700 dark:hover:bg-zinc-600 max-md:grid place-content-center">
+                <button className="w-10 p-2 transition-colors duration-100 rounded-md bg-[#dd2525] hover:bg-danger-700 dark:hover:bg-zinc-600 max-md:grid place-content-center">
                   <MenuIcon className="w-5 h-5 stroke-white" />
                 </button>
               </DropdownTrigger>

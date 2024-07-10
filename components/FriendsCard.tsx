@@ -25,17 +25,17 @@ function FriendsCard() {
       nickName: "emily_brown012",
       image: "https://i.pravatar.cc/150?u=a04258114e29026305d",
     },
-    {
-      name: "Chris Wilson",
-      nickName: "chris_wilson345",
-      image: "https://i.pravatar.cc/150?u=a04258114e29026306d",
-    },
+    // {
+    //   name: "Chris Wilson",
+    //   nickName: "chris_wilson345",
+    //   image: "https://i.pravatar.cc/150?u=a04258114e29026306d",
+    // },
   ];
 
   return (
-    <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] flex flex-col gap-6">
+    <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] max-h-[45%] min-h-[45%] flex flex-col gap-6">
       <Card className="w-full">
-        <CardBody className="flex flex-col w-full gap-4 px-6 py-5">
+        <CardBody className="flex flex-col w-full gap-3 px-6 py-5">
           {users.map((user, index) => (
             <div key={index} className="flex justify-between w-full">
               <User

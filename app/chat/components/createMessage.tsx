@@ -153,7 +153,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
         </div>
       </div>
       {showWarning && (
-        <p className="text-danger-500 p-2">Please enter a message or add an image.</p>
+        <p className="text-[#dd2525] p-2">Please enter a message or add an image.</p>
       )}
     </div>
   );

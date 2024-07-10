@@ -25,8 +25,6 @@ function DashboardPosts() {
       const postsData = await getAllPosts();
       setPosts(postsData.reverse());
       setLoading(false);
-      console.log("All posts:", postsData);
-      // toast.success('All posts 🎔')
     } catch (error) {
       console.error("Error fetching posts:", error);
     }

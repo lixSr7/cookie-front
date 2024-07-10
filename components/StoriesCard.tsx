@@ -9,8 +9,8 @@ function StoriesCard() {
     "https://imgs.search.brave.com/6uuyyA_-a6ZvE21bGE6tHrwrxFpA3Wis885_9m8-KSo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YTEucG9wc3VnYXIt/YXNzZXRzLmNvbS9m/aWxlcy90aHVtYm9y/L3BacFVVbkJndjVq/UlZaNDhPeDlHNWh2/LVJBUT0vZml0LWlu/Lzc5Mng1NDQvdG9w/L2ZpbHRlcnM6Zm9y/bWF0X2F1dG8oKTp1/cHNjYWxlKCkvMjAy/NC8wMS8yMi8xNzAv/bi8xOTIyMjgzL3Rt/cF9FNklDbDBfZjQ2/ZjQ2MDJlNDkwNjRm/MF9NYWluX1BTMjRf/SnVudG9zX0FyY2Fu/Z2VsXzE0NTZ4MTAw/MC5qcGc",
   ];
   return (
-    <Card className="max-w-[22em] min-[1920px]:max-w-[25em] max-h-[320px] h-full gap-2 grid grid-cols-2 grid-rows-2 p-4">
-      <button className="grid w-full h-full place-content-center bg-danger-500 rounded-xl dark:bg-danger-500 ">
+    <Card className="max-w-[22em] min-[1920px]:max-w-[25em] max-h-[45%] min-h-[45%] h-full gap-2 grid grid-cols-2 grid-rows-2 p-4">
+      <button className="grid w-full h-full place-content-center bg-[#dd2525] rounded-xl dark:bg-[#dd2525] ">
         <PlusIcon className=" stroke-white w-7 h-7" />
       </button>
       {images.map((image, index) => (

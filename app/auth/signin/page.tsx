@@ -1,21 +1,20 @@
 'use client'
-import React, { useState } from 'react';
-import { Input } from "@nextui-org/react";
+import { jwtDecode } from 'jwt-decode';
+import React, { useState, useEffect } from 'react';
+import { Input, Button, Image, useDisclosure } from "@nextui-org/react";
 import { Eye as EyeFilledIcon, EyeOff as EyeSlashFilledIcon } from '@geist-ui/icons';
-import { Button } from "@nextui-org/react";
-import { Image } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
 import RECOVER from "../recover/page";
-import { useDisclosure } from '@nextui-org/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IUser {
     role: string;
 }
 
 export default function SIGNIN() {
-    const [isVisible, setIsVisible] = React.useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -24,9 +23,18 @@ export default function SIGNIN() {
     const [isSending, setIsSending] = useState(false);
 
     const handleLogin = async () => {
+        if (!emailOrUsername) {
+            toast.error("Email or username is required.");
+            return;
+        }
+        if (!password) {
+            toast.error("Password is required.");
+            return;
+        }
+
         setIsSending(true);
         try {
-            const response = await fetch('https://co-api-vjvb.onrender.com/api/auth/signin?', {
+            const response = await fetch('https://co-api-vjvb.onrender.com/api/auth/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,9 +45,10 @@ export default function SIGNIN() {
                 }),
             });
 
+            const data = await response.json();
+
             if (response.ok) {
-                const data = await response.json();
-                const decodedToken: IUser = jwtDecode(data.token);
+                const decodedToken: IUser = jwtDecode(data.token);  
                 const userRole = decodedToken.role;
                 localStorage.setItem('token', data.token);
                 if (userRole === 'user') {
@@ -50,22 +59,40 @@ export default function SIGNIN() {
                     router.push('/moder');
                 }
             } else {
-                console.error("Error logging in:", await response.text());
-                throw new Error("Login failed");
+                handleErrors(response.status, data.message);
             }
         } catch (error) {
             console.log("Login error:", error);
-            alert("Error al iniciar sesión. Intente nuevamente.");
+            toast.error("Error logging in. Please try again.");
+        } finally {
             setIsSending(false);
         }
     };
 
+    const handleErrors = (status: number, message: string) => {
+        switch (status) {
+            case 400:
+                toast.error(message || "Invalid request. Please check your input.");
+                break;
+            case 401:
+                toast.error(message || "Incorrect password.");
+                break;
+            case 403:
+                toast.error(message || "User is inactive. Please contact the administrator.");
+                break;
+            case 404:
+                toast.error(message || "Email or username not found.");
+                break;
+            default:
+                toast.error("An unexpected error occurred. Please try again.");
+        }
+    };
 
     return (
         <div className="flex min-h-screen">
             <div className="flex flex-col items-center justify-between w-1/2 text-black bg-white">
-                <div className="flex flex-col items-center justify-center h-1/4 max-h-1/4 min-h-1/4 ">
-                    <h1 className="text-5xl font-bold text-danger-500 ">
+                <div className="flex flex-col items-center justify-center h-1/4 max-h-1/4 min-h-1/4">
+                    <h1 className="text-5xl font-bold text-[#dd2525]">
                         WELCOME
                     </h1>
                     <hr className="w-1/2" />
@@ -83,34 +110,28 @@ export default function SIGNIN() {
                         </button>
                     } type={isVisible ? "text" : "password"} className="max-w-xs text-black"
                     />
-                    <Button className="w-1/2 font-bold text-white bg-danger-500" onClick={handleLogin} isLoading={isSending}>
+                    <Button className="w-1/2 font-bold text-white bg-[#dd2525]" onClick={handleLogin} isLoading={isSending}>
                         Login
                     </Button>
                     <div className="flex flex-col items-center justify-center gap-0 m-0">
-                        <p className="text-xs text-black">Dont have an account?   <a href="/auth/signup" className="font-bold text-danger-500"> Register Now</a></p>
-                        <p className="text-xs text-black">Forgot your password? <a href="#" onClick={onOpen} className="font-bold text-danger-500"> Recover</a></p>
+                        <p className="text-xs text-black">Don't have an account? <a href="/auth/signup" className="font-bold text-[#dd2525]"> Register Now</a></p>
+                        <p className="text-xs text-black">Forgot your password? <a href="#" onClick={onOpen} className="font-bold text-[#dd2525]"> Recover</a></p>
                     </div>
                 </div>
                 <div className="flex flex-col items-center justify-center mb-3 h-1/4 max-h-1/4 min-h-1/4">
                     <hr className="w-1/5" />
-                    <p className="text-xs text-gray-400">politics of privacy and security -  All rights reserved ©</p>
+                    <p className="text-xs text-gray-400">Privacy and security policies - All rights reserved ©</p>
                 </div>
                 <Link className="fixed top-0 left-0 flex items-center justify-center w-full h-full m-4 rounded-full cursor-pointer hover:bg-zinc-100 max-w-6 max-h-6" href="/">
                     <div >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8 p-2 font-bold text-danger-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8 p-2 font-bold text-[#dd2525]">
                             <path d="M15.75 19.5 8.25 12l7.5-7.5" />
                         </svg>
                     </div>
                 </Link>
             </div>
-            <div className="flex flex-col items-center justify-center w-1/2 text-white bg-danger-500">
-                <Image
-                    width={250}
-                    height={250}
-                    className="p-1 bg-white rounded-full"
-                    alt="NextUI hero Image"
-                    src="/img/cookie_login.png"
-                />
+            <div className="flex flex-col items-center justify-center w-1/2 text-white bg-[#dd2525]">
+                <Image width={250} height={250} className="p-1 bg-white rounded-full" alt="NextUI hero Image" src="/img/cookie_login.png" />
                 <p className="font-bold">
                     COOKIE, The new social network for people
                 </p>
@@ -119,6 +140,7 @@ export default function SIGNIN() {
                 </p>
             </div>
             <RECOVER isOpen={isOpen} onOpenChange={onOpenChange} />
+            <ToastContainer limit={5} />
         </div>
     );
 }

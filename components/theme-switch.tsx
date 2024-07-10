@@ -42,7 +42,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   return (
     <button
       onClick={onChange}
-      className={`grid p-2 rounded-lg place-content-center bg-danger-500`}
+      className={`grid p-2 rounded-lg place-content-center bg-[#dd2525]`}
     >
       <Component
         {...getBaseProps({

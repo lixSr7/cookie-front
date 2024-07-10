@@ -43,7 +43,7 @@ const Message: React.FC<MessageProps> = ({ sender, content, createdAt, mediaUrl 
     <div className={`${isSender ? "justify-end" : "justify-start"} p-3 mb-2 w-full flex`}>
       <div
         className={`${
-          isSender ? "bg-danger-500 text-white" : "bg-gray-300 dark:bg-zinc-700"
+          isSender ? "bg-[#dd2525] text-white" : "bg-gray-300 dark:bg-zinc-700"
         } p-4 rounded-md`}
       >
         {mediaUrl && (

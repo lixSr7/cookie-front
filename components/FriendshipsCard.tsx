@@ -37,7 +37,7 @@ function FriendshipsCard() {
       });
       if (response.ok) {
         const users: User[] = await response.json();
-        const randomUsers = getRandomUsers(users, 5);
+        const randomUsers = getRandomUsers(users, 3);
         setUsers(randomUsers);
         setFollowed(randomUsers.map(() => false));
       }
@@ -58,7 +58,7 @@ function FriendshipsCard() {
   };
 
   return (
-    <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] flex flex-col gap-4 ">
+    <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] min-h-[55%] max-h-[55%] flex flex-col gap-4 ">
       {users.map((user, index) => (
         <Card key={user._id} className="w-full">
           <CardBody className="flex flex-col w-full gap-4 px-6 py-5">
