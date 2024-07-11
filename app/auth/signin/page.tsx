@@ -62,7 +62,7 @@ export default function SIGNIN() {
                 handleErrors(response.status, data.message);
             }
         } catch (error) {
-            console.log("Login error:", error);
+            // console.log("Login error:", error);
             toast.error("Error logging in. Please try again.");
         } finally {
             setIsSending(false);

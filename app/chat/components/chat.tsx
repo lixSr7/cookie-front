@@ -73,7 +73,7 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
         },
       });
 
-      console.log("Chat deleted successfully");
+      // console.log("Chat deleted successfully");
       onDeleteChat(id);
     } catch (error) {
       console.error("Failed to delete chat:", error);

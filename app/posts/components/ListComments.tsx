@@ -23,7 +23,7 @@ function ListComments({
   postId: string;
   updateComments: () => void;
 }) {
-  console.log(comments);
+  // console.log(comments);
   return (
     <ScrollShadow
       hideScrollBar
@@ -67,7 +67,7 @@ const Item = ({
   updateComments: () => void;
 }) => {
   let emojiURI = emojis.find((emoji) => emoji.name === comment.emoji)?.svg;
-  console.log(emojiURI);
+  // console.log(emojiURI);
   const handleDelete = async () => {
     await deleteComment(postId, id);
     updateComments();

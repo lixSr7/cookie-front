@@ -67,7 +67,7 @@ export const createComment = async (
       content,
       emoji: emoji ? emoji : "none",
     };
-    console.log(commentData);
+    // console.log(commentData);
     const response = await axios.post(
       `${API_URI}/${postId}/comments`,
       commentData,

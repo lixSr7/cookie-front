@@ -40,7 +40,7 @@ function CreateComment({
       updateComment();
       toast.success('success creating comment')
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error('Error creating comment')
     } finally {
       setIsSending(false);

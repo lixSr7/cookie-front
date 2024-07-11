@@ -17,7 +17,6 @@ function ProfileUser() {
   useEffect(() => {
     if (token) {
       getMyProfile(token);
-      localStorage.setItem('profile', JSON.stringify(user));
     }
   }, [token]);
 
@@ -36,6 +35,7 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
+        // console.log('user', data);
         setUser(data);
       } else {
         console.error("Error:", await response.text());

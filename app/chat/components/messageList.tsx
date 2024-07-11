@@ -87,14 +87,14 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     if (!socket) return;
 
     const handleNewMessage = (message: IMessage) => {
-      console.log("Received message from server:", message);
+      // console.log("Received message from server:", message);
       if (message.chatId === selectedChat) {
         setMessages((prevMessages) => [...prevMessages, message]);
         scrollToBottom();
       }
     };
 
-    console.log("Listening for new messages...");
+    // console.log("Listening for new messages...");
     socket.on("newMessage", handleNewMessage);
 
     return () => {

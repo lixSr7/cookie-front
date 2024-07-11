@@ -75,11 +75,11 @@ export default function SIGNUP() {
                     router.push('/auth/signin');
                 }, 1500);
             } else {
-                console.log('error bro')
+                // console.log('error bro')
             }
 
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             setIsSending(false);
         }
     }

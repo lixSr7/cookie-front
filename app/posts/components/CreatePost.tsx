@@ -29,7 +29,7 @@ const UploaderImagePost = () => {
     if (file) {
       setFileName(file.name);
       setImage(URL.createObjectURL(file));
-      console.log(image);
+      // console.log(image);
     }
   };
 

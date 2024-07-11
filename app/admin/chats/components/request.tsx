@@ -9,7 +9,7 @@ export const getAllChatsForCharts = async (token: string) => {
         'x-access-token': token,
       },
     });
-    console.log(response.data)
+    // console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('Error fetching chats and messages for charts:', error);

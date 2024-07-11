@@ -71,7 +71,7 @@ export default function ChatList({ onSelectChat, searchTerm }: ChatListProps) {
           "x-access-token": token,
         },
       });
-      console.log("Fetched chats:", response.data);
+      // console.log("Fetched chats:", response.data);
       setChats(response.data);
       setLoading(false);
     } catch (error) {

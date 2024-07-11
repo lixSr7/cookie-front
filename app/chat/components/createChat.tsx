@@ -27,7 +27,7 @@ const CreateChat: React.FC = () => {
       const decodedToken = jwtDecode<DecodedToken>(storedToken);
       setId(decodedToken.id);
     } else {
-      console.log("No token found");
+      // console.log("No token found");
     }
   }, []);
 
@@ -66,7 +66,7 @@ const CreateChat: React.FC = () => {
       );
 
       if (response.ok) {
-        console.log("Chat creado exitosamente");
+        // console.log("Chat creado exitosamente");
         clearFields();
       } else {
         const errorText = await response.text();

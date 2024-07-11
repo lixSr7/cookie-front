@@ -42,4 +42,4 @@ export function formatTimeDifference(dateString: string, language: string = 'en'
 
 // Ejemplo de uso:
 const fechaEjemplo = '2023-05-15T01:40:35.146Z';
-console.log(formatTimeDifference(fechaEjemplo, 'es')); // Ejemplo de salida: "15 de mayo, 2023"
+// console.log(formatTimeDifference(fechaEjemplo, 'es')); // Ejemplo de salida: "15 de mayo, 2023"

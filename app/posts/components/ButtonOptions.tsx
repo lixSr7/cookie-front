@@ -17,7 +17,7 @@ function ButtonOptions({ postId }: { postId: string }) {
   };
   const handleLike = () => {
     setisLiked(!isLiked);
-    console.log(isLiked);
+    // console.log(isLiked);
   };
 
   return (

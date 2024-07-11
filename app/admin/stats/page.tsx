@@ -14,7 +14,7 @@ function STATS() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    console.log("Stored token:", storedToken);
+    // console.log("Stored token:", storedToken);
     if (storedToken) {
       setToken(storedToken);
       const decodedToken = jwtDecode(storedToken);
@@ -48,7 +48,7 @@ function STATS() {
         throw new Error("logout failed");
       }
     } catch (error) {
-      console.log("Login error:", error);
+      // console.log("Login error:", error);
       alert("Error al iniciar sesión. Intente nuevamente.");
     }
   };

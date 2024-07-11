@@ -41,9 +41,9 @@ export default function PostCard({
           <div className="flex items-center gap-3">
             <Avatar isBordered size="md" color="danger" src={post.user.image || ""} />
             <div className="flex flex-col">
-              <strong>{post.user.username}</strong>
+              <strong>{post.user.fullname}</strong>
               <span className="text-sm text-blue-500">
-                @{post.user.fullname || post.user.username}
+                @{post.user.username || post.user.username}
               </span>
             </div>
           </div>

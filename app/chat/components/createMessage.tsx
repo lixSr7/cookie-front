@@ -62,7 +62,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
         }
       );
 
-      console.log("Message sent:", response.data);
+      // console.log("Message sent:", response.data);
       setMessage("");
       setSelectedImage(null);
       setImagePreview(null);
