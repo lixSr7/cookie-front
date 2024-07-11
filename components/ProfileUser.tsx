@@ -1,30 +1,30 @@
 "use client";
-import { Avatar, Button, ButtonGroup, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Card, CardBody, Image, Skeleton, ScrollShadow, CardHeader, Divider, Link, CardFooter, } from "@nextui-org/react";
-import { FaSave, FaSearch, FaEnvelope, FaChartLine, FaBell, FaPlus, FaWrench, } from "react-icons/fa";
+import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, CardBody, Image, ScrollShadow, CardHeader, Divider, Link, CardFooter, } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 
 function ProfileUser() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [token, setToken] = useState("");
-  const [id, setId] = useState("");
-  const [profile, setProfile] = useState("");
-  const [profilePic, setProfilePic] = useState("");
+  const [token, setToken] = useState<string>('');
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
-      const decodedToken = jwtDecode(storedToken);
-      setId(decodedToken.id);
-      setProfilePic(decodedToken.image.secure_url);
-      getProfile(storedToken).then((data) => setProfile(data));
     }
   }, []);
-  const getProfile = async (token: string) => {
+
+  useEffect(() => {
+    if (token) {
+      getMyProfile(token);
+      localStorage.setItem('profile', JSON.stringify(user));
+    }
+  }, [token]);
+
+  const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c-p.onrender.com/api/profile",
         {
           method: "GET",
           headers: {
@@ -36,17 +36,12 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('user', data)
-        return data;
+        setUser(data);
       } else {
-        console.error("Error al obtener perfil:", await response.text());
-        throw new Error(
-          "Error interno del servidor. Intente nuevamente más tarde."
-        );
+        console.error("Error:", await response.text());
       }
     } catch (error) {
-      console.error("Error al obtener perfil:", error);
-      alert("Error al obtener el perfil. Intente nuevamente más tarde.");
+      console.error("Error al obtener el perfil:", error);
     }
   };
 
@@ -56,46 +51,36 @@ function ProfileUser() {
         <button onClick={onOpen} className="flex flex-col items-center justify-center gap-0 h-max" >
           Profile
         </button>
-        <Modal isOpen={isOpen} scrollBehavior="inside" onOpenChange={onOpenChange} size="xl" backdrop="blur" placement="center" >
+        <Modal isOpen={isOpen} scrollBehavior="inside" onOpenChange={onOpenChange} size="2xl" backdrop="blur" placement="center" >
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader></ModalHeader>
-                <ModalBody className="flex flex-col items-center justify-center pt-10">
-                  <ScrollShadow
-                    hideScrollBar
-                    className="w-full h-full overflow-y-auto flex flex-col m-auto"
-                  >
+                <ModalBody className="flex flex-col items-center justify-center pt-10 w-full min-h-full">
+                  <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto" >
                     <div className="flex flex-col items-center w-full h-full">
                       <div className="flex flex-col items-center w-full h-max">
-                        <Image className="w-[150px] h-[150px] rounded-full border-1.5" isBlurred src={profilePic} />
+                        <Image className="w-[150px] h-[150px] rounded-full border-1.5" isBlurred src={user.image.secure_url} />
                         <p className="m-0 text-2xl font-bold">
-                          {profile.fullname}
+                          {user.fullname}
                         </p>
                         <p className="text-xs text-gray-300">
-                          @{profile.username}
+                          @{user.username}
                         </p>
-                        <button className="absolute top-10 left-10">
-                          <FaWrench />
-                        </button>
+                        <p className="text-sm font-bold mt-5">
+                          {user.description}
+                        </p>
                       </div>
-                      <ButtonGroup className="mb-10">
-                        <Button>Follow</Button>
-                        <Button>Followers</Button>
-                        <Button>Friends</Button>
+                      <ButtonGroup className="m-2">
+                        <Button className="transition-transform transform hover:scale-105 hover:shadow-lg">Follow <span>{user.followers.length}</span></Button>
+                        <Button className="transition-transform transform hover:scale-105 hover:shadow-lg">Followers <span>{user.following.length}</span></Button>
+                        <Button className="transition-transform transform hover:scale-105 hover:shadow-lg">Friends <span>{user.friends.length}</span></Button>
                       </ButtonGroup>
-                      <Tabs aria-label="Options">
+                      <Tabs className="m-2" aria-label="Options">
                         <Tab key="posts" title="Posts">
-                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
                             <Card className="max-w-[400px]">
                               <CardHeader className="flex gap-3">
-                                <Image
-                                  alt="nextui logo"
-                                  height={40}
-                                  radius="sm"
-                                  src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                                  width={40}
-                                />
+                                <Image alt="nextui logo" height={40} radius="sm" src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4" width={40} />
                                 <div className="flex flex-col">
                                   <p className="text-md">NextUI</p>
                                   <p className="text-small text-default-500">nextui.org</p>

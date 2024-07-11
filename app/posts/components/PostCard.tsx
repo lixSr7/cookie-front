@@ -1,14 +1,7 @@
 'use client';
 import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Avatar,
-} from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Avatar, } from "@nextui-org/react";
 
 import PostImage from "./PostImage";
 import ButtonOptions from "./ButtonOptions";
@@ -20,6 +13,7 @@ import { Post as IPost } from "@/interfaces/Post";
 import { userToken } from "@/interfaces/Users";
 
 import { jwtDecode } from "jwt-decode";
+
 export default function PostCard({
   post,
   updatePosts,
@@ -36,17 +30,16 @@ export default function PostCard({
     setisFollow(!isFollow);
   };
 
+  if (!post.user) {
+    return null; // or display a fallback UI
+  }
+
   return (
     <article className="block w-full max-w-3xl p-4 m-auto rounded-lg">
       <Card className="block w-full">
         <CardHeader className="flex justify-between gap-3 p-4">
           <div className="flex items-center gap-3">
-            <Avatar
-              isBordered
-              size="md"
-              color="danger"
-              src={post.user.image || ""}
-            />
+            <Avatar isBordered size="md" color="danger" src={post.user.image || ""} />
             <div className="flex flex-col">
               <strong>{post.user.username}</strong>
               <span className="text-sm text-blue-500">
@@ -55,19 +48,14 @@ export default function PostCard({
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
-            <Button
-              color={isFollow ? "danger" : "primary"}
-              onClick={handleFollow}
-              variant={isFollow ? "bordered" : "solid"}
-              size="sm"
-            >
+            <Button color={isFollow ? "danger" : "primary"} onClick={handleFollow} variant={isFollow ? "bordered" : "solid"} size="sm" >
               {isFollow ? "Unfollow" : "Follow"}
             </Button>
             <ShowMore />
             {(decodeToken.id === post.user._id ||
               decodeToken.role === "admin") && (
-              <DeletePost updatePosts={updatePosts} postId={post._id} />
-            )}
+                <DeletePost updatePosts={updatePosts} postId={post._id} />
+              )}
           </div>
         </CardHeader>
         <CardBody className="flex flex-col items-center justify-center w-full">
@@ -75,11 +63,7 @@ export default function PostCard({
             {post.content}
           </p>
           {post.image && (
-            <PostImage
-              src={post.image}
-              alt={post.content}
-              date={formatTimeDifference(post.createdAt)}
-            />
+            <PostImage src={post.image} alt={post.content} date={formatTimeDifference(post.createdAt)} />
           )}
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
