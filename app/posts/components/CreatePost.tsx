@@ -22,14 +22,24 @@ import { toast } from "sonner";
 
 const UploaderImagePost = () => {
   const [image, setImage] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string>("Not Select file");
+  const [error, setError] = useState<string | null>(null);
+  const [borderColor, setBorderColor] = useState<string>("border-blue-500");
+  const [iconColor, setIconColor] = useState<string>("stroke-blue-500");
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFileName(file.name);
-      setImage(URL.createObjectURL(file));
-      // console.log(image);
+      if (file.type.startsWith("image/")) {
+        setImage(URL.createObjectURL(file));
+        setError(null);
+        setBorderColor("border-blue-500");
+        setIconColor("stroke-blue-500");
+      } else {
+        setImage(null);
+        setError("Por favor, selecciona una imagen válida.");
+        setBorderColor("border-red-500");
+        setIconColor("stroke-red-500");
+      }
     }
   };
 
@@ -37,7 +47,7 @@ const UploaderImagePost = () => {
     <article>
       <label
         htmlFor="imageInput"
-        className="flex flex-col items-center justify-center overflow-hidden border-2 border-blue-500 border-dashed cursor-pointer rounded-xl h-60"
+        className={`flex flex-col items-center justify-center overflow-hidden border-2 ${borderColor} border-dashed cursor-pointer rounded-xl h-60`}
       >
         {image ? (
           <img
@@ -46,7 +56,10 @@ const UploaderImagePost = () => {
             alt="Imagen de Publicacion"
           />
         ) : (
-          <CloudIcon className="w-20 h-20 stroke-blue-500" />
+          <>
+            <CloudIcon className={`w-20 h-20 ${iconColor}`} />
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+          </>
         )}
         <input
           id="imageInput"
@@ -65,10 +78,10 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isContentInvalid, setIsContentInvalid] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+    const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
     }
@@ -79,10 +92,10 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
       setIsSending(true);
       await createPost(content, imageFile, token);
       updatePosts();
-      toast.success('success creating post')
+      toast.success("success creating post");
     } catch (error) {
       console.error("Error in handleSubmit:", error);
-      toast.error('Error creating comment')
+      toast.error("Error creating comment");
     } finally {
       setIsSending(false);
     }
@@ -119,6 +132,8 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                     "Content"
                   ) as HTMLTextAreaElement;
                   const content = contentInput.value;
+
+                  console.log("content:", content);
 
                   const imageInput = document.querySelector(
                     ".inputImageCreatePost"
@@ -158,9 +173,11 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 </ModalBody>
                 <ModalFooter className="flex flex-col ">
                   <div className="flex justify-end gap-4">
-                    <Button color="primary" type="submit">
-                      Submit
-                    </Button>
+                    {isSending || (
+                      <Button color="primary" type="submit">
+                        Submit
+                      </Button>
+                    )}
                   </div>
                 </ModalFooter>
               </form>

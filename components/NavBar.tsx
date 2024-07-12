@@ -107,6 +107,7 @@ function NavBar() {
               {pathname === "/posts" && <HomeIcon />}
               Home
             </Link>
+            <ProfileUser />
             <button
               onClick={() => setIsChatOpen(true)}
               className={`py-2 px-6 rounded-lg ${

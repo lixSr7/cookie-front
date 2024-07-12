@@ -20,6 +20,7 @@ import { Post as IPost } from "@/types/Post";
 import { userToken } from "@/types/Users";
 
 import { jwtDecode } from "jwt-decode";
+
 export default function PostCard({
   post,
   updatePosts,
@@ -36,6 +37,10 @@ export default function PostCard({
     setisFollow(!isFollow);
   };
 
+  if (!post.user) {
+    return null;
+  }
+
   return (
     <article className="block w-full max-w-3xl p-4 m-auto rounded-lg">
       <Card className="block w-full">
@@ -48,9 +53,9 @@ export default function PostCard({
               src={post.user.image || ""}
             />
             <div className="flex flex-col">
-              <strong>{post.user.username}</strong>
+              <strong>{post.user.fullname}</strong>
               <span className="text-sm text-blue-500">
-                @{post.user.fullname || post.user.username}
+                @{post.user.username || post.user.username}
               </span>
             </div>
           </div>
@@ -74,17 +79,16 @@ export default function PostCard({
           <p className="w-full mb-3 text-sm text-zinc-700 dark:text-white dark:text-opacity-60 ">
             {post.content}
           </p>
-          <div className="flex justify-between w-full">
-            {
-              post.image && (
-                <a href={post.image} className="text-blue-500">view image</a>
-              )
-            }
-            <strong className="text-sm text-gary-500">{formatTimeDifference(post.createdAt)}</strong>
-          </div>
+          {post.image && (
+            <PostImage
+              src={post.image}
+              alt={post.content}
+              date={formatTimeDifference(post.createdAt)}
+            />
+          )}
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
-          <ButtonOptions postId={post._id} />
+          <ButtonOptions postId={post._id} likes={post.likes} />
         </CardFooter>
       </Card>
     </article>

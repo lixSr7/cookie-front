@@ -14,7 +14,7 @@ import { jwtDecode } from "jwt-decode";
  * @param {typeLike[]} props.likes - Lista de likes asociados al post.
  * @returns {JSX.Element} - Elemento del botón de like.
  */
-function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }) {
+function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }): JSX.Element {
   const [userId, setUserId] = useState<string>("");
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeId, setLikeId] = useState<string | null>(null);

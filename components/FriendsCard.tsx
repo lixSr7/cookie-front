@@ -97,7 +97,7 @@ function FriendsCard() {
   return (
     <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] max-h-[45%] min-h-[45%] flex flex-col gap-6">
       <Card className="w-full">
-        <CardBody className="flex flex-col w-full gap-3 px-6 py-5">
+        <CardBody className="flex flex-col w-full gap-6 px-6 py-5">
           {friendsDetails.map((friend, index) => (
             <div key={index} className="flex justify-between w-full">
               <User name={friend.fullname} description={`@${friend.username}`} avatarProps={{ src: friend.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger" }} />
