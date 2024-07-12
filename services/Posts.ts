@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URI = "http://localhost:3001/api/posts";
+const API_URI = "https://rest-api-cookie-u-c-p.onrender.com/api/posts";
 
 export const getAllPosts = async () => {
   try {
