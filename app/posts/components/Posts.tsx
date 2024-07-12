@@ -1,7 +1,7 @@
 "use client";
 import { ScrollShadow, Spinner } from "@nextui-org/react";
 import { CreatePost } from "@/app/posts/components/CreatePost";
-import { Post as IPost } from "@/interfaces/Post";
+import { Post as IPost } from "@/types/Post";
 import { getAllPosts } from "@/services/Posts";
 import PostCard from "./PostCard";
 import { useEffect, useState } from "react";
@@ -25,8 +25,6 @@ function Posts() {
       const postsData = await getAllPosts();
       setPosts(postsData.reverse());
       setLoading(false);
-      // console.log("All posts:", postsData);
-      // toast.success('All posts 🎔')
     } catch (error) {
       console.error("Error fetching posts:", error);
     }

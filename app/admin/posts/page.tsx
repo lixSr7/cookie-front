@@ -3,7 +3,7 @@
 import { getAllPosts } from "@/services/Posts";
 import { ScrollShadow, Spinner } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { Post as IPost } from "@/interfaces/Post";
+import { Post as IPost } from "@/types/Post";
 import PostCard from "./components/posts";
 
 function DashboardPosts() {

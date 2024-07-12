@@ -17,7 +17,7 @@ import {
 //? Components
 import Link from "next/link";
 import { Avatar } from "@nextui-org/react";
-import { userToken } from "@/interfaces/Users";
+import { userToken } from "@/types/Users";
 
 export default function Sidebar() {
   const pathname = usePathname();

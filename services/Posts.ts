@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URI = "https://rest-api-cookie-u-c-p.onrender.com/api/posts";
+const API_URI = "http://localhost:3001/api/posts";
 
 export const getAllPosts = async () => {
   try {
@@ -67,7 +67,6 @@ export const createComment = async (
       content,
       emoji: emoji ? emoji : "none",
     };
-    // console.log(commentData);
     const response = await axios.post(
       `${API_URI}/${postId}/comments`,
       commentData,
@@ -121,23 +120,14 @@ export const getAllLikes = async (postId: string) => {
   }
 };
 
-export const createLike = async (postId: string, user: any) => {
+export const createLike = async (postId: string) => {
   try {
-    const response = await axios.post(
-      `${API_URI}/${postId}/likes`,
-      {
-        user: {
-          name: user.fullname,
-          nickName: user.username,
-          image: user.image,
-        },
+    const token = localStorage.getItem("token") || "";
+    const response = await axios.post(`${API_URI}/${postId}/likes`, null, {
+      headers: {
+        "x-access-token": token,
       },
-      {
-        headers: {
-          "x-access-token": localStorage.getItem("token") || "",
-        },
-      }
-    );
+    });
     return response.data;
   } catch (error) {
     console.error(`Error creating like for post ${postId}:`, error);
@@ -147,9 +137,10 @@ export const createLike = async (postId: string, user: any) => {
 
 export const deleteLike = async (postId: string, id: string) => {
   try {
+    const token = localStorage.getItem("token") || "";
     const response = await axios.delete(`${API_URI}/${postId}/likes/${id}`, {
       headers: {
-        "x-access-token": localStorage.getItem("token") || "",
+        "x-access-token": token,
       },
     });
     return response.data;
@@ -158,6 +149,50 @@ export const deleteLike = async (postId: string, id: string) => {
       `Error deleting like with id ${id} for post ${postId}:`,
       error
     );
+    throw error;
+  }
+};
+
+export const savePost = async (postId: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await axios.post(`${API_URI}/save/${postId}`, null, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error saving post ${postId}:`, error);
+    throw error;
+  }
+};
+
+export const unsavePost = async (postId: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await axios.delete(`${API_URI}/save/${postId}`, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error unsave post ${postId}:`, error);
+    throw error;
+  }
+};
+
+export const getSavedPosts = async () => {
+  try {
+    const response = await axios.get(`${API_URI}/save`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token") || "",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching saved posts:", error);
     throw error;
   }
 };

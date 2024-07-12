@@ -7,7 +7,7 @@ type User = {
 
 export type Like = {
   _id: string;
-  user: User;
+  userId: string;
   createdAt: string;
 };
 

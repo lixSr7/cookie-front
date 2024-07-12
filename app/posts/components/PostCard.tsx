@@ -9,8 +9,8 @@ import DeletePost from "./DeletePost";
 import ShowMore from "./ShowMore";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
-import { Post as IPost } from "@/interfaces/Post";
-import { userToken } from "@/interfaces/Users";
+import { Post as IPost } from "@/types/Post";
+import { userToken } from "@/types/Users";
 
 import { jwtDecode } from "jwt-decode";
 
@@ -31,7 +31,7 @@ export default function PostCard({
   };
 
   if (!post.user) {
-    return null; // or display a fallback UI
+    return null; 
   }
 
   return (
@@ -67,7 +67,7 @@ export default function PostCard({
           )}
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
-          <ButtonOptions postId={post._id} />
+          <ButtonOptions postId={post._id} likes={post.likes} />
         </CardFooter>
       </Card>
     </article>

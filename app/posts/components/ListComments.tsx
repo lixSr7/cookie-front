@@ -7,7 +7,7 @@ import {
   ScrollShadow,
   Button,
 } from "@nextui-org/react";
-import { Comment as CommentType } from "@/interfaces/Post";
+import { Comment as CommentType } from "@/types/Post";
 import { deleteComment } from "@/services/Posts";
 import { Trash2 as TrashIcon } from "@geist-ui/icons";
 import { emojis } from "@/app/consts/emojis";
@@ -108,7 +108,7 @@ const Item = ({
           {comment.content}
           {comment.emoji !== "none" ? (
             <div className="flex items-center justify-center w-full">
-              <img className="w-10 m-auto" src={emojiURI} alt="" />
+              <img className=" w-24 m-auto" src={emojiURI} alt="" />
             </div>
           ) : null}
           <strong className="font-bold text-md text-slate-500">

@@ -16,8 +16,8 @@ import DeletePost from "@/app/posts/components/DeletePost";
 import ShowMore from "@/app/posts/components/ShowMore";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
-import { Post as IPost } from "@/interfaces/Post";
-import { userToken } from "@/interfaces/Users";
+import { Post as IPost } from "@/types/Post";
+import { userToken } from "@/types/Users";
 
 import { jwtDecode } from "jwt-decode";
 export default function PostCard({

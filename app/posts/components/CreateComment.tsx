@@ -3,7 +3,7 @@ import { Button, Input, Select, SelectItem, Avatar } from "@nextui-org/react";
 import { Send as SendIcon, Emoji as EmojiIcon } from "@geist-ui/icons";
 import { useState } from "react";
 import { useAuthStore } from "@/app/context/useAuthSrored";
-import { userToken } from "@/interfaces/Users";
+import { userToken } from "@/types/Users";
 import { emojis } from "@/app/consts/emojis";
 import { toast } from "sonner";
 

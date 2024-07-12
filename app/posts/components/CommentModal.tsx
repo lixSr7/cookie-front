@@ -4,16 +4,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
-  button,
-  Input,
 } from "@nextui-org/react";
-import { Send as SendIcon, MessageCircle as MessageIcon } from "@geist-ui/icons";
+import { MessageCircle as MessageIcon } from "@geist-ui/icons";
 import CreateComment from "./CreateComment";
 import ListComments from "./ListComments";
 import { useEffect, useState } from "react";
-import { Comment as CommentType } from "@/interfaces/Post";
+import { Comment as CommentType } from "@/types/Post";
 import { getAllComments } from "@/services/Posts";
 
 function CommentModal({ postId }: { postId: string }) {

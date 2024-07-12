@@ -17,7 +17,7 @@ import {
 import { useState, ChangeEvent, useEffect } from "react";
 import { createPost } from "@/services/Posts";
 import { useAuthStore } from "@/app/context/useAuthSrored";
-import { userToken } from "@/interfaces/Users";
+import { userToken } from "@/types/Users";
 import { toast } from "sonner";
 
 const UploaderImagePost = () => {
