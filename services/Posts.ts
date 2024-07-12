@@ -49,7 +49,11 @@ export const createPost = async (
 
 export const deletePost = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URI}/${id}`);
+    const response = await axios.delete(`${API_URI}/${id}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token") || "",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error(`Error deleting post with id ${id}:`, error);
