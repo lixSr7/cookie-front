@@ -62,10 +62,15 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
         }
       );
 
-      // console.log("Message sent:", response.data);
       setMessage("");
       setSelectedImage(null);
       setImagePreview(null);
+
+      if (response) {
+        console.log("Message sent successfully");
+      } else {
+        console.error("Failed to send message:", response);
+      }
     } catch (error: any) {
       console.error(
         "Error sending message:",
@@ -136,24 +141,24 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
             </Tooltip>
           ) : (
             <Tooltip content="Add Image">
-              <label htmlFor="imageInput">
-                <div>
-                  <BiImageAdd className="text-2xl cursor-pointer" />
-                </div>
+              <label>
+                <BiImageAdd className="text-2xl" />
+                <input
+                  id="imageInput"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
+                />
               </label>
             </Tooltip>
           )}
-          <input
-            id="imageInput"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleImageChange}
-          />
         </div>
       </div>
       {showWarning && (
-        <p className="text-[#dd2525] p-2">Please enter a message or add an image.</p>
+        <p className="text-[#dd2525] p-2">
+          Please enter a message or add an image.
+        </p>
       )}
     </div>
   );

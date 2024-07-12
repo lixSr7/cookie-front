@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import SearchUsers from '@/app/user/components/SearchUsers';
 
 interface User {
@@ -26,8 +26,6 @@ const CreateChat: React.FC = () => {
     if (storedToken) {
       const decodedToken = jwtDecode<DecodedToken>(storedToken);
       setId(decodedToken.id);
-    } else {
-      // console.log("No token found");
     }
   }, []);
 
@@ -66,7 +64,6 @@ const CreateChat: React.FC = () => {
       );
 
       if (response.ok) {
-        // console.log("Chat creado exitosamente");
         clearFields();
       } else {
         const errorText = await response.text();
@@ -92,12 +89,12 @@ const CreateChat: React.FC = () => {
 
   return (
     <section>
-      <div
+      <button
         onClick={handleToggleModal}
-        className="flex justify-center items-center w-12 h-10 hover:bg-neutral-300 dark:hover:bg-zinc-600 hover:transition-transform-background rounded-md cursor-pointer"
+        className="flex justify-center items-center w-12 h-10 hover:bg-neutral-300 dark:hover:bg-zinc-600 hover:transition-transform-background rounded-md cursor-pointer border-none outline-none"
       >
         <IoChatboxEllipsesOutline />
-      </div>
+      </button>
 
       <Modal isOpen={isOpen} onClose={handleToggleModal}>
         <ModalContent>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardFooter, Image, Button } from "@nextui-org/react";
-import {jwtDecode} from "jwt-decode";
+import { Card, CardFooter, Image } from "@nextui-org/react";
+import { jwtDecode } from "jwt-decode";
 
 export interface MessageProps {
   id: string;
@@ -39,54 +39,54 @@ const Message: React.FC<MessageProps> = ({ sender, content, createdAt, mediaUrl 
   const isSender = sender === id;
   const formattedDate = formatDate(createdAt);
 
+  const TextAndImageMessage = () => (
+    <div
+      className={`${
+        isSender ? "text-white" : "bg-gray-300 dark:bg-zinc-700"
+      } p-4 rounded-md`}
+    >
+      {mediaUrl && (
+        <div className="flex justify-center">
+          <Image
+            width={300}
+            height="auto"
+            alt="Message media"
+            src={mediaUrl.secure_url}
+            style={{ maxHeight: "200px" }}
+          />
+        </div>
+      )}
+      {content && (
+         <p className={`${mediaUrl ? "mt-2" : ""} ${content == "" ? "" : "bg-danger-500"} p-3 mb-2 rounded-md`}>{content}</p>
+      )}
+      <p
+        className={`${
+          isSender ? "text-white" : "dark:text-zinc-400"
+        } text-sm text-opacity-45 flex justify-end`}
+      >
+        {formattedDate}
+      </p>
+    </div>
+  );
+
+  const ImageOnlyMessage = () => (
+    <Card isFooterBlurred radius="lg" className="border-none">
+      <Image
+        alt="Message media"
+        className="object-cover"
+        height={200}
+        src={mediaUrl?.secure_url}
+        width={200}
+      />
+      <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+        <p className="text-tiny text-white/80">{formattedDate}</p>
+      </CardFooter>
+    </Card>
+  );
+
   return (
     <div className={`${isSender ? "justify-end" : "justify-start"} p-3 mb-2 w-full flex`}>
-      {content ? (
-        <div
-          className={`${
-            isSender ? "bg-danger-500 text-white" : "bg-gray-300 dark:bg-zinc-700"
-          } p-4 rounded-md`}
-        >
-          {mediaUrl && (
-            <div className="mt-2 mb-2 max-h-[200px]">  
-              <Image
-                width={300}
-                height="auto"
-                alt="Message media"
-                src={mediaUrl.secure_url}
-                style={{ maxHeight: "200px" }}  
-              />
-            </div>
-          )}
-          <p>{content}</p>
-          <p
-            className={`${
-              isSender ? "text-white" : "dark:text-zinc-400"
-            } text-sm text-opacity-45 flex justify-end`}
-          >
-            {formattedDate}
-          </p>
-        </div>
-      ) : (
-        mediaUrl && (
-          <Card
-            isFooterBlurred
-            radius="lg"
-            className="border-none"
-          >
-            <Image
-              alt="Message media"
-              className="object-cover"
-              height={200}
-              src={mediaUrl.secure_url}
-              width={200}
-            />
-            <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-              <p className="text-tiny text-white/80">{formattedDate}</p>
-            </CardFooter>
-          </Card>
-        )
-      )}
+      {content ? <TextAndImageMessage /> : <ImageOnlyMessage />}
     </div>
   );
 };
