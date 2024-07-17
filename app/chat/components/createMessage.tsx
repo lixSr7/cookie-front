@@ -140,9 +140,9 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
               </div>
             </Tooltip>
           ) : (
-            <Tooltip content="Add Image">
-              <label>
-                <BiImageAdd className="text-2xl" />
+            <Tooltip content="Add Image"> 
+              <label htmlFor="imageInput" className="cursor-pointer" >
+                <BiImageAdd className="text-2xl cursor-pointer" />
                 <input
                   id="imageInput"
                   type="file"

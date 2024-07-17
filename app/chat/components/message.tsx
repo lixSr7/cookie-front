@@ -25,7 +25,12 @@ const formatDate = (date: string | number | Date) => {
   return `${day}/${month}/${year}`;
 };
 
-const Message: React.FC<MessageProps> = ({ sender, content, createdAt, mediaUrl }) => {
+const Message: React.FC<MessageProps> = ({
+  sender,
+  content,
+  createdAt,
+  mediaUrl,
+}) => {
   const [id, setId] = useState<string>("");
 
   useEffect(() => {
@@ -57,7 +62,13 @@ const Message: React.FC<MessageProps> = ({ sender, content, createdAt, mediaUrl 
         </div>
       )}
       {content && (
-         <p className={`${mediaUrl ? "mt-2" : ""} ${content == "" ? "" : "bg-danger-500"} p-3 mb-2 rounded-md`}>{content}</p>
+        <p
+          className={`${mediaUrl ? "mt-2" : ""} p-3 mb-2 rounded-md ${
+            content === "" ? "" : "bg-danger-500"
+          }`}
+        >
+          {content}
+        </p>
       )}
       <p
         className={`${
@@ -85,7 +96,11 @@ const Message: React.FC<MessageProps> = ({ sender, content, createdAt, mediaUrl 
   );
 
   return (
-    <div className={`${isSender ? "justify-end" : "justify-start"} p-3 mb-2 w-full flex`}>
+    <div
+      className={`${
+        isSender ? "justify-end" : "justify-start"
+      } p-3 mb-2 w-full flex`}
+    >
       {content ? <TextAndImageMessage /> : <ImageOnlyMessage />}
     </div>
   );
