@@ -106,7 +106,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       <div className="w-full flex md:flex-row gap-4 p-2">
         {imagePreview && (
           <div className="p-2">
-            <Avatar isBordered radius="lg" src={imagePreview} />
+            <Avatar isBordered radius="lg" src={imagePreview} aria-label="Selected Image Preview" />
           </div>
         )}
         <Input
@@ -140,9 +140,9 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
               </div>
             </Tooltip>
           ) : (
-            <Tooltip content="Add Image"> 
-              <label htmlFor="imageInput" className="cursor-pointer" >
-                <BiImageAdd className="text-2xl cursor-pointer" />
+            <Tooltip content="Add Image">
+              <div className="cursor-pointer">
+                <BiImageAdd className="text-2xl" />
                 <input
                   id="imageInput"
                   type="file"
@@ -150,7 +150,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
                   style={{ display: "none" }}
                   onChange={handleImageChange}
                 />
-              </label>
+              </div>
             </Tooltip>
           )}
         </div>
