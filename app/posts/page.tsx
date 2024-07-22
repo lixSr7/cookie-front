@@ -16,7 +16,6 @@ function Home() {
         <Posts />
         </article>
         <article className="  flex-grow max-w-sm w-full bg-white h-[82vh] shrink dark:bg-black  dark:text-white flex flex-col items-end gap-5 pb-4 max-xl:hidden">
-          <FriendsCard />
         </article>
       </section>
       <NavBar />

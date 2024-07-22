@@ -23,13 +23,7 @@ export default function PostCard({
   updatePosts: () => void;
   token: string;
 }) {
-  const [isFollow, setisFollow] = useState(false);
   const decodeToken: userToken = jwtDecode(token);
-
-  const handleFollow = () => {
-    setisFollow(!isFollow);
-  };
-
   if (!post.user) {
     return null; 
   }
@@ -48,9 +42,6 @@ export default function PostCard({
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
-            <Button color={isFollow ? "danger" : "primary"} onClick={handleFollow} variant={isFollow ? "bordered" : "solid"} size="sm" >
-              {isFollow ? "Unfollow" : "Follow"}
-            </Button>
             <ShowMore />
             {(decodeToken.id === post.user._id ||
               decodeToken.role === "admin") && (

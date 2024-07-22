@@ -69,9 +69,7 @@ export default function SIGNIN() {
       }
     } catch (error) {
       toast.error("Error logging in. Please try again.");
-    } finally {
-      setIsSending(false);
-    }
+    } 
   };
 
   const handleErrors = (status: number, message: string) => {
@@ -148,16 +146,14 @@ export default function SIGNIN() {
           </Button>
           <div className="flex flex-col items-center justify-center gap-0 m-0">
             <p className="text-xs text-black">
-              Don&apos;t have an account?{" "}
+              Don&apos;t have an account?
               <Link href="/auth/signup" className="font-bold text-[#dd2525]">
-                {" "}
                 Register Now
               </Link>
             </p>
             <p className="text-xs text-black">
-              Forgot your password?{" "}
+              Forgot your password?
               <button onClick={onOpen} className="font-bold text-[#dd2525]">
-                {" "}
                 Recover
               </button>
             </p>
