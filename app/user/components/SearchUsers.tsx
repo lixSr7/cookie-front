@@ -17,7 +17,12 @@ interface SearchUsersProps {
   setSearchTerm: (term: string) => void;
 }
 
-const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, searchTerm, setSearchTerm }) => {
+const SearchUsers: React.FC<SearchUsersProps> = ({
+  onUserSelect,
+  selectedUsers,
+  searchTerm,
+  setSearchTerm,
+}) => {
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -38,7 +43,9 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, 
           }
         );
 
-        const filteredResults = response.data.filter((user: User) => user.role && user.role.name === "user");
+        const filteredResults = response.data.filter(
+          (user: User) => user.role && user.role.name === "user"
+        );
         setResults(filteredResults);
       } catch (error) {
         console.error("Error searching users:", error);
@@ -62,7 +69,10 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, 
     setPage(newPage);
   };
 
-  const paginatedResults = results.slice((page - 1) * resultsPerPage, page * resultsPerPage);
+  const paginatedResults = results.slice(
+    (page - 1) * resultsPerPage,
+    page * resultsPerPage
+  );
 
   return (
     <div className="p-4">
@@ -70,7 +80,9 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, 
         radius="lg"
         placeholder="Type to search..."
         labelPlacement="outside"
-        startContent={<CiSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />}
+        startContent={
+          <CiSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+        }
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -84,22 +96,39 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ onUserSelect, selectedUsers, 
             <li
               key={user._id}
               className={`flex items-center p-2 cursor-pointer transition-colors duration-200 rounded-lg ${
-                selectedUsers.some(selectedUser => selectedUser._id === user._id) ? "bg-gray-200 dark:bg-zinc-700" : "hover:bg-gray-100 dark:hover:bg-zinc-600"
+                selectedUsers.some(
+                  (selectedUser) => selectedUser._id === user._id
+                )
+                  ? "bg-gray-200 dark:bg-zinc-700"
+                  : "hover:bg-gray-100 dark:hover:bg-zinc-600"
               }`}
               onClick={() => handleUserSelect(user)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleUserSelect(user);
+              }}
+              role="button"
+              tabIndex={0}
             >
-              <Avatar size="sm" className="mr-3">{user.username.charAt(0)}</Avatar>
+              <Avatar size="sm" className="mr-3">
+                {user.username.charAt(0)}
+              </Avatar>
               <div className="flex-1">{user.username}</div>
-              {selectedUsers.some(selectedUser => selectedUser._id === user._id) && (
-                <GrCheckboxSelected color="danger" />
-              )}
+              {selectedUsers.some(
+                (selectedUser) => selectedUser._id === user._id
+              ) && <GrCheckboxSelected color="danger" />}
             </li>
           ))
         )}
       </ul>
       {results.length > resultsPerPage && (
         <div className="flex justify-center mt-4">
-          <Pagination total={Math.ceil(results.length / resultsPerPage)} initialPage={1} onChange={handlePageChange} variant="bordered" color="danger"/>
+          <Pagination
+            total={Math.ceil(results.length / resultsPerPage)}
+            initialPage={1}
+            onChange={handlePageChange}
+            variant="bordered"
+            color="danger"
+          />
         </div>
       )}
     </div>
