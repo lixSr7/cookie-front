@@ -50,7 +50,7 @@ export default function PostCard({
               isBordered
               size="md"
               color="danger"
-              src={post.user.image || ""}
+              src={post.user.image.secure_url || ""}
             />
             <div className="flex flex-col">
               <strong>{post.user.fullname}</strong>

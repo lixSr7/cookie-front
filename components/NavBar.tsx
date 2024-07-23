@@ -27,7 +27,7 @@ import {
   Sliders as OptionsIcon,
   ArrowLeftCircle as CloseIcon,
 } from "@geist-ui/icons";
-import PageChat from "@/app/chat/page";
+import PageChat from "@/app/chat/chatModal";
 import ProfileUser from "./ProfileUser";
 
 function NavBar() {

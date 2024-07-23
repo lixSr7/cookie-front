@@ -48,7 +48,8 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
         );
         setResults(filteredResults);
       } catch (error) {
-        console.error("Error searching users:", error);
+        // console.error removed to avoid production warnings
+        // Use a logging service or other debugging approach as needed
       } finally {
         setLoading(false);
       }
@@ -93,9 +94,9 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
           </div>
         ) : (
           paginatedResults.map((user) => (
-            <li
+            <button
               key={user._id}
-              className={`flex items-center p-2 cursor-pointer transition-colors duration-200 rounded-lg ${
+              className={`flex items-center p-2 transition-colors duration-200 rounded-lg ${
                 selectedUsers.some(
                   (selectedUser) => selectedUser._id === user._id
                 )
@@ -106,7 +107,6 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleUserSelect(user);
               }}
-              role="button"
               tabIndex={0}
             >
               <Avatar size="sm" className="mr-3">
@@ -116,7 +116,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
               {selectedUsers.some(
                 (selectedUser) => selectedUser._id === user._id
               ) && <GrCheckboxSelected color="danger" />}
-            </li>
+            </button>
           ))
         )}
       </ul>

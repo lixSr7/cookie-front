@@ -8,7 +8,7 @@ import {
 } from "@geist-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import RECOVER from "../recover/page";
+import RECOVER from "../recover/recover";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -187,7 +187,7 @@ export default function SIGNIN() {
           width={250}
           height={250}
           className="p-1 bg-white rounded-full"
-          alt="NextUI hero Image"
+          alt="Cookie Logo in Login Screen"
           src="/img/cookie_login.png"
         />
         <p className="font-bold">COOKIE, The new social network for people</p>

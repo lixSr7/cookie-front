@@ -1,6 +1,6 @@
-import { Comment as CommentType } from "@/app/interfaces/Post";
 
-function ListLikes({ comment }: { comment: CommentType }) {
+
+function ListLikes() {
   return (
     <article>
     </article>

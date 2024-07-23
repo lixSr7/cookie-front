@@ -1,9 +1,18 @@
-type User = {
+import { Image as UserImage } from "./Users";
+
+type PostUser = {
+  _id: string;
+  username: string;
+  fullname: string;
+  image: UserImage;
+};
+type CommentUser = {
   _id: string;
   username: string;
   fullname: string;
   image: string;
 };
+
 
 export type Like = {
   _id: string;
@@ -13,7 +22,7 @@ export type Like = {
 
 export type Comment = {
   content: string;
-  user: User;
+  user: CommentUser;
   _id: string;
   date: string;
   emoji?: "happy" | "ungry" | "sad" | "none";
@@ -24,9 +33,9 @@ export type Post = {
   _id: string;
   content: string;
   image: string;
-  user: User;
+  user: PostUser;
   likes: Like[];
   comments: Comment[];
-  createdAt: string; // Puedes usar Date para representar fechas.
-  updatedAt: string; // Puedes usar Date para representar fechas.
+  createdAt: string;
+  updatedAt: string;
 };

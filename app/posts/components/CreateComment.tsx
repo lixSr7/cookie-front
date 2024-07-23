@@ -2,7 +2,6 @@ import { createComment } from "@/services/Posts";
 import { Button, Input, Select, SelectItem, Avatar } from "@nextui-org/react";
 import { Send as SendIcon, Emoji as EmojiIcon } from "@geist-ui/icons";
 import { useState } from "react";
-import { useAuthStore } from "@/app/context/useAuthSrored";
 import { userToken } from "@/types/Users";
 import { emojis } from "@/app/consts/emojis";
 import { toast } from "sonner";
@@ -17,19 +16,15 @@ function CreateComment({
   const [content, setContent] = useState("");
   const [emoji, setEmoji] = useState("none");
   const [isSending, setIsSending] = useState(false);
-  const { user } = useAuthStore();
 
   const userDefault: userToken = {
     fullname: "Alexis Gonzalez",
     username: "DJ Zass",
-    image:
-      "https://industriamusical.com/wp-content/uploads/2022/09/Bizarrap.jpg",
     role: "user",
     id: "1",
     iat: 0,
   };
 
-  const userData = user ? user : userDefault;
 
   const handleCreate = async () => {
     try {

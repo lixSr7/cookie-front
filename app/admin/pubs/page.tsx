@@ -1,35 +1,44 @@
-"use client"
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Card, CardBody, Image, Avatar } from "@nextui-org/react";
-import React, { useState, useEffect } from 'react';
+"use client";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Avatar,
+} from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import { userToken, User } from "@/types/Users"; // Importa los tipos
 
 function PUBS() {
-  const [token, setToken] = useState('');
-  const [users, setUsers] = useState([]);
-  const [selectedRoleIds, setSelectedRoleIds] = useState({});
-  const [username, setUsername] = useState('');
-  const [image, setImage] = useState('');
+  const [token, setToken] = useState("");
+  const [users, setUsers] = useState<User[]>([]); // Define el tipo de estado
+  const [selectedRoleIds, setSelectedRoleIds] = useState<{
+    [key: string]: string;
+  }>({});
+  const [username, setUsername] = useState("");
+  const [image, setImage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    // console.log("Stored token:", storedToken);
+    const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
-      const decodedToken = jwtDecode(storedToken);
+      const decodedToken = jwtDecode<userToken>(storedToken); // Usa el tipo definido
       setUsername(decodedToken.username);
-      setImage(decodedToken.image.secure_url);
+      setImage(decodedToken.image?.secure_url || ""); // Accede a la propiedad secure_url del objeto image
       GetAllUsers(storedToken)
-        .then(data => {
+        .then((data) => {
+        
           setUsers(data);
-          const initialSelectedRoleIds = {};
-          data.forEach(user => {
+          const initialSelectedRoleIds: { [key: string]: string } = {};
+          data.forEach((user: User) => {
             initialSelectedRoleIds[user._id] = user.role._id;
           });
           setSelectedRoleIds(initialSelectedRoleIds);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error al obtener usuarios:", error);
         });
     }
@@ -37,34 +46,33 @@ function PUBS() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/auth/logout', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
       });
 
       if (response.ok) {
-        router.push('/');
+        router.push("/");
       } else {
         console.error("Error logout in:", await response.text());
         throw new Error("logout failed");
       }
     } catch (error) {
-      // console.log("Login error:", error);
       alert("Error al iniciar sesión. Intente nuevamente.");
     }
   };
 
-  const GetAllUsers = async (token) => {
+  const GetAllUsers = async (token: string): Promise<User[]> => {
     try {
-      const response = await fetch('http://localhost:3000/api/users/', {
-        method: 'GET',
+      const response = await fetch("http://localhost:3000/api/users/", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': token
+          "Content-Type": "application/json",
+          "x-access-token": token,
         },
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data: User[] = await response.json();
         return data;
       } else {
         console.error("Error al obtener usuarios:", await response.text());
@@ -74,7 +82,7 @@ function PUBS() {
       console.error("Error al obtener usuarios:", error);
       throw new Error("Error al obtener usuarios");
     }
-  }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -86,10 +94,18 @@ function PUBS() {
               <Avatar src={image} size="lg" className="object-cover"></Avatar>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="new" href="/admin">Users</DropdownItem>
-              <DropdownItem key="copy" href="/admin/stats">Stas</DropdownItem>
-              <DropdownItem key="edit" href="/admin/pubs">Post / Stories</DropdownItem>
-              <DropdownItem key="delete" onClick={handleLogout}>Logout</DropdownItem>
+              <DropdownItem key="new" href="/admin">
+                Users
+              </DropdownItem>
+              <DropdownItem key="copy" href="/admin/stats">
+                Stats
+              </DropdownItem>
+              <DropdownItem key="edit" href="/admin/pubs">
+                Post / Stories
+              </DropdownItem>
+              <DropdownItem key="delete" onClick={handleLogout}>
+                Logout
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -99,4 +115,4 @@ function PUBS() {
   );
 }
 
-export default PUBS
+export default PUBS;

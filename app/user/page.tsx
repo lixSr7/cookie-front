@@ -1,17 +1,46 @@
 "use client";
-import { Avatar, Button, ButtonGroup, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Card, CardBody, Image, Skeleton, } from "@nextui-org/react";
-import { FaSave, FaSearch, FaEnvelope, FaChartLine, FaBell, FaPlus, FaWrench, } from "react-icons/fa";
+import {
+  Avatar,
+  Button,
+  ButtonGroup,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Tabs,
+  Tab,
+  Card,
+  CardBody,
+  Image,
+  Skeleton,
+} from "@nextui-org/react";
+import {
+  FaSave,
+  FaSearch,
+  FaEnvelope,
+  FaChartLine,
+  FaBell,
+  FaPlus,
+  FaWrench,
+} from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import PageChat from "../chat/page";
+import { userProfile } from "@/types/Users";
+import PageChat from "../chat/chatModal";
 
 function PROFILE() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [token, setToken] = useState("");
-  const [id, setId] = useState("");
-  const [profile, setProfile] = useState("");
-  const [profilePic, setProfilePic] = useState("");
+  const [token, setToken] = useState<string>("");
+  const [id, setId] = useState<string>("");
+  const [profile, setProfile] = useState<userProfile | null>(null);
+  const [profilePic, setProfilePic] = useState<string>("");
   const router = useRouter();
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
@@ -19,15 +48,15 @@ function PROFILE() {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
-      const decodedToken = jwtDecode(storedToken);
+      const decodedToken = jwtDecode<any>(storedToken);
       setId(decodedToken.id);
       setProfilePic(decodedToken.image.secure_url);
       getProfile(storedToken).then((data) => setProfile(data));
-      console.log('perfil', profile);
+      console.log("perfil", profile);
     }
   }, []);
 
-  const getProfile = async (token) => {
+  const getProfile = async (token: string): Promise<userProfile> => {
     try {
       const response = await fetch(
         "https://co-api-vjvb.onrender.com/api/profile/",
@@ -41,7 +70,7 @@ function PROFILE() {
       );
 
       if (response.ok) {
-        const data = await response.json();
+        const data: userProfile = await response.json();
         return data;
       } else {
         console.error("Error al obtener perfil:", await response.text());
@@ -52,6 +81,7 @@ function PROFILE() {
     } catch (error) {
       console.error("Error al obtener perfil:", error);
       alert("Error al obtener el perfil. Intente nuevamente más tarde.");
+      return Promise.reject(error); // Maneja el error adecuadamente
     }
   };
 
@@ -95,10 +125,11 @@ function PROFILE() {
                 isBordered
                 as="button"
                 color="default"
-                name=""
+                name="Profile Pic"
                 size="sm"
                 className="ml-1 transition-transform"
                 fallback={<FaPlus />}
+                src={profilePic}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" variant="shadow">
@@ -107,16 +138,14 @@ function PROFILE() {
                 startContent={<FaSave />}
                 textValue="Save"
               >
-                {" "}
-                Save{" "}
+                Save
               </DropdownItem>
               <DropdownItem
                 key="search"
                 startContent={<FaSearch />}
                 textValue="Search"
               >
-                {" "}
-                Search{" "}
+                Search
               </DropdownItem>
               <DropdownItem
                 key="messages"
@@ -131,21 +160,19 @@ function PROFILE() {
                 startContent={<FaChartLine />}
                 textValue="Stats"
               >
-                {" "}
-                Stats{" "}
+                Stats
               </DropdownItem>
               <DropdownItem
                 key="notifi"
                 startContent={<FaBell />}
                 textValue="Notifications"
               >
-                {" "}
-                Notifications{" "}
+                Notifications
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
 
-          <div >
+          <div>
             <Button
               onPress={onOpen}
               className="flex flex-col items-center justify-between gap-0 bg-red-500 h-max"
@@ -182,12 +209,12 @@ function PROFILE() {
                             className="w-[150px] h-[150px] rounded-full border-1.5"
                             isBlurred
                             src={profilePic}
-                          ></Image>
+                          />
                           <p className="m-0 text-2xl font-bold">
-                            {profile.fullname}
+                            {profile?.fullname}
                           </p>
                           <p className="text-xs text-gray-300">
-                            @{profile.username}
+                            @{profile?.username}
                           </p>
                           <button className="absolute top-10 left-10">
                             <FaWrench />
@@ -201,66 +228,27 @@ function PROFILE() {
                         <Tabs aria-label="Options">
                           <Tab key="posts" title="Posts">
                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                              <Card
-                                shadow="sm"
-                                isPressable
-                                onPress={() => console.log("item pressed")}
-                              >
-                                <CardBody className="p-0 overflow-visible">
-                                  <Image
+                              {/* Placeholder images */}
+                              {Array(4)
+                                .fill(null)
+                                .map((_, index) => (
+                                  <Card
                                     shadow="sm"
-                                    radius="lg"
-                                    width="100%"
-                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-                                    className="w-full object-cover h-[140px]"
-                                  />
-                                </CardBody>
-                              </Card>
-                              <Card
-                                shadow="sm"
-                                isPressable
-                                onPress={() => console.log("item pressed")}
-                              >
-                                <CardBody className="p-0 overflow-visible">
-                                  <Image
-                                    shadow="sm"
-                                    radius="lg"
-                                    width="100%"
-                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-                                    className="w-full object-cover h-[140px]"
-                                  />
-                                </CardBody>
-                              </Card>
-                              <Card
-                                shadow="sm"
-                                isPressable
-                                onPress={() => console.log("item pressed")}
-                              >
-                                <CardBody className="p-0 overflow-visible">
-                                  <Image
-                                    shadow="sm"
-                                    radius="lg"
-                                    width="100%"
-                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-                                    className="w-full object-cover h-[140px]"
-                                  />
-                                </CardBody>
-                              </Card>
-                              <Card
-                                shadow="sm"
-                                isPressable
-                                onPress={() => console.log("item pressed")}
-                              >
-                                <CardBody className="p-0 overflow-visible">
-                                  <Image
-                                    shadow="sm"
-                                    radius="lg"
-                                    width="100%"
-                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-                                    className="w-full object-cover h-[140px]"
-                                  />
-                                </CardBody>
-                              </Card>
+                                    isPressable
+                                    key={index}
+                                    onPress={() => console.log("item pressed")}
+                                  >
+                                    <CardBody className="p-0 overflow-visible">
+                                      <Image
+                                        shadow="sm"
+                                        radius="lg"
+                                        width="100%"
+                                        src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+                                        className="w-full object-cover h-[140px]"
+                                      />
+                                    </CardBody>
+                                  </Card>
+                                ))}
                             </div>
                           </Tab>
                           <Tab key="save" title="Save">
@@ -309,6 +297,7 @@ function PROFILE() {
               </ModalContent>
             </Modal>
           </div>
+
           <Dropdown backdrop="blur" className="text-white bg-red-500">
             <DropdownTrigger>
               <Avatar
@@ -323,21 +312,20 @@ function PROFILE() {
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="shadow">
               <DropdownItem key="logout" onClick={handleLogout}>
-                {" "}
-                Log Out{" "}
+                Log Out
               </DropdownItem>
               <DropdownItem key="profile" className="gap-2 h-14">
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">{profile.email}</p>
+                <p className="font-semibold">{profile?.email}</p>
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
       </footer>
+
       <PageChat isOpen={isChatOpen} onClose={handleCloseChat} />
     </main>
   );
 }
-
 
 export default PROFILE;

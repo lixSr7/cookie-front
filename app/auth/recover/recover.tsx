@@ -9,7 +9,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/react";
-import { ValidateCodeSend } from "./validateCode/page";
+import { ValidateCodeSend } from "../recover/validateCode";
 import { useDisclosure } from "@nextui-org/react";
 
 interface RecoverProps {
