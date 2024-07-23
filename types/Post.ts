@@ -9,7 +9,7 @@ type PostUser = {
   _id: string;
   username: string;
   fullname: string;
-  mediaUrl?: mediaUrl;
+  image: UserImage;
 };
 type CommentUser = {
   _id: string;
