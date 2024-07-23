@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import Message from "./message";
 import { Spinner } from "@nextui-org/react";
-import socket from "@/app/config/socketConfig";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+
+import Message from "./message";
+
+import socket from "@/app/config/socketConfig";
 
 interface DecodedToken {
   id: string;
@@ -30,15 +32,18 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
   const [id, setId] = useState<string>("");
+  const [chatId, setChatId] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
       const decodedToken = jwtDecode<DecodedToken>(storedToken);
+
       setId(decodedToken.id);
     }
   }, []);
@@ -70,11 +75,16 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
             },
           }
         );
+
         setMessages(response.data.chat.messages);
+        setChatId(response.data.chat._id);
         socket.emit("joinRoom", selectedChat);
         scrollToBottom();
       } catch (error: any) {
-        console.error("Failed to join chat:", error.response?.data || error.message);
+        console.error(
+          "Failed to join chat:",
+          error.response?.data || error.message,
+        );
       } finally {
         setLoading(false);
       }
@@ -87,18 +97,26 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     if (!socket) return;
 
     const handleNewMessage = (message: IMessage) => {
-      // console.log("Received message from server:", message);
       if (message.chatId === selectedChat) {
         setMessages((prevMessages) => [...prevMessages, message]);
         scrollToBottom();
       }
     };
 
-    // console.log("Listening for new messages...");
+    const handleDeleteMessage = (messageId: string, chatId: string) => {
+      if (chatId === selectedChat) {
+        setMessages((prevMessages) =>
+          prevMessages.filter((message) => message._id !== messageId),
+        );
+      }
+    };
+
     socket.on("newMessage", handleNewMessage);
+    socket.on("messageDeleted", handleDeleteMessage);
 
     return () => {
       socket.off("newMessage", handleNewMessage);
+      socket.off("messageDeleted", handleDeleteMessage);
     };
   }, [selectedChat]);
 
@@ -114,6 +132,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     const date = new Date(dateString);
     const today = new Date();
     const yesterday = new Date(today);
+
     yesterday.setDate(today.getDate() - 1);
 
     if (date.toDateString() === today.toDateString()) {
@@ -121,13 +140,19 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     } else if (date.toDateString() === yesterday.toDateString()) {
       return "Ayer";
     } else {
-      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+      const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
       return date.toLocaleDateString(undefined, options);
     }
   };
 
   return (
-    <article className={`flex-grow w-full h-full min-h-[400px] flex flex-col ${windowWidth <= 768 ? 'overflow-y-auto' : ''}`}>
+    <article
+      className={`flex-grow w-full h-full min-h-[400px] flex flex-col ${windowWidth <= 768 ? "overflow-y-auto" : ""}`}
+    >
       {loading ? (
         <div className="grid place-content-center w-full h-full">
           <Spinner label="Loading..." color="danger" className="flex m-auto" />
@@ -152,11 +177,12 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
                   </div>
                 )}
                 <Message
-                  sender={message.sender}
+                  chatId={chatId}
                   content={message.content}
                   createdAt={message.createdAt}
                   id={message._id}
                   mediaUrl={message.mediaUrl}
+                  sender={message.sender}
                 />
               </React.Fragment>
             );

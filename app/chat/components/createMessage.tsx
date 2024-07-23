@@ -16,18 +16,20 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [showWarning, setShowWarning] = useState<boolean>(false);
+  const [showImageError, setShowImageError] = useState<boolean>(false);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    if (showWarning) {
+    if (showWarning || showImageError) {
       timer = setTimeout(() => {
         setShowWarning(false);
+        setShowImageError(false);
       }, 5000);
     }
 
     return () => clearTimeout(timer);
-  }, [showWarning]);
+  }, [showWarning, showImageError]);
 
   const sendMessage = async () => {
     if (!message.trim() && !selectedImage) {
@@ -91,6 +93,13 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+      if (!validImageTypes.includes(file.type)) {
+        setShowImageError(true);
+        return;
+      }
+
       setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file));
     }
@@ -106,26 +115,26 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       <div className="w-full flex md:flex-row gap-4 p-2">
         {imagePreview && (
           <div className="p-2">
-            <Avatar isBordered radius="lg" src={imagePreview} aria-label="Selected Image Preview" />
+            <Avatar aria-label="Selected Image Preview" isBordered radius="lg" src={imagePreview} />
           </div>
         )}
         <Input
-          id="messageInput"
-          type="text"
-          variant="bordered"
-          label="Enter your message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
           className="flex-grow h-[50px]"
           color={showWarning ? "danger" : "default"}
+          id="messageInput"
+          label="Enter your message"
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          type="text"
+          value={message}
+          variant="bordered"
         />
         <Button
-          color="danger"
-          variant="ghost"
           className="w-full max-w-[20px] flex-shrink-0 h-[50px]"
-          onClick={sendMessage}
+          color="danger"
           disabled={isSending || (!message.trim() && !selectedImage)}
+          onClick={sendMessage}
+          variant="ghost"
         >
           {isSending ? <Spinner size="sm" /> : <GoPaperAirplane />}
         </Button>
@@ -141,16 +150,19 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
             </Tooltip>
           ) : (
             <Tooltip content="Add Image">
-              <div className="cursor-pointer">
-                <BiImageAdd className="text-2xl" />
+              <form className="cursor-pointer">
+                <label htmlFor="imageInput">
+                  .
+                  <BiImageAdd className="text-2xl" />
+                </label>
                 <input
-                  id="imageInput"
-                  type="file"
                   accept="image/*"
-                  style={{ display: "none" }}
+                  id="imageInput"
                   onChange={handleImageChange}
+                  style={{ display: "none" }}
+                  type="file"
                 />
-              </div>
+              </form>
             </Tooltip>
           )}
         </div>
@@ -158,6 +170,11 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       {showWarning && (
         <p className="text-[#dd2525] p-2">
           Please enter a message or add an image.
+        </p>
+      )}
+      {showImageError && (
+        <p className="text-[#dd2525] p-2">
+          Invalid file type. Please upload an image.
         </p>
       )}
     </div>

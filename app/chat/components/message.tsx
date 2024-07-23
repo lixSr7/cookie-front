@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardFooter, Image } from "@nextui-org/react";
+import {
+  Card,
+  CardFooter,
+  Image,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from "@nextui-org/react";
 import { jwtDecode } from "jwt-decode";
+import { IoIosArrowDown } from "react-icons/io";
+
+import deleteMessage from "./deleteMessage";
+
+import socket from "@/app/config/socketConfig";
 
 export interface MessageProps {
   id: string;
@@ -11,26 +25,28 @@ export interface MessageProps {
     public_id: string;
     secure_url: string;
   };
+  chatId: string;
 }
 
 interface DecodedToken {
   id: string;
 }
 
-const formatDate = (date: string | number | Date) => {
+const formatTime = (date: string | number | Date) => {
   const dateObj = new Date(date);
-  const day = dateObj.getDate().toString().padStart(2, "0");
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
-  const year = dateObj.getFullYear();
+  const hours = dateObj.getHours().toString().padStart(2, "0");
+  const minutes = dateObj.getMinutes().toString().padStart(2, "0");
 
-  return `${day}/${month}/${year}`;
+  return `${hours}:${minutes}`;
 };
 
 const Message: React.FC<MessageProps> = ({
+  id: messageId,
   sender,
   content,
   createdAt,
   mediaUrl,
+  chatId,
 }) => {
   const [id, setId] = useState<string>("");
 
@@ -45,46 +61,75 @@ const Message: React.FC<MessageProps> = ({
   }, []);
 
   const isSender = sender === id;
-  const formattedDate = formatDate(createdAt);
+  const formattedTime = formatTime(createdAt);
+
+  const handleDelete = async () => {
+    if (window.confirm("¿Seguro que deseas eliminar el mensaje?")) {
+      const token = localStorage.getItem("token") || "";
+
+      try {
+        await deleteMessage(messageId, chatId, token);
+        console.log("Mensaje eliminado");
+        socket.emit("deleteMessage", messageId, chatId);
+      } catch (error) {
+        console.error("Error deleting message:", error);
+      }
+    }
+  };
 
   const TextAndImageMessage = () => (
-    <div
-      className={`${
-        isSender ? "text-white" : "bg-gray-300 dark:bg-zinc-700"
-      } p-4 rounded-md`}
-    >
+    <div className="relative p-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
       {mediaUrl && (
         <div className="flex justify-center">
           <Image
-            width={300}
-            height="auto"
             alt="Message media"
+            height="auto"
             src={mediaUrl.secure_url}
             style={{ maxHeight: "200px" }}
+            width={300}
           />
         </div>
       )}
       {content && (
         <p
           className={`${mediaUrl ? "mt-2" : ""} p-3 mb-2 rounded-md ${
-            isSender ? "bg-blue-500" : "bg-gray-200"
+            isSender ? "bg-danger-500 text-white" : "bg-gray-200"
           }`}
         >
           {content}
         </p>
       )}
-      <p
-        className={`${
-          isSender ? "text-white" : "dark:text-zinc-400"
-        } text-sm text-opacity-45 flex justify-end`}
-      >
-        {formattedDate}
-      </p>
+      <p className="text-xs text-gray-500">{formattedTime}</p>
+      {isSender && (
+        <div className="absolute top-0 right-0 mt-2 mr-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <button className="">
+                <IoIosArrowDown />
+              </button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+              <DropdownItem
+                key="delete"
+                className="text-danger"
+                color="danger"
+                onClick={handleDelete}
+              >
+                Delete
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      )}
     </div>
   );
 
   const ImageOnlyMessage = () => (
-    <Card isFooterBlurred radius="lg" className="border-none">
+    <Card
+      isFooterBlurred
+      className="border-none relative hover:bg-gray-100 dark:hover:bg-gray-700"
+      radius="lg"
+    >
       {mediaUrl && (
         <>
           <Image
@@ -95,8 +140,29 @@ const Message: React.FC<MessageProps> = ({
             width={200}
           />
           <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-            <p className="text-tiny text-white/80">{formattedDate}</p>
+            <p className="text-tiny text-white/80">{formattedTime}</p>
           </CardFooter>
+          {isSender && (
+            <div className="absolute top-0 right-0 mt-2 mr-2">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button>
+                    <IoIosArrowDown />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem
+                    key="delete"
+                    className="text-danger"
+                    color="danger"
+                    onClick={handleDelete}
+                  >
+                    Delete message
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          )}
         </>
       )}
     </Card>
@@ -104,9 +170,7 @@ const Message: React.FC<MessageProps> = ({
 
   return (
     <div
-      className={`${
-        isSender ? "justify-end" : "justify-start"
-      } p-3 mb-2 w-full flex`}
+      className={`${isSender ? "justify-end" : "justify-start"} p-3 mb-2 w-full flex`}
     >
       {content || mediaUrl ? <TextAndImageMessage /> : <ImageOnlyMessage />}
     </div>
