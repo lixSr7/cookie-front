@@ -32,7 +32,7 @@ export default function PostCard({
       <Card className="block w-full">
         <CardHeader className="flex justify-between gap-3 p-4">
           <div className="flex items-center gap-3">
-            <Avatar isBordered size="md" color="danger" src={post.user.image.secure_url || ""} />
+            <Avatar isBordered size="md" color="danger" src={post.user.image || ""} />
             <div className="flex flex-col">
               <strong>{post.user.fullname}</strong>
               <span className="text-sm text-blue-500">

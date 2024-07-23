@@ -4,7 +4,7 @@ type PostUser = {
   _id: string;
   username: string;
   fullname: string;
-  image: UserImage;
+  image: string;
 };
 type CommentUser = {
   _id: string;
