@@ -1,10 +1,15 @@
 import { Image as UserImage } from "./Users";
 
+type mediaUrl = {
+  public_id: string;
+  secure_url: string;
+};
+
 type PostUser = {
   _id: string;
   username: string;
   fullname: string;
-  image: string;
+  mediaUrl?: mediaUrl;
 };
 type CommentUser = {
   _id: string;

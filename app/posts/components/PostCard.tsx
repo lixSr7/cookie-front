@@ -1,6 +1,12 @@
-'use client';
+"use client";
 
-import {  Card, CardBody, CardFooter, CardHeader, Avatar, } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Avatar,
+} from "@nextui-org/react";
 
 import PostImage from "./PostImage";
 import ButtonOptions from "./ButtonOptions";
@@ -24,7 +30,7 @@ export default function PostCard({
 }) {
   const decodeToken: userToken = jwtDecode(token);
   if (!post.user) {
-    return null; 
+    return null;
   }
 
   return (
@@ -32,7 +38,12 @@ export default function PostCard({
       <Card className="block w-full">
         <CardHeader className="flex justify-between gap-3 p-4">
           <div className="flex items-center gap-3">
-            <Avatar isBordered size="md" color="danger" src={post.user.image || ""} />
+            <Avatar
+              isBordered
+              size="md"
+              color="danger"
+              src={post.user.mediaUrl?.secure_url || ""}
+            />
             <div className="flex flex-col">
               <strong>{post.user.fullname}</strong>
               <span className="text-sm text-blue-500">
@@ -44,8 +55,8 @@ export default function PostCard({
             <ShowMore />
             {(decodeToken.id === post.user._id ||
               decodeToken.role === "admin") && (
-                <DeletePost updatePosts={updatePosts} postId={post._id} />
-              )}
+              <DeletePost updatePosts={updatePosts} postId={post._id} />
+            )}
           </div>
         </CardHeader>
         <CardBody className="flex flex-col items-center justify-center w-full">
@@ -53,7 +64,11 @@ export default function PostCard({
             {post.content}
           </p>
           {post.image && (
-            <PostImage src={post.image} alt={post.content} date={formatTimeDifference(post.createdAt)} />
+            <PostImage
+              src={post.image}
+              alt={post.content}
+              date={formatTimeDifference(post.createdAt)}
+            />
           )}
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
