@@ -2,7 +2,10 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import { Input, Button, Image, useDisclosure } from "@nextui-org/react";
-import { Eye as EyeFilledIcon, EyeOff as EyeSlashFilledIcon } from "@geist-ui/icons";
+import {
+  Eye as EyeFilledIcon,
+  EyeOff as EyeSlashFilledIcon,
+} from "@geist-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import RECOVER from "../recover/recover";
@@ -41,7 +44,7 @@ export default function SIGNIN() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
+          body: JSON.stringify({  
             emailOrUsername,
             password,
           }),
@@ -66,7 +69,7 @@ export default function SIGNIN() {
       }
     } catch (error) {
       toast.error("Error logging in. Please try again.");
-    }
+    } 
   };
 
   const handleErrors = (status: number, message: string) => {
@@ -144,13 +147,13 @@ export default function SIGNIN() {
           <div className="flex flex-col items-center justify-center gap-0 m-0">
             <p className="text-xs text-black">
               Don&apos;t have an account?
-              <Link href="/auth/signup" className="ml-1 font-bold text-[#dd2525]">
+              <Link href="/auth/signup" className="font-bold text-[#dd2525]">
                 Register Now
               </Link>
             </p>
             <p className="text-xs text-black">
               Forgot your password?
-              <button onClick={onOpen} className="ml-1 font-bold text-[#dd2525]">
+              <button onClick={onOpen} className="font-bold text-[#dd2525]">
                 Recover
               </button>
             </p>
