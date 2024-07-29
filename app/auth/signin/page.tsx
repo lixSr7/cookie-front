@@ -38,7 +38,7 @@ export default function SIGNIN() {
     setIsSending(true);
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/auth/signin",
+        "https://cookie-rest-api-8fnl.onrender.com/api/auth/signin",
         {
           method: "POST",
           headers: {

@@ -68,7 +68,7 @@ export default function ChatList({ onSelectChat, searchTerm }: ChatListProps) {
     if (!token) return;
 
     try {
-      const response = await axios.get("https://rest-api-cookie-u-c-p.onrender.com/api/chat/", {
+      const response = await axios.get("https://cookie-rest-api-8fnl.onrender.com/api/chat/", {
         headers: {
           "x-access-token": token,
         },

@@ -67,7 +67,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          `https://rest-api-cookie-u-c-p.onrender.com/api/chat/${selectedChat}`,
+          `https://cookie-rest-api-8fnl.onrender.com/api/chat/${selectedChat}`,
           {},
           {
             headers: {

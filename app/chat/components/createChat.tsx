@@ -49,7 +49,7 @@ const CreateChat: React.FC = () => {
     const usersToSend = [...selectedUsers.map(user => user._id), id];
     try {
       const response = await fetch(
-        "https://rest-api-cookie-u-c-p.onrender.com/api/chat/",
+        "https://cookie-rest-api-8fnl.onrender.com/api/chat/",
         {
           method: "POST",
           headers: {

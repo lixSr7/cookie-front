@@ -54,7 +54,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       }
 
       const response = await axios.post(
-        `https://rest-api-cookie-u-c-p.onrender.com/api/chat/messages/${chatId}/messages`,
+        `https://cookie-rest-api-8fnl.onrender.com/api/chat/messages/${chatId}/messages`,
         formData,
         {
           headers: {
