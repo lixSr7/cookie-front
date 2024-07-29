@@ -28,7 +28,7 @@ function FriendshipsCard() {
 
   const getAllUsers = async (token: string | null) => {
     try {
-      const response = await fetch('https://co-api-vjvb.onrender.com/api/users/', {
+      const response = await fetch('https://cookie-rest-api-8fnl.onrender.com/api/users/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
