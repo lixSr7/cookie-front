@@ -200,3 +200,13 @@ export const getSavedPosts = async () => {
     throw error;
   }
 };
+
+export const getStatsPlatform = async () => {
+  try {
+    const response = await axios.get(`${API_URI}/stats-platform`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching stats platform:", error);
+    throw error;
+  }
+};
