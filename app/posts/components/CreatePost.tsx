@@ -1,84 +1,27 @@
-"use client";
-
-// Componets
-import { UploadCloud as CloudIcon } from "@geist-ui/icons";
+import { useDisclosure } from "@nextui-org/react";
+import { useState, useEffect } from "react";
 import {
+  Avatar,
+  Button,
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
-  useDisclosure,
-  Avatar,
-  Textarea,
   Spinner,
+  Textarea,
 } from "@nextui-org/react";
-import { useState, ChangeEvent, useEffect } from "react";
 import { createPost } from "@/services/Posts";
-import { useAuthStore } from "@/app/context/useAuthSrored";
-import { userToken } from "@/types/Users";
 import { toast } from "sonner";
-
-const UploaderImagePost = () => {
-  const [image, setImage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [borderColor, setBorderColor] = useState<string>("border-blue-500");
-  const [iconColor, setIconColor] = useState<string>("stroke-blue-500");
-
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type.startsWith("image/")) {
-        setImage(URL.createObjectURL(file));
-        setError(null);
-        setBorderColor("border-blue-500");
-        setIconColor("stroke-blue-500");
-      } else {
-        setImage(null);
-        setError("Por favor, selecciona una imagen válida.");
-        setBorderColor("border-red-500");
-        setIconColor("stroke-red-500");
-      }
-    }
-  };
-
-  return (
-    <article>
-      <label
-        htmlFor="imageInput"
-        className={`flex flex-col items-center justify-center overflow-hidden border-2 ${borderColor} border-dashed cursor-pointer rounded-xl h-60`}
-      >
-        {image ? (
-          <img
-            className="object-cover w-full h-full"
-            src={image}
-            alt="Imagen de Publicacion"
-          />
-        ) : (
-          <>
-            <CloudIcon className={`w-20 h-20 ${iconColor}`} />
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-          </>
-        )}
-        <input
-          id="imageInput"
-          name="Image"
-          onChange={handleImageChange}
-          type="file"
-          accept="image/*"
-          className="hidden inputImageCreatePost"
-        />
-      </label>
-    </article>
-  );
-};
+import UploaderImagePost from "./UploaderImagePost";
 
 export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isContentInvalid, setIsContentInvalid] = useState(false);
+  const [errorContent, setErrorContent] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [token, setToken] = useState("");
+  const [image, setImage] = useState<string | null>(null); // State for image
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -87,18 +30,60 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
     }
   }, []);
 
-  const handleSubmit = async (content: string, imageFile?: File | null) => {
-    try {
-      setIsSending(true);
-      await createPost(content, imageFile, token);
-      updatePosts();
-      toast.success("success creating post");
-    } catch (error) {
-      console.error("Error in handleSubmit:", error);
-      toast.error("Error creating comment");
-    } finally {
-      setIsSending(false);
+  useEffect(() => {
+    if (!isOpen) {
+      resetForm(); // Reset the form when modal is closed
     }
+  }, [isOpen]);
+
+  // Function to validate content
+  function validateContent(content: string, imageIsEmpty: boolean) {
+    const ERROS_CONTENT = {
+      empty: "The content cannot be empty",
+      maxLength: "The content cannot be longer than 3000 characters",
+    };
+
+    if (content.trim() === "" && imageIsEmpty) {
+      setIsContentInvalid(true);
+      setErrorContent(ERROS_CONTENT.empty);
+      console.error("Error:", ERROS_CONTENT.empty);
+      return false;
+    } else if (content.trim().length > 3000) {
+      setIsContentInvalid(true);
+      setErrorContent(ERROS_CONTENT.maxLength);
+      console.error("Error:", ERROS_CONTENT.maxLength);
+      return false;
+    }
+    return true;
+  }
+
+  const handleSubmit = async (
+    content: string,
+    imageFile?: File | null,
+    onClose?: () => void
+  ) => {
+    const imageIsEmpty = !image; // Determine if image is empty
+    if (validateContent(content, imageIsEmpty)) {
+      try {
+        setIsSending(true);
+        await createPost(content, imageFile, token);
+        updatePosts();
+        toast.success("Success creating post");
+      } catch (error) {
+        console.error("Error in handleSubmit:", error);
+        toast.error("Error creating post");
+      } finally {
+        setIsSending(false);
+        onClose?.(); 
+      }
+    }
+  };
+
+
+  const resetForm = () => {
+    setImage(null);
+    setIsContentInvalid(false);
+    setErrorContent("");
   };
 
   return (
@@ -140,7 +125,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                   ) as HTMLInputElement;
                   const imageFile = imageInput.files?.[0];
 
-                  handleSubmit(content, imageFile);
+                  handleSubmit(content, imageFile, onClose);
                 }}
               >
                 <ModalHeader className="flex flex-col gap-1">
@@ -152,22 +137,22 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                       label="Loading..."
                       color="primary"
                       labelColor="primary"
+                      className="w-full h-full flex items-center justify-center"
                     />
                   ) : (
                     <>
                       <Textarea
                         name="Content"
-                        required
                         variant="faded"
-                        label="¿Que estas pensando?"
+                        label="What's on your mind?"
                         placeholder="Hi, I am cookie"
                         className="max-w-s"
-                        maxLength={250}
+                        maxLength={3000}
                         isInvalid={isContentInvalid}
-                        errorMessage="El campo no puede estar vacio"
+                        errorMessage={errorContent}
                       />
 
-                      <UploaderImagePost />
+                      <UploaderImagePost setImage={setImage} image={image} />
                     </>
                   )}
                 </ModalBody>

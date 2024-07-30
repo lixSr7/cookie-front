@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@nextui-org/react";
+import ShareModal from "./ShareModal";
 import CommentModal from "./CommentModal";
 import { userToken } from "@/types/Users";
 import { Like as typeLike } from "@/types/Post";
@@ -40,11 +40,6 @@ function ButtonOptions({
   };
 
   // Maneja la acción de compartir
-  const handleShare = () => {
-    // Lógica para manejar la acción de compartir
-    console.log("Share button clicked!");
-    // Aquí podrías implementar la lógica específica de compartir
-  };
 
   return (
     <div className="flex items-center justify-between w-full rounded-md">
@@ -54,7 +49,7 @@ function ButtonOptions({
         {/* Modal de comentarios */}
         <CommentModal postId={postId} />
         {/* Componente ShareButton para manejar el ícono de compartir */}
-        <ShareButton onClick={handleShare} />
+        <ShareModal />
       </div>
       <div>
         {/* Componente SaveButton para manejar el botón de guardar */}

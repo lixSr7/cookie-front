@@ -13,6 +13,9 @@ import { Trash2 as TrashIcon } from "@geist-ui/icons";
 import { emojis } from "@/app/consts/emojis";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
+import { useEffect, useState } from "react";
+import { userToken } from "@/types/Users";
+import { jwtDecode } from "jwt-decode";
 
 function ListComments({
   comments,
@@ -23,7 +26,15 @@ function ListComments({
   postId: string;
   updateComments: () => void;
 }) {
-  // console.log(comments);
+  const [userId, setUserId] = useState<string>("");
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const decodeToken: userToken = jwtDecode(storedToken);
+      setUserId(decodeToken.id);
+    }
+  }, []);
   return (
     <ScrollShadow
       hideScrollBar
@@ -36,6 +47,7 @@ function ListComments({
             comment={comment}
             id={comment._id}
             postId={postId}
+            isMeComment={comment.user._id === userId}
             updateComments={updateComments}
           />
         ))
@@ -59,19 +71,20 @@ const Item = ({
   comment,
   postId,
   id,
+  isMeComment = false,
   updateComments,
 }: {
   comment: CommentType;
   postId: string;
   id: string;
+  isMeComment?: boolean;
   updateComments: () => void;
 }) => {
   let emojiURI = emojis.find((emoji) => emoji.name === comment.emoji)?.svg;
 
-
   const handleDelete = async () => {
-    console.log(comment)
-    console.log("Deleting comment with ID:", comment._id);        
+    console.log(comment);
+    console.log("Deleting comment with ID:", comment._id);
     await deleteComment(postId, id);
     updateComments();
   };
@@ -95,14 +108,16 @@ const Item = ({
               </div>
             </div>
             <div className="flex gap-2 ">
-              <Button
-                isIconOnly
-                aria-label="Options of Post"
-                variant="ghost"
-                onClick={handleDelete}
-              >
-                <TrashIcon className=" stroke-zinc-500" />
-              </Button>
+              {isMeComment && (
+                <Button
+                  isIconOnly
+                  aria-label="Options of Post"
+                  variant="ghost"
+                  onClick={handleDelete}
+                >
+                  <TrashIcon className=" stroke-zinc-500" />
+                </Button>
+              )}
             </div>
           </div>
         </CardHeader>
