@@ -5,12 +5,14 @@ import { Card, ScrollShadow } from "@nextui-org/react";
 
 import BarChart from "./components/charts/Bar";
 import { GenderPieChart, CategoryPieChart } from "./components/charts/Pie";
-import LineChart from "./posts/components/LineChartPosts";
+import { LineChart } from "./components/charts/chats/charts";
 import { getAllPosts } from "@/services/Posts";
 
-import Counters from "./posts/components/Counters";
 import { ChatsLineChart } from "./chats/components/firstChart";
 import PieChart from "./chats/components/secondChart";
+import Counters from "./components/Counters";
+
+
 
 function Dashboard() {
   return (
