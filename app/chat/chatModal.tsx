@@ -82,12 +82,12 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
         }`}
       >
         <ModalBody>
-          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800 relative ">
+          <article className="flex p-2 h-full max-h-[500px] dark:bg-zinc-800 relative ">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
                   <section
-                    className="flex flex-col w-full h-full max-h-[750px] min-h-[700px]
+                    className="flex flex-col w-full max-w-[500px] min-w-[100px] overflow-hidden h-full max-h-[900px] min-h-[700px]
                   
                   bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <div className="flex justify-center gap-2 mb-4 dark:bg-zinc-800">
@@ -114,7 +114,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                   </section>
                 )}
                 {viewMode === "messages" && (
-                  <section className="flex flex-col w-full h-full max-h-[750px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full h-full max-h-[900px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                       <div className="flex-grow overflow-y-auto">
                         <Messages selectedChat={selectedChat} />
