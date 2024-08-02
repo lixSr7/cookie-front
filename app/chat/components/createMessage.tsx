@@ -34,6 +34,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
   const sendMessage = async () => {
     if (!message.trim() && !selectedImage) {
       setShowWarning(true);
+
       return;
     }
 
@@ -41,13 +42,16 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
 
     try {
       const token = localStorage.getItem("token");
+
       if (!token) {
         console.error("No token found");
         setIsSending(false);
+
         return;
       }
 
       const formData = new FormData();
+
       formData.append("content", message);
       if (selectedImage) {
         formData.append("image", selectedImage);
@@ -93,10 +97,11 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
 
       if (!validImageTypes.includes(file.type)) {
         setShowImageError(true);
+
         return;
       }
 
@@ -115,7 +120,12 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       <div className="w-full flex md:flex-row gap-4 p-2">
         {imagePreview && (
           <div className="p-2">
-            <Avatar aria-label="Selected Image Preview" isBordered radius="lg" src={imagePreview} />
+            <Avatar
+              isBordered
+              aria-label="Selected Image Preview"
+              radius="lg"
+              src={imagePreview}
+            />
           </div>
         )}
         <Input
@@ -123,18 +133,18 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
           color={showWarning ? "danger" : "default"}
           id="messageInput"
           label="Enter your message"
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
           type="text"
           value={message}
           variant="bordered"
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <Button
           className="w-full max-w-[20px] flex-shrink-0 h-[50px]"
           color="danger"
           disabled={isSending || (!message.trim() && !selectedImage)}
-          onClick={sendMessage}
           variant="ghost"
+          onClick={sendMessage}
         >
           {isSending ? <Spinner size="sm" /> : <GoPaperAirplane />}
         </Button>
@@ -158,9 +168,9 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
                 <input
                   accept="image/*"
                   id="imageInput"
-                  onChange={handleImageChange}
                   style={{ display: "none" }}
                   type="file"
+                  onChange={handleImageChange}
                 />
               </form>
             </Tooltip>

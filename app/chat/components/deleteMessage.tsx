@@ -11,7 +11,7 @@ const deleteMessage = async (
       {
         headers: {
           "x-access-token": token,
-        },
+        }
       }
     );
 

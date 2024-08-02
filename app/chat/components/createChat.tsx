@@ -120,10 +120,10 @@ const CreateChat: React.FC = () => {
           <ModalHeader className="flex flex-col gap-1">Create Chat</ModalHeader>
           <ModalBody>
             <SearchUsers
-              onUserSelect={handleUserSelect}
-              selectedUsers={selectedUsers}
               searchTerm={searchTerm}
+              selectedUsers={selectedUsers}
               setSearchTerm={setSearchTerm}
+              onUserSelect={handleUserSelect}
             />
             {selectedUsers.length > 1 && (
               <Input
