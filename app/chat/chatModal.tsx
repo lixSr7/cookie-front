@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import {
   Modal,
@@ -7,13 +6,14 @@ import {
   Input,
   ScrollShadow,
 } from "@nextui-org/react";
+import { CiSearch } from "react-icons/ci";
+import { TbArrowBackUp } from "react-icons/tb";
+import { jwtDecode } from "jwt-decode";
+
 import CreateChat from "./components/createChat";
 import ChatList from "./components/chatList";
-import { CiSearch } from "react-icons/ci";
 import Messages from "./components/messageList";
 import CreateMessage from "./components/createMessage";
-import { jwtDecode } from "jwt-decode";
-import { TbArrowBackUp } from "react-icons/tb";
 
 interface PageChatProps {
   isOpen: boolean;
@@ -35,14 +35,18 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
+
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       const decodedToken = jwtDecode<DecodedToken>(storedToken);
+
       setId(decodedToken.id);
     }
   }, []);
@@ -70,18 +74,27 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
       size="5xl"
       className="bg-gray-100 dark:bg-zinc-800"
     >
-      <ModalContent>
+      <ModalContent
+        className={`${
+          windowWidth <= 789
+            ? "flex items-center justify-center min-h-screen"
+            : ""
+        }`}
+      >
         <ModalBody>
-          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800 relative">
+          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800 relative ">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
-                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section
+                    className="flex flex-col w-full h-full max-h-[750px] min-h-[700px]
+                  
+                  bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <div className="flex justify-center gap-2 mb-4 dark:bg-zinc-800">
                       <Input
-                        radius="lg"
-                        placeholder="Type to search..."
                         labelPlacement="outside"
+                        placeholder="Type to search..."
+                        radius="lg"
                         startContent={
                           <CiSearch className="flex-shrink-0 text-2xl pointer-events-none text-default-400" />
                         }
@@ -115,12 +128,12 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
               </>
             ) : (
               <>
-                <section className="flex flex-col w-full max-w-[300px] h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                <section className="flex flex-col w-full max-w-[300px] h-full max-h-[450px] min-h-[400px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                   <div className="flex justify-center gap-2 mb-4">
                     <Input
-                      radius="lg"
-                      placeholder="Type to search..."
                       labelPlacement="outside"
+                      placeholder="Chat to search..."
+                      radius="lg"
                       startContent={
                         <CiSearch className="flex-shrink-0 text-2xl pointer-events-none text-default-400" />
                       }
