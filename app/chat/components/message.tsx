@@ -93,7 +93,9 @@ const Message: React.FC<MessageProps> = ({
       {content && (
         <p
           className={`${mediaUrl ? "mt-2" : ""} p-3 mb-2 rounded-md ${
-            isSender ? "bg-danger-500 text-white dark:text-black" : "bg-gray-200"
+            isSender
+              ? "bg-danger-500 text-white dark:text-black"
+              : "bg-gray-200 dark:text-black"
           }`}
         >
           {content}
