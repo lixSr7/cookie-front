@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, Divider, Link, CardFooter, User as NextUser, Badge, ModalHeader, Input, ModalFooter, Select, SelectItem, Pagination } from "@nextui-org/react";
+import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, Divider, Link, CardFooter, User as NextUser, Badge, ModalHeader, Input, ModalFooter, Select, SelectItem, Pagination, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
@@ -207,6 +207,14 @@ function ProfileUser() {
 
   const editProfile = async () => {
     try {
+      const updatedFields: { [key: string]: any } = {};
+
+      if (username) updatedFields.username = username;
+      if (email) updatedFields.email = email;
+      if (gender) updatedFields.gender = gender;
+      if (phoneNumber) updatedFields.phone_number = phoneNumber;
+      if (description) updatedFields.description = description;
+
       const response = await fetch(
         "https://cookie-rest-api-8fnl.onrender.com/api/profile",
         {
@@ -215,19 +223,13 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-          body: JSON.stringify({
-            username,
-            email,
-            gender,
-            phone_number: phoneNumber,
-            description,
-          }),
+          body: JSON.stringify(updatedFields),
         }
       );
 
       if (response.ok) {
-        const data = await response.json();
-        setUser(data);
+        console.log("Perfil actualizado correctamente");
+        window.location.reload();
       } else {
         console.error("Error:", await response.text());
       }
@@ -327,11 +329,9 @@ function ProfileUser() {
     }
   };
 
-  const genders = [
-    ['male', 'Male'],
-    ['female', 'Female'],
-    ['not binary', 'Not binary'],
-  ]
+  const handleGenderChange = (selectedGender: string) => {
+    setGender(selectedGender);
+  };
 
   const postsWithImages = posts.filter(post => post.userId === userId && post.image);
   const postsWithoutImages = posts.filter(post => post.userId === userId && !post.image);
@@ -452,11 +452,16 @@ function ProfileUser() {
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 p-2">
                     <Input type="text" label="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user.username} />
                     <Input type="text" label="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={user.email} />
-                    <Select label="gender" value={gender} onChange={(e) => setGender(e.target.value)} placeholder={user.gender}>
-                      {genders.map((gender, index) => (
-                        <SelectItem key={index} value={gender[0]}>{gender[1]}</SelectItem>
-                      ))}
-                    </Select>
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button>{gender || user.gender}</Button>
+                      </DropdownTrigger>
+                      <DropdownMenu aria-label="Select Gender">
+                        <DropdownItem key="male" onClick={() => handleGenderChange('male')}>Male</DropdownItem>
+                        <DropdownItem key="female" onClick={() => handleGenderChange('female')}>Female</DropdownItem>
+                        <DropdownItem key="not binary" onClick={() => handleGenderChange('not binary')}>Not Binary</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
                     <Input type="text" label="phone_number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user.phone_number} />
                     <div className="col-span-2">
                       <Input type="text" label="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={user.description} />
@@ -466,7 +471,7 @@ function ProfileUser() {
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}> Close </Button>
-                <Button color="primary" onPress={editProfile}> Edit </Button>
+                <Button color="primary" onClick={editProfile}> Edit </Button>
               </ModalFooter>
             </>
           )}
