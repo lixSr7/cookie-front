@@ -27,6 +27,9 @@ function ProfileUser() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {
@@ -361,6 +364,34 @@ function ProfileUser() {
     setGender(selectedGender);
   };
 
+  const changePassword = async () => {
+    try {
+      const response = await fetch(
+        "https://cookie-rest-api-8fnl.onrender.com/api/profile/change-password",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        onEditClose();
+      } else {
+        console.error("Error al cambiar la contraseña:", await response.text());
+        throw new Error("Error al cambiar la contraseña");
+      }
+    } catch (error) {
+      console.error("Error al cambiar la contraseña:", error);
+    }
+  };
+
   const postsWithImages = posts.filter(post => post.userId === userId && post.image);
   const postsWithoutImages = posts.filter(post => post.userId === userId && !post.image);
 
@@ -502,6 +533,14 @@ function ProfileUser() {
                     <Input type="text" label="phone_number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user.phone_number} />
                     <div className="col-span-2">
                       <Input type="text" label="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={user.description} />
+                    </div>
+                    <div className="col-span-2 flex justify-center items-center py-5">
+                      <p>CHANGE PASSWORD</p>
+                    </div>
+                    <Input type="password" label="old password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+                    <Input type="password" label="new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                    <div className="col-span-2">
+                      <Button color="danger" variant="light" onPress={changePassword}> Change </Button>
                     </div>
                   </div>
                 </ScrollShadow>
