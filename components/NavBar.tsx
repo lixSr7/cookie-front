@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -9,6 +8,7 @@ import Link from "next/link";
 import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, AlertOctagon as LogOutIcon, Users as FriendIcon, PieChart as ChartIcon, Image as PhotoIcon, Heart as LikeIcon, Star as StarIcon, Menu as MenuIcon, Sliders as OptionsIcon, ArrowLeftCircle as CloseIcon, } from "@geist-ui/icons";
 import PageChat from "@/app/chat/chatModal";
 import ProfileUser from "./ProfileUser";
+import socket from "@/app/config/socketConfig";
 
 function NavBar() {
   const router = useRouter();
@@ -28,6 +28,18 @@ function NavBar() {
     if (token) {
       getMyProfile(token);
     }
+  }, [token]);
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on('userUpdate', async (data) => {
+      await getMyProfile(token);
+    });
+
+    return () => {
+      socket.off('userUpdate');
+    };
   }, [token]);
 
   const handleLogout = async () => {
@@ -107,8 +119,8 @@ function NavBar() {
             <Link
               href="/posts"
               className={`flex items-center gap-2 py-2 px-6 rounded-lg ${pathname === "/posts"
-                  ? "bg-[#dd2525] text-white"
-                  : "text-zinc-600 dark:text-white"
+                ? "bg-[#dd2525] text-white"
+                : "text-zinc-600 dark:text-white"
                 }`}
             >
               {pathname === "/posts" && <HomeIcon />}
@@ -118,8 +130,8 @@ function NavBar() {
             <button
               onClick={() => setIsChatOpen(true)}
               className={`py-2 px-6 rounded-lg ${pathname === "/Chats"
-                  ? "bg-[#dd2525] text-white"
-                  : "text-zinc-600 dark:text-white"
+                ? "bg-[#dd2525] text-white"
+                : "text-zinc-600 dark:text-white"
                 }`}
             >
               {pathname === "/Chats" && <ChatIcon />}
@@ -151,8 +163,8 @@ function NavBar() {
                 <DropdownItem
                   key="posts"
                   className={`${pathname === "/posts"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
+                    ? "bg-danger-600 text-white"
+                    : "fill-zinc-600 dark:fill-slate-300"
                     }`}
                 >
                   <Link href="/posts" className="flex items-center gap-2">
@@ -163,8 +175,8 @@ function NavBar() {
                 <DropdownItem
                   key="Chat"
                   className={`${pathname === "/chats"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
+                    ? "bg-danger-600 text-white"
+                    : "fill-zinc-600 dark:fill-slate-300"
                     }`}
                   onClick={() => setIsChatOpen(true)}
                 >
@@ -176,8 +188,8 @@ function NavBar() {
                 <DropdownItem
                   key="Friends"
                   className={`${pathname === "/friends"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
+                    ? "bg-danger-600 text-white"
+                    : "fill-zinc-600 dark:fill-slate-300"
                     }`}
                 >
                   <Link href="/friends" className="flex items-center gap-2">
@@ -188,8 +200,8 @@ function NavBar() {
                 <DropdownItem
                   key="Dashboard"
                   className={`${pathname === "/dashboard"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
+                    ? "bg-danger-600 text-white"
+                    : "fill-zinc-600 dark:fill-slate-300"
                     }`}
                 >
                   <Link href="/admin" className="flex items-center gap-2">
@@ -200,8 +212,8 @@ function NavBar() {
                 <DropdownItem
                   key="Photos"
                   className={`${pathname === "/chats"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
+                    ? "bg-danger-600 text-white"
+                    : "fill-zinc-600 dark:fill-slate-300"
                     }`}
                 >
                   <Link href="/photos" className="flex items-center gap-2">
@@ -212,8 +224,8 @@ function NavBar() {
                 <DropdownItem
                   key="Saves"
                   className={`${pathname === "/friends"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
+                    ? "bg-danger-600 text-white"
+                    : "fill-zinc-600 dark:fill-slate-300"
                     }`}
                 >
                   <Link href="/saves" className="flex items-center gap-2">

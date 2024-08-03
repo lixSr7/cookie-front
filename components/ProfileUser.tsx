@@ -6,7 +6,7 @@ import socket from "@/app/config/socketConfig";
 
 function ProfileUser() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange } = useDisclosure();
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange, onClose: onEditClose } = useDisclosure();
   const { isOpen: isFollowersOpen, onOpen: onFollowersOpen, onOpenChange: onFollowersOpenChange } = useDisclosure();
   const { isOpen: isFollowingOpen, onOpen: onFollowingOpen, onOpenChange: onFollowingOpenChange } = useDisclosure();
   const { isOpen: isFriendsOpen, onOpen: onFriendsOpen, onOpenChange: onFriendsOpenChange } = useDisclosure();
@@ -96,11 +96,16 @@ function ProfileUser() {
       await getFriends(userId, token);
     });
 
+    socket.on('userUpdate', async (data) => {
+      await getMyProfile(token);
+    });
+
     return () => {
       socket.off('userFollowed');
       socket.off('userUnfollowed');
       socket.off('friendAdded');
       socket.off('friendRemoved');
+      socket.off('userUpdate');
     };
   }, [userId, token]);
 
@@ -252,7 +257,7 @@ function ProfileUser() {
 
       if (response.ok) {
         console.log("Perfil actualizado correctamente");
-        window.location.reload();
+        onEditClose();
       } else {
         console.error("Error:", await response.text());
       }
