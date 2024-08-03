@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, Divider, Link, CardFooter, User as NextUser, Badge, ModalHeader, Input, ModalFooter, Select, SelectItem } from "@nextui-org/react";
+import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, Divider, Link, CardFooter, User as NextUser, Badge, ModalHeader, Input, ModalFooter, Select, SelectItem, Pagination } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
@@ -13,6 +13,7 @@ function ProfileUser() {
   const [token, setToken] = useState<string>('');
   const [user, setUser] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
+  const [savedPosts, setSavedPosts] = useState<any[]>([]);
   const [userId, setUserId] = useState<string>("");
   const [following, setFollowing] = useState<any[]>([]);
   const [followers, setFollowers] = useState<any[]>([]);
@@ -23,6 +24,10 @@ function ProfileUser() {
   const [gender, setGender] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [description, setDescription] = useState('');
+
+  // Estado de la paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -40,6 +45,7 @@ function ProfileUser() {
       getFollowing(userId, token);
       getFollowers(userId, token);
       getFriends(userId, token);
+      getSavedPosts(token);
     }
   }, [token]);
 
@@ -56,9 +62,19 @@ function ProfileUser() {
       await getFollowing(userId, token);
     });
 
+    socket.on('friendAdded', async (data) => {
+      await getFriends(userId, token);
+    });
+
+    socket.on('friendRemoved', async (data) => {
+      await getFriends(userId, token);
+    });
+
     return () => {
       socket.off('userFollowed');
       socket.off('userUnfollowed');
+      socket.off('friendAdded');
+      socket.off('friendRemoved');
     };
   }, [userId, token]);
 
@@ -172,8 +188,12 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
-        setFriends(data);
-        return data;
+        if (Array.isArray(data)) {
+          setFriends(data);
+          return data;
+        } else {
+          console.error("Expected an array but got:", data);
+        }
       } else {
         const errorData = await response.json();
         console.error("Error fetching friends:", errorData.message);
@@ -183,7 +203,7 @@ function ProfileUser() {
       console.error("Error fetching friends:", error);
       throw new Error(error instanceof Error ? error.message : "Unknown error");
     }
-  }
+  };
 
   const editProfile = async () => {
     try {
@@ -216,6 +236,97 @@ function ProfileUser() {
     }
   };
 
+  const getSavedPosts = async (token: string) => {
+    try {
+      const response = await fetch(
+        "https://cookie-rest-api-8fnl.onrender.com/api/posts/save",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setSavedPosts(data);
+      } else {
+        console.error("Error al obtener las publicaciones guardadas:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error al obtener las publicaciones guardadas:", error);
+    }
+  };
+
+  const unfollow = async (userId: string) => {
+    try {
+      const response = await fetch(`https://cookie-rest-api-8fnl.onrender.com/api/users/unfollow/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setFollowers(data);
+      } else {
+        console.error("Error al des-seguir al usuario:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error al des-seguir al usuario:", error);
+    }
+  };
+
+  const addFriend = async (userId: string) => {
+    try {
+      const response = await fetch(`https://cookie-rest-api-8fnl.onrender.com/api/users/addFriend/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setFriends(data);
+      } else {
+        console.error("Error al añadir a amigos:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error al añadir a amigos:", error);
+    }
+  };
+
+  const removeFriend = async (userId: string) => {
+    try {
+      const response = await fetch(`https://cookie-rest-api-8fnl.onrender.com/api/users/removeFriend/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setFriends(data);
+      } else {
+        console.error("Error al eliminar a amigos:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error al eliminar a amigos:", error);
+    }
+  };
+
   const genders = [
     ['male', 'Male'],
     ['female', 'Female'],
@@ -224,6 +335,16 @@ function ProfileUser() {
 
   const postsWithImages = posts.filter(post => post.userId === userId && post.image);
   const postsWithoutImages = posts.filter(post => post.userId === userId && !post.image);
+
+  // Paginación
+  const totalFollowingPages = Math.ceil(following.length / itemsPerPage);
+  const currentFollowingData = following.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const totalFollowersPages = Math.ceil(followers.length / itemsPerPage);
+  const currentFollowersData = followers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const totalFriendsPages = Array.isArray(friends) ? Math.ceil(friends.length / itemsPerPage) : 0;
+  const currentFriendsData = Array.isArray(friends) ? friends.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
 
   return (
     <>
@@ -288,8 +409,20 @@ function ProfileUser() {
                           </div>
                         </Tab>
                         <Tab key="save" title="Save">
-                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-
+                          <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
+                            {savedPosts.map((post, index) => (
+                              <Card key={index} isFooterBlurred radius="lg" className="border-none">
+                                {post.image && (
+                                  <Image className="object-cover w-[200px] h-[200px]" src={post.image} />
+                                )}
+                                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                                  <p className="text-tiny text-white/80">{post.content}</p>
+                                  <Button className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg" size="sm">
+                                    {new Date(post.createdAt).toLocaleDateString()}
+                                  </Button>
+                                </CardFooter>
+                              </Card>
+                            ))}
                           </div>
                         </Tab>
                         <Tab key="shared" title="Shared">
@@ -306,6 +439,7 @@ function ProfileUser() {
           </ModalContent>
         </Modal>
       </div>
+
       <Modal isOpen={isEditOpen} scrollBehavior="inside" onOpenChange={onEditOpenChange} size="lg">
         <ModalContent>
           {(onClose) => (
@@ -338,69 +472,91 @@ function ProfileUser() {
           )}
         </ModalContent>
       </Modal>
-      <Modal isOpen={isFollowingOpen} scrollBehavior="inside" onOpenChange={onFollowingOpenChange}>
+
+      <Modal isOpen={isFollowingOpen} onOpenChange={onFollowingOpenChange}>
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col items-center gap-1">
-                Following
-              </ModalHeader>
-              <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
-                <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto">
-                  <div className="flex flex-col w-full gap-6 px-6 py-5">
-                    {following.map((following, index) => (
-                      <div key={following._id} className="flex justify-between w-full">
-                        <NextUser name={following.fullname} description={`@${following.username}`} avatarProps={{ src: following.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
-                      </div>
-                    ))}
-                  </div>
-                </ScrollShadow>
-              </ModalBody>
-            </>
-          )}
+          <ModalHeader className="flex flex-col items-center gap-1">
+            Following
+          </ModalHeader>
+          <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
+            {currentFollowingData.length > 0 ? (
+              <>
+                <div className="flex flex-col w-full gap-6 px-6 py-5">
+                  {currentFollowingData.map(user => (
+                    <div key={user._id} className="flex justify-between w-full">
+                      <NextUser key={user._id} name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                      <Button onClick={() => unfollow(user._id)} color="danger" variant="shadow">
+                        Unfollow
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p>No users found.</p>
+            )}
+          </ModalBody>
+          <ModalFooter className="flex justify-center items-center">
+            <Pagination total={totalFollowingPages} initialPage={1} onChange={(page) => setCurrentPage(page)} color="danger" />
+          </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Modal isOpen={isFollowersOpen} scrollBehavior="inside" onOpenChange={onFollowersOpenChange}>
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col items-center gap-1">
-                Followers
-              </ModalHeader>
-              <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
-                <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto">
-                  <div className="flex flex-col w-full gap-6 px-6 py-5">
-                    {followers.map((follower, index) => (
-                      <div key={follower._id} className="flex justify-between w-full">
-                        <NextUser name={follower.fullname} description={`@${follower.username}`} avatarProps={{ src: follower.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
-                      </div>
-                    ))}                  </div>
-                </ScrollShadow>
-              </ModalBody>
-            </>
-          )}
+          <ModalHeader className="flex flex-col items-center gap-1">
+            Followers
+          </ModalHeader>
+          <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
+            {currentFollowersData.length > 0 ? (
+              <>
+                <div className="flex flex-col w-full gap-6 px-6 py-5">
+                  {currentFollowersData.map((user) => (
+                    <div key={user._id} className="flex justify-between w-full">
+                      <NextUser name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                      <Button onClick={() => addFriend(user._id)} color="danger" variant="shadow">
+                        add to friends
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p>No users found.</p>
+            )}
+          </ModalBody>
+          <ModalFooter className="flex justify-center items-center">
+            <Pagination total={totalFollowersPages} initialPage={1} onChange={(page) => setCurrentPage(page)} color="danger" />
+          </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Modal isOpen={isFriendsOpen} scrollBehavior="inside" onOpenChange={onFriendsOpenChange}>
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col items-center gap-1">
-                Friends
-              </ModalHeader>
-              <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
-                <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto">
-                  <div className="flex flex-col w-full gap-6 px-6 py-5">
-                    {friends.map((friend, index) => (
-                      <div key={friend._id} className="flex justify-between w-full">
-                        <NextUser name={friend.fullname} description={`@${friend.username}`} avatarProps={{ src: friend.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
-                      </div>
-                    ))}
-                  </div>
-                </ScrollShadow>
-              </ModalBody>
-            </>
-          )}
+          <ModalHeader className="flex flex-col items-center gap-1">
+            Friends
+          </ModalHeader>
+          <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
+            {currentFriendsData.length > 0 ? (
+              <>
+                <div className="flex flex-col w-full gap-6 px-6 py-5">
+                  {currentFriendsData.map((user) => (
+                    <div key={user._id} className="flex justify-between w-full">
+                      <NextUser name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                      <Button onClick={() => removeFriend(user._id)} color="danger" variant="shadow">
+                        remove friend
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p>No users found.</p>
+            )}
+          </ModalBody>
+          <ModalFooter className="flex justify-center items-center">
+            <Pagination total={totalFriendsPages} initialPage={1} onChange={(page) => setCurrentPage(page)} color="danger" />
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
