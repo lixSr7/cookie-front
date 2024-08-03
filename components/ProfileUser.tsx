@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, Divider, Link, CardFooter, User as NextUser, Badge, ModalHeader, Input, ModalFooter, Select, SelectItem, Pagination, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from "@nextui-org/react";
-import React, { useState, useEffect } from "react";
+import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, CardFooter, User as NextUser, ModalHeader, Input, ModalFooter, Pagination, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from "@nextui-org/react";
+import React, { useState, useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
 import socket from "@/app/config/socketConfig";
@@ -24,6 +24,32 @@ function ProfileUser() {
   const [gender, setGender] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [description, setDescription] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger file input click
+    }
+  };
+
+  useEffect(() => {
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  }, [selectedImage]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(event.target.files[0]);
+    }
+  };
 
   // Estado de la paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -207,25 +233,22 @@ function ProfileUser() {
 
   const editProfile = async () => {
     try {
-      const updatedFields: { [key: string]: any } = {};
+      const formData = new FormData();
 
-      if (username) updatedFields.username = username;
-      if (email) updatedFields.email = email;
-      if (gender) updatedFields.gender = gender;
-      if (phoneNumber) updatedFields.phone_number = phoneNumber;
-      if (description) updatedFields.description = description;
+      if (username) formData.append("username", username);
+      if (email) formData.append("email", email);
+      if (gender) formData.append("gender", gender);
+      if (phoneNumber) formData.append("phone_number", phoneNumber);
+      if (description) formData.append("description", description);
+      if (selectedImage) formData.append("image", selectedImage);
 
-      const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": token,
-          },
-          body: JSON.stringify(updatedFields),
-        }
-      );
+      const response = await fetch("https://cookie-rest-api-8fnl.onrender.com/api/profile", {
+        method: "PUT",
+        headers: {
+          "x-access-token": token,
+        },
+        body: formData,
+      });
 
       if (response.ok) {
         console.log("Perfil actualizado correctamente");
@@ -365,7 +388,7 @@ function ProfileUser() {
                       <div className="flex flex-col items-center w-full h-max">
                         {user && (
                           <>
-                            <Image className="w-[150px] h-[150px] rounded-full border-1.5" isBlurred src={user.image?.secure_url} />
+                            <Image className="w-[150px] h-[150px] rounded-full border-1.5 object-cover" isBlurred src={user.image?.secure_url} />
                             <p className="m-0 text-2xl font-bold">{user.fullname}</p>
                             <p className="text-xs text-gray-300">@{user.username}</p>
                             <p className="text-sm font-bold mt-5">{user.description}</p>
@@ -383,7 +406,7 @@ function ProfileUser() {
                             {postsWithImages.map((post, index) => (
                               <Card key={index} isFooterBlurred radius="lg" className="border-none">
                                 {post.image && (
-                                  <Image className="object-cover w-[200px] h-[200px]" src={post.image} />
+                                  <Image isZoomed className="object-cover w-[200px] h-[200px]" src={post.image} />
                                 )}
                                 <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
                                   <p className="text-tiny text-white/80">{post.content}</p>
@@ -408,12 +431,13 @@ function ProfileUser() {
                             ))}
                           </div>
                         </Tab>
+
                         <Tab key="save" title="Save">
                           <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
                             {savedPosts.map((post, index) => (
                               <Card key={index} isFooterBlurred radius="lg" className="border-none">
                                 {post.image && (
-                                  <Image className="object-cover w-[200px] h-[200px]" src={post.image} />
+                                  <Image isZoomed className="object-cover w-[200px] h-[200px]" src={post.image} />
                                 )}
                                 <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
                                   <p className="text-tiny text-white/80">{post.content}</p>
@@ -450,18 +474,26 @@ function ProfileUser() {
               <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
                 <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto">
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 p-2">
+                    <div className="col-span-2 flex justify-center items-center">
+                      <input type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: 'none' }} />
+                      <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
+                        <Image isZoomed className="object-cover w-[150px] h-[150px]" src={previewImage || user.image?.secure_url || 'https://via.placeholder.com/150'} alt="Profile Image" />
+                      </div>
+                    </div>
                     <Input type="text" label="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user.username} />
                     <Input type="text" label="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={user.email} />
-                    <Dropdown>
-                      <DropdownTrigger>
-                        <Button>{gender || user.gender}</Button>
-                      </DropdownTrigger>
-                      <DropdownMenu aria-label="Select Gender">
-                        <DropdownItem key="male" onClick={() => handleGenderChange('male')}>Male</DropdownItem>
-                        <DropdownItem key="female" onClick={() => handleGenderChange('female')}>Female</DropdownItem>
-                        <DropdownItem key="not binary" onClick={() => handleGenderChange('not binary')}>Not Binary</DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
+                    <div className="relative">
+                      <Dropdown>
+                        <DropdownTrigger>
+                          <Button variant="flat" className="w-full h-full">{gender || user.gender}</Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Select Gender">
+                          <DropdownItem key="male" onClick={() => handleGenderChange('male')}>Male</DropdownItem>
+                          <DropdownItem key="female" onClick={() => handleGenderChange('female')}>Female</DropdownItem>
+                          <DropdownItem key="not binary" onClick={() => handleGenderChange('not binary')}>Not Binary</DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
                     <Input type="text" label="phone_number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user.phone_number} />
                     <div className="col-span-2">
                       <Input type="text" label="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={user.description} />
