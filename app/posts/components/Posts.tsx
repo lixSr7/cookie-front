@@ -6,6 +6,7 @@ import { getAllPosts } from "@/services/Posts";
 import PostCard from "./PostCard";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import socket from "@/app/config/socketConfig";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -19,6 +20,18 @@ function Posts() {
     }
     allPosts();
   }, []);
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on('userUpdate', async (data) => {
+      await allPosts();
+    });
+
+    return () => {
+      socket.off('userUpdate');
+    };
+  }, [token]);
 
   const allPosts = async () => {
     try {
