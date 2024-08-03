@@ -155,7 +155,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                   ) as HTMLTextAreaElement;
                   const content = contentInput.value;
 
-                  console.log("content:", content);
+                  // console.log("content:", content);
 
                   const imageInput = document.querySelector(
                     ".inputImageCreatePost"

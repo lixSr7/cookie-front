@@ -256,7 +256,7 @@ function ProfileUser() {
       });
 
       if (response.ok) {
-        console.log("Perfil actualizado correctamente");
+        // console.log("Perfil actualizado correctamente");
         onEditClose();
       } else {
         console.error("Error:", await response.text());
@@ -281,7 +281,7 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setSavedPosts(data);
       } else {
         console.error("Error al obtener las publicaciones guardadas:", await response.text());
@@ -303,7 +303,7 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setFollowers(data);
       } else {
         console.error("Error al des-seguir al usuario:", await response.text());
@@ -325,7 +325,7 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setFriends(data);
       } else {
         console.error("Error al añadir a amigos:", await response.text());
@@ -347,7 +347,7 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setFriends(data);
       } else {
         console.error("Error al eliminar a amigos:", await response.text());

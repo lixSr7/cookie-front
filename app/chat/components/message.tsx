@@ -69,7 +69,7 @@ const Message: React.FC<MessageProps> = ({
 
       try {
         await deleteMessage(messageId, chatId, token);
-        console.log("Mensaje eliminado");
+        // console.log("Mensaje eliminado");
         socket.emit("deleteMessage", messageId, chatId);
       } catch (error) {
         console.error("Error deleting message:", error);

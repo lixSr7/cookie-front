@@ -83,8 +83,8 @@ const Item = ({
   let emojiURI = emojis.find((emoji) => emoji.name === comment.emoji)?.svg;
 
   const handleDelete = async () => {
-    console.log(comment);
-    console.log("Deleting comment with ID:", comment._id);
+    // console.log(comment);
+    // console.log("Deleting comment with ID:", comment._id);
     await deleteComment(postId, id);
     updateComments();
   };

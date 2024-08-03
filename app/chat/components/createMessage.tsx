@@ -73,7 +73,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       setImagePreview(null);
 
       if (response) {
-        console.log("Message sent successfully");
+        // console.log("Message sent successfully");
       } else {
         console.error("Failed to send message:", response);
       }

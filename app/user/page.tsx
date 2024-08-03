@@ -52,7 +52,6 @@ function PROFILE() {
       setId(decodedToken.id);
       setProfilePic(decodedToken.image.secure_url);
       getProfile(storedToken).then((data) => setProfile(data));
-      console.log("perfil", profile);
     }
   }, []);
 
@@ -102,7 +101,7 @@ function PROFILE() {
         throw new Error("logout failed");
       }
     } catch (error) {
-      console.log("Logout error:", error);
+      // console.log("Logout error:", error);
       alert("Error al cerrar sesión. Intente nuevamente.");
     }
   };

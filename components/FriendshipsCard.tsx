@@ -38,7 +38,7 @@ function FriendshipsCard() {
         try {
           const followingData = await getFollowing(userId, token);
           setFollowing(followingData);
-          console.log('followingData:', followingData);
+          // console.log('followingData:', followingData);
 
           const allUsers = await getAllUsers(token);
           if (allUsers) {
@@ -47,7 +47,7 @@ function FriendshipsCard() {
             );
             setUsers(allUsers);
             setFollowed(followedStatus);
-            console.log('allUsers:', allUsers);
+            // console.log('allUsers:', allUsers);
           }
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -133,7 +133,7 @@ function FriendshipsCard() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setFollowed((prev) =>
           prev.map((isFollowed, i) => (i === index ? followStatus : isFollowed))
         );
