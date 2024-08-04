@@ -5,6 +5,7 @@ import { MdEdit } from "react-icons/md";
 import socket from "@/app/config/socketConfig";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 function ProfileUser() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -131,6 +132,7 @@ function ProfileUser() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('data:', data);
         setUser(data);
       } else {
         console.error("Error:", await response.text());
@@ -431,11 +433,11 @@ function ProfileUser() {
   const postsWithoutImages = posts.filter(post => post.userId === userId && !post.image);
 
   // Paginación
-  const totalFollowingPages = Math.ceil(following.length / itemsPerPage);
-  const currentFollowingData = following.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalFollowingPages = Array.isArray(following) ? Math.ceil(following.length / itemsPerPage) : 0;
+  const currentFollowingData = Array.isArray(following) ? following.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
 
-  const totalFollowersPages = Math.ceil(followers.length / itemsPerPage);
-  const currentFollowersData = followers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalFollowersPages = Array.isArray(followers) ? Math.ceil(followers.length / itemsPerPage) : 0;
+  const currentFollowersData = Array.isArray(followers) ? followers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
 
   const totalFriendsPages = Array.isArray(friends) ? Math.ceil(friends.length / itemsPerPage) : 0;
   const currentFriendsData = Array.isArray(friends) ? friends.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
@@ -461,7 +463,7 @@ function ProfileUser() {
                         {user && (
                           <>
                             <Image className="w-[150px] h-[150px] rounded-full border-1.5 object-cover" isBlurred src={user.image?.secure_url} />
-                            <p className="m-0 text-2xl font-bold">{user.fullname}</p>
+                            <p className="m-0 text-2xl font-bold flex justify-center items-center">{user.fullname} <span className="ml-2">{user.verified === true && <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />}</span></p>
                             <p className="text-xs text-gray-300">@{user.username}</p>
                             <p className="text-sm font-bold mt-5">{user.description}</p>
                           </>
@@ -604,7 +606,7 @@ function ProfileUser() {
                 <div className="flex flex-col w-full gap-6 px-6 py-5">
                   {currentFollowingData.map(user => (
                     <div key={user._id} className="flex justify-between w-full">
-                      <NextUser key={user._id} name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                      <NextUser key={user._id} name={<div className="flex items-center" style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', }}> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.fullname}</span>{user.verified && (<RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: '5px', flexShrink: 0 }} />)}</div>} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
                       <Button onClick={() => unfollow(user._id)} color="danger" variant="shadow">
                         Unfollow
                       </Button>
@@ -633,7 +635,7 @@ function ProfileUser() {
                 <div className="flex flex-col w-full gap-6 px-6 py-5">
                   {currentFollowersData.map((user) => (
                     <div key={user._id} className="flex justify-between w-full">
-                      <NextUser name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                      <NextUser key={user._id} name={<div className="flex items-center" style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', }}> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.fullname}</span>{user.verified && (<RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: '5px', flexShrink: 0 }} />)}</div>} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
                       <Button onClick={() => addFriend(user._id)} color="danger" variant="shadow">
                         add to friends
                       </Button>
@@ -662,7 +664,7 @@ function ProfileUser() {
                 <div className="flex flex-col w-full gap-6 px-6 py-5">
                   {currentFriendsData.map((user) => (
                     <div key={user._id} className="flex justify-between w-full">
-                      <NextUser name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                      <NextUser key={user._id} name={<div className="flex items-center" style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', }}> <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.fullname}</span>{user.verified && (<RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: '5px', flexShrink: 0 }} />)}</div>} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
                       <Button onClick={() => removeFriend(user._id)} color="danger" variant="shadow">
                         remove friend
                       </Button>

@@ -5,6 +5,7 @@ import { Bell as BellIcon } from "@geist-ui/icons";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import socket from "@/app/config/socketConfig";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 interface Friend {
   _id: string;
@@ -14,6 +15,7 @@ interface Friend {
     secure_url: string;
   };
   sesion: string;
+  verified?: boolean;
 }
 
 function FriendsCard() {
@@ -82,14 +84,18 @@ function FriendsCard() {
     if (sesion === 'false') return "default";
   };
 
-
   return (
     <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] min-h-[100%] max-h-[100%] flex flex-col gap-6">
       <Card className="w-full">
         <CardBody className="flex flex-col w-full gap-6 px-6 py-5">
         {friends.slice(0, 8).map((friend, index) => (
             <div key={friend._id} className="flex justify-between w-full">
-              <User name={friend.fullname} description={`@${friend.username}`} avatarProps={{ src: friend.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: getColor(friend.sesion), }} />
+              <User name={<div className="flex items-center" style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{friend.fullname}</span>
+                 {friend.verified && (
+                   <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: '5px', flexShrink: 0 }} />
+                 )}
+                 </div>} description={`@${friend.username}`} avatarProps={{ src: friend.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: getColor(friend.sesion), }} />
               <Badge color="danger" content={1} shape="circle" size="sm">
                 <BellIcon size={25} />
               </Badge>

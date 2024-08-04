@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Spinner, Image, ButtonGroup, Tab, Tabs, Card, CardFooter, CardBody, ScrollShadow } from "@nextui-org/react";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 interface OtherProfileUserProps {
  userId: string | null;
@@ -182,7 +183,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({ userId, onClose }) 
              {user && (
               <>
                <Image className="w-[150px] h-[150px] rounded-full border-1.5 object-cover" isBlurred src={user.image?.secure_url} />
-               <p className="m-0 text-2xl font-bold">{user.fullname}</p>
+               <p className="m-0 text-2xl font-bold flex justify-center items-center">{user.fullname} <span className="ml-2">{user.verified === true && <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />}</span></p>
                <p className="text-xs text-gray-300">@{user.username}</p>
                <p className="text-sm font-bold mt-5">{user.description}</p>
               </>

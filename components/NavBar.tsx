@@ -11,6 +11,7 @@ import ProfileUser from "./ProfileUser";
 import socket from "@/app/config/socketConfig";
 import { TiUserAdd } from "react-icons/ti";
 import OtherProfileUser from "./otherProfileUser";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 function NavBar() {
   const router = useRouter();
@@ -155,7 +156,7 @@ function NavBar() {
             <div className="flex items-center justify-start gap-4">
               <Avatar isBordered size="sm" color="success" src={user?.image?.secure_url || "https://via.placeholder.com/150"} />
               <div className="flex flex-col">
-                <strong className="text-base m-0">{user?.fullname}</strong>
+                <strong className="text-base m-0 flex justify-center items-center">{user?.fullname} <span className="ml-2">{user?.verified === true && <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />}</span></strong>
                 <span className="font-medium text-[#dd2525] text-[70%] m-0">
                   @{user?.username}
                 </span>

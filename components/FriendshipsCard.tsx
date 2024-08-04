@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { User as NextUser, Spinner } from "@nextui-org/react";
 import { Card, CardBody, Button } from "@nextui-org/react";
 import { jwtDecode } from "jwt-decode";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 interface User {
   _id: string;
@@ -11,6 +12,7 @@ interface User {
   image?: {
     secure_url: string;
   };
+  verified?: boolean; 
 }
 
 function FriendshipsCard() {
@@ -20,7 +22,7 @@ function FriendshipsCard() {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string>("");
   const [following, setFollowing] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -34,11 +36,10 @@ function FriendshipsCard() {
   useEffect(() => {
     if (userId && token) {
       const fetchData = async () => {
-        setLoading(true); 
+        setLoading(true);
         try {
           const followingData = await getFollowing(userId, token);
           setFollowing(followingData);
-          // console.log('followingData:', followingData);
 
           const allUsers = await getAllUsers(token);
           if (allUsers) {
@@ -47,13 +48,12 @@ function FriendshipsCard() {
             );
             setUsers(allUsers);
             setFollowed(followedStatus);
-            // console.log('allUsers:', allUsers);
           }
         } catch (error) {
           console.error("Error fetching data:", error);
           setError(error instanceof Error ? error.message : "Unknown error");
         } finally {
-          setLoading(false); 
+          setLoading(false);
         }
       };
 
@@ -133,7 +133,6 @@ function FriendshipsCard() {
       });
       if (response.ok) {
         const data = await response.json();
-        // console.log(data);
         setFollowed((prev) =>
           prev.map((isFollowed, i) => (i === index ? followStatus : isFollowed))
         );
@@ -160,7 +159,21 @@ function FriendshipsCard() {
           <Card key={user._id} className="w-full">
             <CardBody className="flex flex-col w-full gap-4 px-6 py-5">
               <div className="flex justify-between w-full">
-                <NextUser name={user.fullname} description={`@${user.username}`} avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: "danger", }} />
+                <div className="flex items-center">
+                  <NextUser name={ 
+                      <div className="flex items-center" style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {user.fullname}
+                        </span>
+                        {user.verified && (
+                          <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: '5px', flexShrink: 0 }} />
+                        )}
+                      </div>
+                    }
+                    description={`@${user.username}`}
+                    avatarProps={{ src: user.image?.secure_url || 'https://via.placeholder.com/150', isBordered: true, color: 'danger' }}
+                  />
+                </div>
                 <Button color="danger" variant={followed[index] ? "shadow" : "ghost"} onClick={() => handleFollowToggle(index)} >
                   {followed[index] ? "Unfollow" : "Follow"}
                 </Button>
