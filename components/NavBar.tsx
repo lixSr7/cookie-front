@@ -5,11 +5,12 @@ import { usePathname } from "next/navigation";
 import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, User, Card, CardBody, ButtonGroup, } from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
 import Link from "next/link";
-import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, AlertOctagon as LogOutIcon, Users as FriendIcon, PieChart as ChartIcon, Image as PhotoIcon, Heart as LikeIcon, Star as StarIcon, Menu as MenuIcon, Sliders as OptionsIcon, ArrowLeftCircle as CloseIcon, } from "@geist-ui/icons";
+import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon, } from "@geist-ui/icons"; 
 import PageChat from "@/app/chat/chatModal";
 import ProfileUser from "./ProfileUser";
 import socket from "@/app/config/socketConfig";
 import { TiUserAdd } from "react-icons/ti";
+import OtherProfileUser from "./otherProfileUser";
 
 function NavBar() {
   const router = useRouter();
@@ -20,7 +21,9 @@ function NavBar() {
   const [users, setUsers] = useState<any[]>([]);
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -47,7 +50,6 @@ function NavBar() {
       socket.off('userUpdate');
     };
   }, [token]);
-
 
   const handleLogout = async () => {
     try {
@@ -136,6 +138,15 @@ function NavBar() {
     }
   };
 
+  const handleUserClick = (userId: string) => {
+    setSelectedUserId(userId);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <>
       <div className="fixed z-50 flex items-center justify-center w-full h-20 px-4 min-sm:px-8 bottom-6">
@@ -173,7 +184,7 @@ function NavBar() {
                 <Card className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[400px]" style={{ maxHeight: 'calc(5 * 4rem)' }}>
                   <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
                     {searchResults.slice(0, 5).map((result) => (
-                      <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md">
+                      <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" onClick={() => handleUserClick(result._id)}>
                         <User name={result.fullname} description={`@${result.username}`} avatarProps={{ src: result.image?.secure_url || 'https://via.placeholder.com/150' }} />
                         <ButtonGroup>
                           <Button color="danger" variant="ghost"><TiUserAdd /></Button>
@@ -194,12 +205,6 @@ function NavBar() {
                 </button>
               </DropdownTrigger>
               <DropdownMenu aria-label="Link Actions">
-                {/* <DropdownItem key="Dashboard" className={`${pathname === "/dashboard" ? "bg-danger-600 text-white" : "fill-zinc-600 dark:fill-slate-300"}`} >
-                  <Link href="/admin" className="flex items-center gap-2">
-                    <ChartIcon className="w-5 h-5" />
-                    <span className="text-sm ">Dashboard</span>
-                  </Link>
-                </DropdownItem> */}
                 <DropdownItem key="Logout" onClick={() => handleLogout()}>
                   <div className="flex items-center gap-2">
                     <CloseIcon className="w-5 h-5" />
@@ -211,6 +216,7 @@ function NavBar() {
           </div>
         </nav>
       </div>
+      {isModalVisible && <OtherProfileUser userId={selectedUserId} onClose={closeModal} />}
       <PageChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );

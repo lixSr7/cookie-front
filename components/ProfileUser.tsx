@@ -3,9 +3,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
 import socket from "@/app/config/socketConfig";
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 
 function ProfileUser() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange, onClose: onEditClose } = useDisclosure();
   const { isOpen: isFollowersOpen, onOpen: onFollowersOpen, onOpenChange: onFollowersOpenChange } = useDisclosure();
   const { isOpen: isFollowingOpen, onOpen: onFollowingOpen, onOpenChange: onFollowingOpenChange } = useDisclosure();
@@ -18,7 +20,9 @@ function ProfileUser() {
   const [following, setFollowing] = useState<any[]>([]);
   const [followers, setFollowers] = useState<any[]>([]);
   const [friends, setFriends] = useState<any[]>([]);
+  const router = useRouter();
 
+  const [fullname, setFullname] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('');
@@ -243,6 +247,7 @@ function ProfileUser() {
     try {
       const formData = new FormData();
 
+      if (fullname) formData.append("fullname", fullname);
       if (username) formData.append("username", username);
       if (email) formData.append("email", email);
       if (gender) formData.append("gender", gender);
@@ -364,6 +369,31 @@ function ProfileUser() {
     setGender(selectedGender);
   };
 
+  const logout = async () => {
+    try {
+      const response = await fetch(
+        "https://cookie-rest-api-8fnl.onrender.com/api/auth/logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (response.ok) {
+        localStorage.removeItem("token");
+        router.push("/");
+      } else {
+        console.error("Error al cerrar sesión:", await response.text());
+        throw new Error("Error al cerrar sesión");
+      }
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   const changePassword = async () => {
     try {
       const response = await fetch(
@@ -383,6 +413,11 @@ function ProfileUser() {
 
       if (response.ok) {
         onEditClose();
+        onClose();
+        toast.success("The password has been changed successfully, your session will be closed for security.");
+        setTimeout(() => {
+          logout();
+        }, 1500);
       } else {
         console.error("Error al cambiar la contraseña:", await response.text());
         throw new Error("Error al cambiar la contraseña");
@@ -407,6 +442,7 @@ function ProfileUser() {
 
   return (
     <>
+      <ToastContainer />
       <div>
         <button onClick={onOpen} className="flex flex-col items-center justify-center gap-0 h-max">
           Profile
@@ -515,6 +551,9 @@ function ProfileUser() {
                       <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
                         <Image isZoomed className="object-cover w-[150px] h-[150px]" src={previewImage || user.image?.secure_url || 'https://via.placeholder.com/150'} alt="Profile Image" />
                       </div>
+                    </div>
+                    <div className="col-span-2">
+                      <Input type="text" label="fullname" value={fullname} onChange={(e) => setFullname(e.target.value)} placeholder={user.fullname} />
                     </div>
                     <Input type="text" label="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user.username} />
                     <Input type="text" label="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={user.email} />

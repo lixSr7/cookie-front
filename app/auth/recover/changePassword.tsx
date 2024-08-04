@@ -9,7 +9,7 @@ export function ChangePassword({ isOpen: isOpen, onOpenChange, token2 }: { isOpe
 
     const handleChangePassword = async () => {
         try {
-            const response = await fetch('https://co-api-vjvb.onrender.com/api/auth/changePassword', {
+            const response = await fetch('https://cookie-rest-api-8fnl.onrender.com/api/auth/changePassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
