@@ -77,6 +77,11 @@ function ProfileUser() {
     if (token) {
       getMyProfile(token);
       getFollowing(userId, token);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
       getFollowers(userId, token);
       getFriends(userId, token);
       getSavedPosts(token);

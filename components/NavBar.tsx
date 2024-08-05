@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, User, Card, CardBody, ButtonGroup, } from "@nextui-org/react";
+import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, User, Card, CardBody, ButtonGroup } from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
 import Link from "next/link";
-import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon, } from "@geist-ui/icons"; 
+import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon } from "@geist-ui/icons";
 import PageChat from "@/app/chat/chatModal";
 import ProfileUser from "./ProfileUser";
 import socket from "@/app/config/socketConfig";
@@ -24,7 +24,8 @@ function NavBar() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  
+  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -134,8 +135,10 @@ function NavBar() {
         user.username.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(filteredUsers);
+      setShowSearchResults(true); // Mostrar los resultados cuando hay una búsqueda
     } else {
       setSearchResults([]);
+      setShowSearchResults(false); // Ocultar los resultados cuando la búsqueda está vacía
     }
   };
 
@@ -180,12 +183,12 @@ function NavBar() {
 
           <div className="flex justify-end gap-4 pl-4 xl:min-w-96">
             <div className="relative">
-              <Input startContent={<SearchIcon />} className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden" placeholder="Search..." value={searchQuery} onChange={(e) => handleSearch(e.target.value)} />
-              {searchQuery && searchResults.length > 0 && (
+              <Input startContent={<SearchIcon />} className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden" placeholder="Search..." value={searchQuery} onChange={(e) => handleSearch(e.target.value)} onBlur={() => setShowSearchResults(false)} onFocus={() => searchQuery && setShowSearchResults(true)} />
+              {showSearchResults && searchResults.length > 0 && (
                 <Card className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[400px]" style={{ maxHeight: 'calc(5 * 4rem)' }}>
                   <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
                     {searchResults.slice(0, 5).map((result) => (
-                      <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" onClick={() => handleUserClick(result._id)}>
+                      <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" onMouseDown={() => handleUserClick(result._id)}>
                         <User name={result.fullname} description={`@${result.username}`} avatarProps={{ src: result.image?.secure_url || 'https://via.placeholder.com/150' }} />
                         <ButtonGroup>
                           <Button color="danger" variant="ghost"><TiUserAdd /></Button>
