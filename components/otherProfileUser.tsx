@@ -235,19 +235,6 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({ userId, onClose }) 
                  </Card>
                 ))}
                </div>
-               {/* <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
-                {likes.map((like, index) => (
-                 <Card key={index} isFooterBlurred radius="lg" className="border-none">
-                  <Image className="object-cover w-[200px] h-[200px]" src={like.mediaUrl?.secure_url} />
-                  <CardFooter>
-                   <p className="text-tiny text-white/80">{like.content}</p>
-                   <Button className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg" size="sm">
-                    {new Date(like.createdAt).toLocaleDateString()}
-                   </Button>
-                  </CardFooter>
-                 </Card>
-                ))}
-               </div> */}
               </Tab>
              </Tabs>
             </div>

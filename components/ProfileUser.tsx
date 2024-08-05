@@ -17,6 +17,7 @@ function ProfileUser() {
   const [user, setUser] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
   const [savedPosts, setSavedPosts] = useState<any[]>([]);
+  const [likes, setLikes] = useState<any[]>([]);
   const [userId, setUserId] = useState<string>("");
   const [following, setFollowing] = useState<any[]>([]);
   const [followers, setFollowers] = useState<any[]>([]);
@@ -139,6 +140,7 @@ function ProfileUser() {
         const data = await response.json();
         console.log('data:', data);
         setUser(data);
+        setLikes(data.likes);
       } else {
         console.error("Error:", await response.text());
       }
@@ -528,9 +530,21 @@ function ProfileUser() {
                             ))}
                           </div>
                         </Tab>
-                        <Tab key="shared" title="Shared">
-                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-
+                        <Tab key="likes" title="Likes">
+                          <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
+                            {likes.map((like, index) => (
+                              <Card key={index} isFooterBlurred radius="lg" className="border-none">
+                                {like.image && (
+                                  <Image isZoomed className="object-cover w-[200px] h-[200px]" src={like.image} />
+                                )}
+                                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                                  <p className="text-tiny text-white/80">{like.content}</p>
+                                  <Button className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg" size="sm">
+                                    {new Date(like.createdAt).toLocaleDateString()}
+                                  </Button>
+                                </CardFooter>
+                              </Card>
+                            ))}
                           </div>
                         </Tab>
                       </Tabs>
