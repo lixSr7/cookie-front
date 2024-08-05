@@ -3,57 +3,32 @@ import {
   Modal,
   ModalContent,
   ModalBody,
-  Input,
   ScrollShadow,
+  Input
 } from "@nextui-org/react";
+import { jwtDecode } from "jwt-decode";
 import { CiSearch } from "react-icons/ci";
 import { TbArrowBackUp } from "react-icons/tb";
-import { jwtDecode } from "jwt-decode";
 
-import CreateChat from "./components/createChat";
 import ChatList from "./components/chatList";
+import CreateChat from "./components/createChat";
 import Messages from "./components/messageList";
 import CreateMessage from "./components/createMessage";
+import useWindowWidth from "./hooks/useWindowWidth";
+import useAuth from "./hooks/useAuth";
 
 interface PageChatProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface DecodedToken {
-  id: string;
-}
-
 const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"chatList" | "messages">("chatList");
   const idChat = selectedChat || "1234";
-  const [id, setId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [windowWidth, setWindowWidth] = useState<number>(0);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-
-    if (storedToken) {
-      const decodedToken = jwtDecode<DecodedToken>(storedToken);
-
-      setId(decodedToken.id);
-    }
-  }, []);
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+  const windowWidth = useWindowWidth();
+  const id = useAuth();
 
   useEffect(() => {
     if (windowWidth <= 789) {
@@ -62,6 +37,10 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
       setViewMode("messages");
     }
   }, [windowWidth]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   if (!isOpen) {
     return null;
@@ -74,22 +53,13 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
       size="5xl"
       onOpenChange={onClose}
     >
-      <ModalContent
-        className={`${
-          windowWidth <= 789
-            ? "flex items-center justify-center min-h-screen"
-            : ""
-        }`}
-      >
+      <ModalContent className="flex items-center justify-center min-h-screen">
         <ModalBody>
-          <article className="flex p-2 h-full max-h-[500px] dark:bg-zinc-800 relative ">
+          <article className="flex p-2 h-full max-h-[600px] dark:bg-zinc-800 relative">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
-                  <section
-                    className="flex flex-col w-full max-w-[500px] min-w-[100px] overflow-hidden h-full max-h-[900px] min-h-[700px]
-                  
-                  bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full max-w-[500px] min-w-[100px] overflow-hidden h-full max-h-[600px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <div className="flex justify-center gap-2 mb-4 dark:bg-zinc-800">
                       <Input
                         labelPlacement="outside"
@@ -103,7 +73,6 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                       />
                       <CreateChat />
                     </div>
-
                     <ChatList
                       searchTerm={searchTerm}
                       onSelectChat={(chatId) => {
@@ -114,7 +83,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                   </section>
                 )}
                 {viewMode === "messages" && (
-                  <section className="flex flex-col w-full h-full max-h-[900px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full max-w-[500px] min-w-[100px] h-full max-h-[600px] min-h-[600px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                       <div className="flex-grow overflow-y-auto">
                         <Messages selectedChat={selectedChat} />
@@ -155,7 +124,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                     />
                   </ScrollShadow>
                 </section>
-                <section className="flex flex-col flex-grow h-full max-h-[750px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4 ml-2">
+                <section className="flex flex-col flex-grow h-full max-h-[600px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4 ml-2">
                   <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                     <div className="flex-grow overflow-y-auto">
                       <Messages selectedChat={selectedChat} />
