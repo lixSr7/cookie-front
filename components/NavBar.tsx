@@ -3,10 +3,30 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, } from "@nextui-org/react";
+import {
+  Avatar,
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownItem,
+} from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
 import Link from "next/link";
-import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, AlertOctagon as LogOutIcon, Users as FriendIcon, PieChart as ChartIcon, Image as PhotoIcon, Heart as LikeIcon, Star as StarIcon, Menu as MenuIcon, Sliders as OptionsIcon, ArrowLeftCircle as CloseIcon, } from "@geist-ui/icons";
+import {
+  MessageCircle as ChatIcon,
+  Home as HomeIcon,
+  Search as SearchIcon,
+  AlertOctagon as LogOutIcon,
+  Users as FriendIcon,
+  PieChart as ChartIcon,
+  Image as PhotoIcon,
+  Heart as LikeIcon,
+  Star as StarIcon,
+  Menu as MenuIcon,
+  Sliders as OptionsIcon,
+  ArrowLeftCircle as CloseIcon,
+} from "@geist-ui/icons";
 import PageChat from "@/app/chat/chatModal";
 import ProfileUser from "./ProfileUser";
 
@@ -106,10 +126,11 @@ function NavBar() {
           <div className="flex items-center justify-between w-full gap-4 max-w-64 max-lg:hidden">
             <Link
               href="/posts"
-              className={`flex items-center gap-2 py-2 px-6 rounded-lg ${pathname === "/posts"
+              className={`flex items-center gap-2 py-2 px-6 rounded-lg ${
+                pathname === "/posts"
                   ? "bg-[#dd2525] text-white"
                   : "text-zinc-600 dark:text-white"
-                }`}
+              }`}
             >
               {pathname === "/posts" && <HomeIcon />}
               Home
@@ -117,10 +138,11 @@ function NavBar() {
             <ProfileUser />
             <button
               onClick={() => setIsChatOpen(true)}
-              className={`py-2 px-6 rounded-lg ${pathname === "/Chats"
+              className={`py-2 px-6 rounded-lg ${
+                pathname === "/Chats"
                   ? "bg-[#dd2525] text-white"
                   : "text-zinc-600 dark:text-white"
-                }`}
+              }`}
             >
               {pathname === "/Chats" && <ChatIcon />}
               Chats
@@ -150,10 +172,11 @@ function NavBar() {
               <DropdownMenu aria-label="Link Actions">
                 <DropdownItem
                   key="posts"
-                  className={`${pathname === "/posts"
+                  className={`${
+                    pathname === "/posts"
                       ? "bg-danger-600 text-white"
                       : "fill-zinc-600 dark:fill-slate-300"
-                    }`}
+                  }`}
                 >
                   <Link href="/posts" className="flex items-center gap-2">
                     <HomeIcon className="w-5 h-5" />
@@ -162,64 +185,17 @@ function NavBar() {
                 </DropdownItem>
                 <DropdownItem
                   key="Chat"
-                  className={`${pathname === "/chats"
+                  className={`${
+                    pathname === "/chats"
                       ? "bg-danger-600 text-white"
                       : "fill-zinc-600 dark:fill-slate-300"
-                    }`}
+                  }`}
                   onClick={() => setIsChatOpen(true)}
                 >
                   <div className="flex items-center gap-2">
                     <ChatIcon className="w-5 h-5" />
                     <span className="text-sm ">Chat</span>
                   </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="Friends"
-                  className={`${pathname === "/friends"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
-                    }`}
-                >
-                  <Link href="/friends" className="flex items-center gap-2">
-                    <FriendIcon className="w-5 h-5" />
-                    <span className="text-sm ">Friends</span>
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  key="Dashboard"
-                  className={`${pathname === "/dashboard"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
-                    }`}
-                >
-                  <Link href="/admin" className="flex items-center gap-2">
-                    <ChartIcon className="w-5 h-5" />
-                    <span className="text-sm ">Dashboard</span>
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  key="Photos"
-                  className={`${pathname === "/chats"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
-                    }`}
-                >
-                  <Link href="/photos" className="flex items-center gap-2">
-                    <PhotoIcon className="w-5 h-5" />
-                    <span className="text-sm ">Photos</span>
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  key="Saves"
-                  className={`${pathname === "/friends"
-                      ? "bg-danger-600 text-white"
-                      : "fill-zinc-600 dark:fill-slate-300"
-                    }`}
-                >
-                  <Link href="/saves" className="flex items-center gap-2">
-                    <StarIcon className="w-5 h-5" />
-                    <span className="text-sm ">Saves</span>
-                  </Link>
                 </DropdownItem>
                 <DropdownItem key="Logout" onClick={() => handleLogout()}>
                   <div className="flex items-center gap-2">
