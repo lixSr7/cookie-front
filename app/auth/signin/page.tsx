@@ -2,10 +2,7 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import { Input, Button, Image, useDisclosure } from "@nextui-org/react";
-import {
-  Eye as EyeFilledIcon,
-  EyeOff as EyeSlashFilledIcon,
-} from "@geist-ui/icons";
+import { Eye as EyeFilledIcon, EyeOff as EyeSlashFilledIcon, } from "@geist-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import RECOVER from "../recover/recover";

@@ -1,4 +1,4 @@
-'use client'; 
+'use client';
 import React, { useState } from "react";
 import {
   Button,
@@ -29,7 +29,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
   const handleSendCode = async () => {
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/auth/recover",
+        "https://cookie-rest-api-8fnl.onrender.com/api/auth/recover",
         {
           method: "POST",
           headers: {
@@ -68,13 +68,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
                 Recover password
               </ModalHeader>
               <ModalBody>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+                <Input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -88,11 +82,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
           )}
         </ModalContent>
       </Modal>
-      <ValidateCodeSend
-        isOpen={isValidateOpen}
-        onOpenChange={onValidateOpenChange}
-        token={token}
-      />
+      <ValidateCodeSend isOpen={isValidateOpen} onOpenChange={onValidateOpenChange} token={token} />
     </>
   );
 }

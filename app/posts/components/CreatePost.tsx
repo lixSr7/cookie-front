@@ -14,6 +14,7 @@ import {
 import { createPost } from "@/services/Posts";
 import { toast } from "sonner";
 import UploaderImagePost from "./UploaderImagePost";
+import socket from "@/app/config/socketConfig";
 
 export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -22,11 +23,13 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const [isSending, setIsSending] = useState(false);
   const [token, setToken] = useState("");
   const [image, setImage] = useState<string | null>(null); // State for image
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
+      getMyProfile(storedToken);
     }
   }, []);
 
@@ -36,7 +39,42 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
     }
   }, [isOpen]);
 
-  // Function to validate content
+  useEffect(() => {
+    socket.connect();
+
+    socket.on('userUpdate', async (data) => {
+      await getMyProfile(token);
+    });
+
+    return () => {
+      socket.off('userUpdate');
+    };
+  }, [token]);
+
+  const getMyProfile = async (token: string) => {
+    try {
+      const response = await fetch(
+        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+      } else {
+        console.error("Error:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error al obtener el perfil:", error);
+    }
+  };
+
   function validateContent(content: string, imageIsEmpty: boolean) {
     const ERROS_CONTENT = {
       empty: "The content cannot be empty",
@@ -74,11 +112,10 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
         toast.error("Error creating post");
       } finally {
         setIsSending(false);
-        onClose?.(); 
+        onClose?.();
       }
     }
   };
-
 
   const resetForm = () => {
     setImage(null);
@@ -92,7 +129,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
         <Avatar
           isBordered
           color="danger"
-          src="https://www.los40.do/wp-content/uploads/2023/10/16880295953133-e1696339269651-300x300.jpeg"
+          src={user?.image?.secure_url || "https://via.placeholder.com/150"}
         />
 
         <button
@@ -118,7 +155,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                   ) as HTMLTextAreaElement;
                   const content = contentInput.value;
 
-                  console.log("content:", content);
+                  // console.log("content:", content);
 
                   const imageInput = document.querySelector(
                     ".inputImageCreatePost"

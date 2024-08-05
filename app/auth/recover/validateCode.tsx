@@ -35,7 +35,7 @@ export function ValidateCodeSend({
   const handleValidateCode = async () => {
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/auth/validate",
+        "https://cookie-rest-api-8fnl.onrender.com/api/auth/validate",
         {
           method: "POST",
           headers: {
@@ -74,13 +74,7 @@ export function ValidateCodeSend({
                 Validate Code
               </ModalHeader>
               <ModalBody>
-                <Input
-                  type="text"
-                  placeholder="Enter code sent by email"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  required
-                />
+                <Input type="text" placeholder="Enter code sent by email" value={code} onChange={(e) => setCode(e.target.value)} required />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -94,11 +88,7 @@ export function ValidateCodeSend({
           )}
         </ModalContent>
       </Modal>
-      <ChangePassword
-        isOpen={isChangePasswordOpen}
-        onOpenChange={onChangePasswordOpenChange}
-        token2={token2}
-      />
+      <ChangePassword isOpen={isChangePasswordOpen} onOpenChange={onChangePasswordOpenChange} token2={token2} />
     </>
   );
 }
