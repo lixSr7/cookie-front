@@ -18,7 +18,6 @@ type CommentUser = {
   image: string;
 };
 
-
 export type Like = {
   _id: string;
   userId: string;

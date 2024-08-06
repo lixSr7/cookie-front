@@ -1,12 +1,16 @@
 "use client";
 import { jwtDecode } from "jwt-decode";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Input, Button, Image, useDisclosure } from "@nextui-org/react";
-import { Eye as EyeFilledIcon, EyeOff as EyeSlashFilledIcon, } from "@geist-ui/icons";
+import {
+  Eye as EyeFilledIcon,
+  EyeOff as EyeSlashFilledIcon,
+} from "@geist-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import RECOVER from "../recover/recover";
 import { ToastContainer, toast } from "react-toastify";
+
+import RECOVER from "../recover/recover";
 import "react-toastify/dist/ReactToastify.css";
 
 interface IUser {
@@ -25,10 +29,12 @@ export default function SIGNIN() {
   const handleLogin = async () => {
     if (!emailOrUsername) {
       toast.error("Email or username is required.");
+
       return;
     }
     if (!password) {
       toast.error("Password is required.");
+
       return;
     }
 
@@ -41,11 +47,11 @@ export default function SIGNIN() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({  
+          body: JSON.stringify({
             emailOrUsername,
             password,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -53,6 +59,7 @@ export default function SIGNIN() {
       if (response.ok) {
         const decodedToken: IUser = jwtDecode(data.token);
         const userRole = decodedToken.role;
+
         localStorage.setItem("token", data.token);
         if (userRole === "user") {
           router.push("/posts");
@@ -66,7 +73,7 @@ export default function SIGNIN() {
       }
     } catch (error) {
       toast.error("Error logging in. Please try again.");
-    } 
+    }
   };
 
   const handleErrors = (status: number, message: string) => {
@@ -79,7 +86,7 @@ export default function SIGNIN() {
         break;
       case 403:
         toast.error(
-          message || "User is inactive. Please contact the administrator."
+          message || "User is inactive. Please contact the administrator.",
         );
         break;
       case 404:
@@ -104,20 +111,15 @@ export default function SIGNIN() {
           <Input
             required
             isDisabled={isSending}
-            type="text"
-            variant="bordered"
             label="Email or username"
+            type="text"
             value={emailOrUsername}
+            variant="bordered"
             onChange={(e) => setEmailOrUsername(e.target.value)}
           />
           <Input
             required
-            isDisabled={isSending}
-            label="Password"
-            variant="bordered"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className="max-w-xs text-black"
             endContent={
               <button
                 className="focus:outline-none"
@@ -131,26 +133,31 @@ export default function SIGNIN() {
                 )}
               </button>
             }
+            isDisabled={isSending}
+            label="Password"
+            placeholder="Enter your password"
             type={isVisible ? "text" : "password"}
-            className="max-w-xs text-black"
+            value={password}
+            variant="bordered"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button
             className="w-1/2 font-bold text-white bg-[#dd2525]"
-            onClick={handleLogin}
             isLoading={isSending}
+            onClick={handleLogin}
           >
             Login
           </Button>
           <div className="flex flex-col items-center justify-center gap-0 m-0">
             <p className="text-xs text-black">
               Don&apos;t have an account?
-              <Link href="/auth/signup" className="font-bold text-[#dd2525]">
+              <Link className="font-bold text-[#dd2525]" href="/auth/signup">
                 Register Now
               </Link>
             </p>
             <p className="text-xs text-black">
               Forgot your password?
-              <button onClick={onOpen} className="font-bold text-[#dd2525]">
+              <button className="font-bold text-[#dd2525]" onClick={onOpen}>
                 Recover
               </button>
             </p>
@@ -168,11 +175,11 @@ export default function SIGNIN() {
         >
           <div>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
               className="w-8 h-8 p-2 font-bold text-[#dd2525]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
@@ -181,11 +188,11 @@ export default function SIGNIN() {
       </div>
       <div className="flex flex-col items-center justify-center w-1/2 text-white bg-[#dd2525]">
         <Image
-          width={250}
-          height={250}
-          className="p-1 bg-white rounded-full"
           alt="Cookie Logo in Login Screen"
+          className="p-1 bg-white rounded-full"
+          height={250}
           src="/img/cookie_login.png"
+          width={250}
         />
         <p className="font-bold">COOKIE, The new social network for people</p>
         <p className="font-bold">with visual disabilities.</p>

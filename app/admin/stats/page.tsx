@@ -9,6 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+
 import { userToken, User } from "@/types/Users"; // Importa los tipos
 
 function STATS() {
@@ -23,15 +24,18 @@ function STATS() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
       const decodedToken = jwtDecode<userToken>(storedToken); // Usa el tipo definido
+
       setUsername(decodedToken.username);
       setImage(decodedToken.image?.secure_url || ""); // Accede a la propiedad secure_url del objeto image
       GetAllUsers(storedToken)
         .then((data) => {
           setUsers(data);
           const initialSelectedRoleIds: { [key: string]: string } = {};
+
           data.forEach((user: User) => {
             initialSelectedRoleIds[user._id] = user.role._id;
           });
@@ -72,6 +76,7 @@ function STATS() {
 
       if (response.ok) {
         const data: User[] = await response.json();
+
         return data;
       } else {
         console.error("Error al obtener usuarios:", await response.text());
@@ -90,7 +95,7 @@ function STATS() {
         <div className="absolute top-0 right-0 m-2">
           <Dropdown>
             <DropdownTrigger>
-              <Avatar src={image} size="lg" className="object-cover"></Avatar>
+              <Avatar className="object-cover" size="lg" src={image} />
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
               <DropdownItem key="new" href="/admin">

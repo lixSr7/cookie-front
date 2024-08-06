@@ -1,26 +1,54 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
-import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, User, Card, CardBody, ButtonGroup } from "@nextui-org/react";
-import { ThemeSwitch } from "./theme-switch";
+
+import { useEffect, useState, KeyboardEvent } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import {
+  Avatar,
+  Input,
+  Dropdown,
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownItem,
+  Button,
+  User,
+  Card,
+  CardBody,
+  ButtonGroup,
+} from "@nextui-org/react";
 import Link from "next/link";
-import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon } from "@geist-ui/icons";
-import PageChat from "@/app/chat/chatModal";
-import ProfileUser from "./ProfileUser";
-import socket from "@/app/config/socketConfig";
+import {
+  MessageCircle as ChatIcon,
+  Home as HomeIcon,
+  Search as SearchIcon,
+  Menu as MenuIcon,
+  ArrowLeftCircle as CloseIcon,
+} from "@geist-ui/icons";
 import { TiUserAdd } from "react-icons/ti";
-import OtherProfileUser from "./otherProfileUser";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+
+import OtherProfileUser from "./otherProfileUser";
+import ProfileUser from "./ProfileUser";
+import { ThemeSwitch } from "./theme-switch";
+
+import socket from "@/app/config/socketConfig";
+import PageChat from "@/app/chat/chatModal";
+
+interface User {
+  _id: string;
+  fullname: string;
+  username: string;
+  image?: { secure_url: string };
+  verified?: boolean;
+}
 
 function NavBar() {
   const router = useRouter();
   const pathname = usePathname();
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
-  const [user, setUser] = useState<any>(null);
-  const [users, setUsers] = useState<any[]>([]);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [searchResults, setSearchResults] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -28,6 +56,7 @@ function NavBar() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
       getAllUsers(storedToken);
@@ -43,13 +72,13 @@ function NavBar() {
   useEffect(() => {
     socket.connect();
 
-    socket.on('userUpdate', async () => {
+    socket.on("userUpdate", async () => {
       await getMyProfile(token);
       await getAllUsers(token);
     });
 
     return () => {
-      socket.off('userUpdate');
+      socket.off("userUpdate");
     };
   }, [token]);
 
@@ -63,7 +92,7 @@ function NavBar() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        }
+        },
       );
 
       if (response.ok) {
@@ -89,11 +118,12 @@ function NavBar() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        }
+        },
       );
 
       if (response.ok) {
         const data = await response.json();
+
         setUser(data);
       } else {
         console.error("Error al obtener el perfil:", await response.text());
@@ -106,16 +136,20 @@ function NavBar() {
 
   const getAllUsers = async (token: string) => {
     try {
-      const response = await fetch("https://cookie-rest-api-8fnl.onrender.com/api/users/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": token,
+      const response = await fetch(
+        "https://cookie-rest-api-8fnl.onrender.com/api/users/",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
+
         setUsers(data);
       } else {
         console.error("Error al obtener los usuarios:", await response.text());
@@ -130,15 +164,17 @@ function NavBar() {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query) {
-      const filteredUsers = users.filter((user) =>
-        user.fullname.toLowerCase().includes(query.toLowerCase()) ||
-        user.username.toLowerCase().includes(query.toLowerCase())
+      const filteredUsers = users.filter(
+        (user) =>
+          user.fullname.toLowerCase().includes(query.toLowerCase()) ||
+          user.username.toLowerCase().includes(query.toLowerCase()),
       );
+
       setSearchResults(filteredUsers);
-      setShowSearchResults(true); // Mostrar los resultados cuando hay una búsqueda
+      setShowSearchResults(true);
     } else {
       setSearchResults([]);
-      setShowSearchResults(false); // Ocultar los resultados cuando la búsqueda está vacía
+      setShowSearchResults(false);
     }
   };
 
@@ -151,15 +187,39 @@ function NavBar() {
     setIsModalVisible(false);
   };
 
+  const handleKeyPress = (
+    event: KeyboardEvent<HTMLDivElement>,
+    callback: () => void,
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      callback();
+    }
+  };
+
   return (
     <>
       <div className="fixed z-50 flex items-center justify-center w-full h-20 px-4 min-sm:px-8 bottom-6">
         <nav className="flex items-center justify-between flex-grow w-full h-full px-4 bg-white border-2 rounded-lg border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700">
           <div className="lg:min-w-96">
             <div className="flex items-center justify-start gap-4">
-              <Avatar isBordered size="sm" color="success" src={user?.image?.secure_url || "https://via.placeholder.com/150"} />
+              <Avatar
+                isBordered
+                color="success"
+                size="sm"
+                src={
+                  user?.image?.secure_url || "https://via.placeholder.com/150"
+                }
+              />
               <div className="flex flex-col">
-                <strong className="text-base m-0 flex justify-center items-center">{user?.fullname} <span className="ml-2">{user?.verified === true && <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />}</span></strong>
+                <strong className="text-base m-0 flex justify-center items-center">
+                  {user?.fullname}{" "}
+                  <span className="ml-2">
+                    {user?.verified && (
+                      <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
+                    )}
+                  </span>
+                </strong>
                 <span className="font-medium text-[#dd2525] text-[70%] m-0">
                   @{user?.username}
                 </span>
@@ -168,14 +228,28 @@ function NavBar() {
           </div>
 
           <div className="flex items-center justify-between w-full gap-4 max-w-64 max-lg:hidden">
-            <Link href="/posts" className={`flex items-center gap-2 py-2 px-6 rounded-lg ${pathname === "/posts" ? "bg-[#dd2525] text-white" : "text-zinc-600 dark:text-white"}`} >
+            <Link
+              className={`flex items-center gap-2 py-2 px-6 rounded-lg ${
+                pathname === "/posts"
+                  ? "bg-[#dd2525] text-white"
+                  : "text-zinc-600 dark:text-white"
+              }`}
+              href="/posts"
+            >
               {pathname === "/posts" && <HomeIcon />}
               Home
             </Link>
 
             <ProfileUser />
 
-            <button onClick={() => setIsChatOpen(true)} className={`py-2 px-6 rounded-lg ${pathname === "/Chats" ? "bg-[#dd2525] text-white" : "text-zinc-600 dark:text-white"}`} >
+            <button
+              className={`py-2 px-6 rounded-lg ${
+                pathname === "/Chats"
+                  ? "bg-[#dd2525] text-white"
+                  : "text-zinc-600 dark:text-white"
+              }`}
+              onClick={() => setIsChatOpen(true)}
+            >
               {pathname === "/Chats" && <ChatIcon />}
               Chats
             </button>
@@ -183,15 +257,48 @@ function NavBar() {
 
           <div className="flex justify-end gap-4 pl-4 xl:min-w-96">
             <div className="relative">
-              <Input startContent={<SearchIcon />} className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden" placeholder="Search..." value={searchQuery} onChange={(e) => handleSearch(e.target.value)} onBlur={() => setShowSearchResults(false)} onFocus={() => searchQuery && setShowSearchResults(true)} />
+              <Input
+                className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden"
+                placeholder="Search..."
+                startContent={<SearchIcon />}
+                value={searchQuery}
+                onBlur={() => setShowSearchResults(false)}
+                onChange={(e) => handleSearch(e.target.value)}
+                onFocus={() => searchQuery && setShowSearchResults(true)}
+              />
               {showSearchResults && searchResults.length > 0 && (
-                <Card className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[400px]" style={{ maxHeight: 'calc(5 * 4rem)' }}>
-                  <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
+                <Card
+                  className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[400px]"
+                  style={{ maxHeight: "calc(5 * 4rem)" }}
+                >
+                  <CardBody
+                    className="flex flex-col w-full gap-4 px-6 py-5"
+                    style={{ overflowY: "auto", scrollbarWidth: "none" }}
+                  >
                     {searchResults.slice(0, 5).map((result) => (
-                      <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" onMouseDown={() => handleUserClick(result._id)}>
-                        <User name={result.fullname} description={`@${result.username}`} avatarProps={{ src: result.image?.secure_url || 'https://via.placeholder.com/150' }} />
+                      <div
+                        key={result._id}
+                        className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer"
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) =>
+                          handleKeyPress(e, () => handleUserClick(result._id))
+                        }
+                        onMouseDown={() => handleUserClick(result._id)}
+                      >
+                        <User
+                          avatarProps={{
+                            src:
+                              result.image?.secure_url ||
+                              "https://via.placeholder.com/150",
+                          }}
+                          description={`@${result.username}`}
+                          name={result.fullname}
+                        />
                         <ButtonGroup>
-                          <Button color="danger" variant="ghost"><TiUserAdd /></Button>
+                          <Button color="danger" variant="ghost">
+                            <TiUserAdd />
+                          </Button>
                         </ButtonGroup>
                       </div>
                     ))}
@@ -202,7 +309,15 @@ function NavBar() {
 
             <ThemeSwitch />
 
-            <Dropdown showArrow backdrop="blur" classNames={{ base: "before:bg-default-200", content: "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black", }} >
+            <Dropdown
+              showArrow
+              backdrop="blur"
+              classNames={{
+                base: "before:bg-default-200",
+                content:
+                  "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
+              }}
+            >
               <DropdownTrigger className="grid place-content-center">
                 <button className="w-10 p-2 transition-colors duration-100 rounded-md bg-[#dd2525] hover:bg-danger-700 dark:hover:bg-zinc-600 max-md:grid place-content-center">
                   <MenuIcon className="w-5 h-5 stroke-white" />
@@ -220,7 +335,9 @@ function NavBar() {
           </div>
         </nav>
       </div>
-      {isModalVisible && <OtherProfileUser userId={selectedUserId} onClose={closeModal} />}
+      {isModalVisible && (
+        <OtherProfileUser userId={selectedUserId} onClose={closeModal} />
+      )}
       <PageChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );

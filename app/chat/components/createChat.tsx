@@ -78,7 +78,7 @@ const CreateChat: React.FC = () => {
             name: selectedUsers.length > 1 ? chatName : "",
             users: usersToSend,
           }),
-        }
+        },
       );
 
       if (response.ok) {

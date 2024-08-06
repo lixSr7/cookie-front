@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Skeleton } from "@nextui-org/react";
 import CountUp from "react-countup";
+
 import { getStatsPlatform } from "@/services/Posts";
 
 interface Stats {
@@ -20,6 +21,7 @@ function CountersUP() {
     const fetchStats = async () => {
       try {
         const data = await getStatsPlatform();
+
         setStats(data);
       } catch (error) {
         console.error("Failed to fetch statistics:", error);
@@ -33,13 +35,13 @@ function CountersUP() {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <Counter title="Posts" value={stats?.totalPosts || 0} loading={loading} />
+      <Counter loading={loading} title="Posts" value={stats?.totalPosts || 0} />
       <Counter
+        loading={loading}
         title="Comments"
         value={stats?.totalComments || 0}
-        loading={loading}
       />
-      <Counter title="Likes" value={stats?.totalLikes || 0} loading={loading} />
+      <Counter loading={loading} title="Likes" value={stats?.totalLikes || 0} />
     </div>
   );
 }
@@ -59,7 +61,7 @@ function Counter({ title, value, loading }: CounterProps) {
         </div>
       ) : (
         <>
-          + <CountUp start={0} end={value} duration={3} separator="," />
+          + <CountUp duration={3} end={value} separator="," start={0} />
           <span className="ml-2">{title}</span>
         </>
       )}

@@ -7,15 +7,18 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { MessageCircle as MessageIcon } from "@geist-ui/icons";
+import { useEffect, useState } from "react";
+
 import CreateComment from "./CreateComment";
 import ListComments from "./ListComments";
-import { useEffect, useState } from "react";
+
 import { Comment as CommentType } from "@/types/Post";
 import { getAllComments } from "@/services/Posts";
 
 function CommentModal({ postId }: { postId: string }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [comments, setComments] = useState<CommentType[]>([]);
+
   useEffect(() => {
     allComments();
   }, []);
@@ -29,16 +32,15 @@ function CommentModal({ postId }: { postId: string }) {
       console.error("Error fetching Comments:", error);
     }
   };
+
   return (
     <>
       <button onClick={onOpen}>
         <MessageIcon className="w-6 h-6 cursor-pointer opacity-60" />
       </button>
       <Modal
-        size="lg"
         backdrop="blur"
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
         motionProps={{
           variants: {
             enter: {
@@ -59,6 +61,8 @@ function CommentModal({ postId }: { postId: string }) {
             },
           },
         }}
+        size="lg"
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           {(onClose) => (
@@ -67,10 +71,14 @@ function CommentModal({ postId }: { postId: string }) {
                 Comments
               </ModalHeader>
               <ModalBody>
-                <ListComments updateComments={allComments} postId={postId} comments={comments} />
+                <ListComments
+                  comments={comments}
+                  postId={postId}
+                  updateComments={allComments}
+                />
               </ModalBody>
               <ModalFooter className="flex items-center justify-between">
-                <CreateComment updateComment={allComments} postId={postId} />
+                <CreateComment postId={postId} updateComment={allComments} />
               </ModalFooter>
             </>
           )}

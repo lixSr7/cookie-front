@@ -10,16 +10,14 @@ import {
   TableCell,
 } from "@nextui-org/react";
 
-
 const TopUsersPosts: React.FC = () => {
-
   return (
     <div className="flex flex-col gap-3">
       <Table
-        color="primary"
-        selectionMode="single"
-        defaultSelectedKeys={["2"]}
         aria-label="Example static collection table"
+        color="primary"
+        defaultSelectedKeys={["2"]}
+        selectionMode="single"
       >
         <TableHeader>
           <TableColumn>NAME</TableColumn>

@@ -1,8 +1,9 @@
+import Posts from "./components/Posts";
+
 import FriendsCard from "@/components/FriendsCard";
 import FriendshipsCard from "@/components/FriendshipsCard";
 import NavBar from "@/components/NavBar";
 import StoriesCard from "@/components/StoriesCard";
-import Posts from "./components/Posts";
 
 function Home() {
   return (

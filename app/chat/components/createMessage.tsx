@@ -65,7 +65,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
             "x-access-token": token,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       setMessage("");
@@ -80,7 +80,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
     } catch (error: any) {
       console.error(
         "Error sending message:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
     } finally {
       setIsSending(false);

@@ -3,19 +3,18 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   ScrollShadow,
   Button,
 } from "@nextui-org/react";
+import { Trash2 as TrashIcon } from "@geist-ui/icons";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+
 import { Comment as CommentType } from "@/types/Post";
 import { deleteComment } from "@/services/Posts";
-import { Trash2 as TrashIcon } from "@geist-ui/icons";
 import { emojis } from "@/app/consts/emojis";
-
 import { formatTimeDifference } from "@/utils/formatedDate";
-import { useEffect, useState } from "react";
 import { userToken } from "@/types/Users";
-import { jwtDecode } from "jwt-decode";
 
 function ListComments({
   comments,
@@ -30,11 +29,14 @@ function ListComments({
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       const decodeToken: userToken = jwtDecode(storedToken);
+
       setUserId(decodeToken.id);
     }
   }, []);
+
   return (
     <ScrollShadow
       hideScrollBar
@@ -46,17 +48,17 @@ function ListComments({
             key={comment._id}
             comment={comment}
             id={comment._id}
-            postId={postId}
             isMeComment={comment.user._id === userId}
+            postId={postId}
             updateComments={updateComments}
           />
         ))
       ) : (
         <div className="grid w-full h-full place-content-center">
           <img
+            alt=""
             className="m-auto w-36"
             src="https://res.cloudinary.com/dtbedhbr4/image/upload/f_auto,q_auto/v1/Cookie%20Post/k6x8sxuzomlzc6gjihm0"
-            alt=""
           />
           <span className="text-sm text-center opacity-60">
             Create the first comment ¿No?
@@ -88,6 +90,7 @@ const Item = ({
     await deleteComment(postId, id);
     updateComments();
   };
+
   return (
     <div key={comment._id} className="w-full">
       <Card className=" dark:bg-zinc-800">
@@ -96,8 +99,8 @@ const Item = ({
             <div className="flex items-center gap-3">
               <Avatar
                 isBordered
-                size="md"
                 color="danger"
+                size="md"
                 src={comment.user.image || ""}
               />
               <div className="flex flex-col">
@@ -126,7 +129,7 @@ const Item = ({
           {comment.content}
           {comment.emoji !== "none" ? (
             <div className="flex items-center justify-center w-full">
-              <img className=" w-24 m-auto" src={emojiURI} alt="" />
+              <img alt="" className=" w-24 m-auto" src={emojiURI} />
             </div>
           ) : null}
           <strong className="font-bold text-md text-slate-500">

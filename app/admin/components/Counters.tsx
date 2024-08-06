@@ -19,13 +19,13 @@ const Counter: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setUserCounter((previousCounter) =>
-        incrementCounter(previousCounter, totalUsers)
+        incrementCounter(previousCounter, totalUsers),
       );
       setPostCounter((previousCounter) =>
-        incrementCounter(previousCounter, totalPosts)
+        incrementCounter(previousCounter, totalPosts),
       );
       setChatCounter((previousCounter) =>
-        incrementCounter(previousCounter, totalChats)
+        incrementCounter(previousCounter, totalChats),
       );
     }, 20); // We adjust the interval so that the counter reaches the total in 2 seconds
 
@@ -36,8 +36,9 @@ const Counter: React.FC = () => {
     if (previousCounter < total) {
       const increment = Math.max(
         Math.floor(((total - previousCounter) / 50) * 4),
-        1
+        1,
       ); // We adjust the increment to be faster
+
       return previousCounter + increment;
     } else {
       return previousCounter;
@@ -51,6 +52,7 @@ const Counter: React.FC = () => {
         const total = [totalUsers, totalPosts, totalChats][index];
 
         let percentage = 0;
+
         if (label === "Users") {
           percentage = 20;
         }
@@ -74,9 +76,9 @@ const Counter: React.FC = () => {
                   track: "stroke-white/10",
                   value: "text-3xl font-semibold text-white",
                 }}
-                value={percentage}
-                strokeWidth={4}
                 showValueLabel={true}
+                strokeWidth={4}
+                value={percentage}
               />
             </CardBody>
             <CardFooter className="justify-center items-center pt-0">

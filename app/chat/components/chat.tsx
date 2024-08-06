@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Avatar, Badge } from "@nextui-org/react";
 import { MdOutlineDelete } from "react-icons/md";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 import socket from "@/app/config/socketConfig";
-import {jwtDecode} from "jwt-decode";
 
 interface ChatProps {
   chatData: {
@@ -32,12 +33,15 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       console.error("No token found");
+
       return;
     }
 
     const decodedToken: any = jwtDecode(token);
+
     setUsername(decodedToken.username);
 
     const socketInstance = socket;
@@ -57,21 +61,29 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
   }, [id]);
 
   const deleteChat = async () => {
-    const confirmed = window.confirm("Are you sure you want to delete this chat?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this chat?",
+    );
+
     if (!confirmed) return;
 
     try {
       const token = localStorage.getItem("token");
+
       if (!token) {
         console.error("No token found");
+
         return;
       }
 
-      await axios.delete(`https://cookie-rest-api-8fnl.onrender.com/api/chat/${id}`, {
-        headers: {
-          "x-access-token": token,
+      await axios.delete(
+        `https://cookie-rest-api-8fnl.onrender.com/api/chat/${id}`,
+        {
+          headers: {
+            "x-access-token": token,
+          },
         },
-      });
+      );
 
       // console.log("Chat deleted successfully");
       onDeleteChat(id);
@@ -92,16 +104,16 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
     <div className="flex bg-white dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:hover:transition-transform-background p-3 rounded-md shadow w-full max-w-[300px] gap-4 justify-between hover:bg-slate-200 transition-transform-background">
       <div className="flex items-center gap-4 w-full">
         <Badge
-          content={unreadMessages > 0 ? unreadMessages : ""}
           color="danger"
+          content={unreadMessages > 0 ? unreadMessages : ""}
           shape="circle"
           showOutline={false}
         >
           <Avatar
             isBordered
+            color="danger"
             radius="full"
             src={`https://i.pravatar.cc/150?u=${otherUserId}`}
-            color="danger"
           />
         </Badge>
         <div className="flex flex-col">
@@ -113,10 +125,7 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
           </p>
         </div>
       </div>
-      <button
-        onClick={deleteChat}
-        className="text-red-600 hover:text-red-800"
-      >
+      <button className="text-red-600 hover:text-red-800" onClick={deleteChat}>
         <MdOutlineDelete size={24} />
       </button>
     </div>

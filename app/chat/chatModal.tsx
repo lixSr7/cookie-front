@@ -4,9 +4,8 @@ import {
   ModalContent,
   ModalBody,
   ScrollShadow,
-  Input
+  Input,
 } from "@nextui-org/react";
-import { jwtDecode } from "jwt-decode";
 import { CiSearch } from "react-icons/ci";
 import { TbArrowBackUp } from "react-icons/tb";
 

@@ -7,11 +7,11 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-24 bg-[#dd2525]">
       <Image
-        width={250}
-        height={250}
-        className="p-1 bg-white rounded-full"
         alt="NextUI hero Image"
+        className="p-1 bg-white rounded-full"
+        height={250}
         src="/img/cookie_login.png"
+        width={250}
       />
       <h1 className="text-6xl font-bold text-white ">COOKIE</h1>
       <p className="mb-5 text-xs text-white">ANOTHER SENSATION</p>

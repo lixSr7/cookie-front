@@ -5,6 +5,7 @@ const API_URI = "https://cookie-rest-api-8fnl.onrender.com/api/posts";
 export const getAllPosts = async () => {
   try {
     const response = await axios.get(API_URI);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching all posts:", error);
@@ -15,6 +16,7 @@ export const getAllPosts = async () => {
 export const getPostById = async (id: string) => {
   try {
     const response = await axios.get(`${API_URI}/${id}`);
+
     return response.data;
   } catch (error) {
     console.error(`Error fetching post with id ${id}:`, error);
@@ -25,9 +27,10 @@ export const getPostById = async (id: string) => {
 export const createPost = async (
   content: string,
   imageFile?: File | null,
-  token?: string
+  token?: string,
 ) => {
   const formData = new FormData();
+
   formData.append("content", content);
   if (imageFile) {
     formData.append("image", imageFile);
@@ -40,6 +43,7 @@ export const createPost = async (
         "Content-Type": "multipart/form-data",
       },
     });
+
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -54,6 +58,7 @@ export const deletePost = async (id: string) => {
         "x-access-token": localStorage.getItem("token") || "",
       },
     });
+
     return response.data;
   } catch (error) {
     console.error(`Error deleting post with id ${id}:`, error);
@@ -64,7 +69,7 @@ export const deletePost = async (id: string) => {
 export const createComment = async (
   postId: string,
   content: string,
-  emoji?: string
+  emoji?: string,
 ) => {
   try {
     const commentData = {
@@ -78,8 +83,9 @@ export const createComment = async (
         headers: {
           "x-access-token": localStorage.getItem("token") || "",
         },
-      }
+      },
     );
+
     return response.data;
   } catch (error) {
     console.error("Error creating comment:", error);
@@ -90,6 +96,7 @@ export const createComment = async (
 export const getAllComments = async (postId: string) => {
   try {
     const response = await axios.get(`${API_URI}/${postId}/comments`);
+
     return response.data;
   } catch (error) {
     console.error(`Error fetching comments for post ${postId}:`, error);
@@ -104,11 +111,12 @@ export const deleteComment = async (postId: string, id: string) => {
         "x-access-token": localStorage.getItem("token") || "",
       },
     });
+
     return response.data;
   } catch (error) {
     console.error(
       `Error deleting comment with id ${id} for post ${postId}:`,
-      error
+      error,
     );
     throw error;
   }
@@ -117,6 +125,7 @@ export const deleteComment = async (postId: string, id: string) => {
 export const getAllLikes = async (postId: string) => {
   try {
     const response = await axios.get(`${API_URI}/${postId}/likes`);
+
     return response.data;
   } catch (error) {
     console.error(`Error fetching likes for post ${postId}:`, error);
@@ -132,6 +141,7 @@ export const createLike = async (postId: string) => {
         "x-access-token": token,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error(`Error creating like for post ${postId}:`, error);
@@ -147,11 +157,12 @@ export const deleteLike = async (postId: string, id: string) => {
         "x-access-token": token,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error(
       `Error deleting like with id ${id} for post ${postId}:`,
-      error
+      error,
     );
     throw error;
   }
@@ -165,6 +176,7 @@ export const savePost = async (postId: string) => {
         "x-access-token": token,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error(`Error saving post ${postId}:`, error);
@@ -180,6 +192,7 @@ export const unsavePost = async (postId: string) => {
         "x-access-token": token,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error(`Error unsave post ${postId}:`, error);
@@ -194,6 +207,7 @@ export const getSavedPosts = async () => {
         "x-access-token": localStorage.getItem("token") || "",
       },
     });
+
     return response.data;
   } catch (error) {
     console.error("Error fetching saved posts:", error);
@@ -204,6 +218,7 @@ export const getSavedPosts = async () => {
 export const getStatsPlatform = async () => {
   try {
     const response = await axios.get(`${API_URI}/stats-platform`);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching stats platform:", error);

@@ -9,7 +9,6 @@ import {
 } from "@nextui-org/react";
 
 import ShareButton from "./ShareButton";
-import ChatList from "@/app/chat/components/chatList";
 
 function ShareModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -24,11 +23,7 @@ function ShareModal() {
               <ModalHeader className="flex flex-col gap-1">
                 Share Post
               </ModalHeader>
-              <ModalBody>
-
-              
-
-              </ModalBody>
+              <ModalBody />
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close

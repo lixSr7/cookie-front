@@ -9,7 +9,6 @@ import {
   PieChart as ChartIcon,
   Users as UsersIcon,
   User as UserIcon,
-  MessageCircle as MessageIcon,
   Image as PictureIcon,
   ArrowLeft,
 } from "@geist-ui/icons";
@@ -17,6 +16,7 @@ import {
 //? Components
 import Link from "next/link";
 import { Avatar } from "@nextui-org/react";
+
 import { userToken } from "@/types/Users";
 
 export default function Sidebar() {
@@ -27,13 +27,13 @@ export default function Sidebar() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
       const decodeToken: userToken = jwtDecode(storedToken);
+
       setUser(decodeToken);
     }
-
-
   }, []);
 
   const toggleExpanded = () => {
@@ -45,8 +45,8 @@ export default function Sidebar() {
       <nav className="flex flex-col h-full bg-white dark:bg-[#111111] border-r dark:border-gray-700 shadow-sm">
         <div className="flex items-center justify-between p-4 pb-2">
           <button
-            onClick={toggleExpanded}
             className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+            onClick={toggleExpanded}
           >
             {expanded ? <ArrowLeft /> : <ArrowLeft />}
           </button>
@@ -93,8 +93,8 @@ export default function Sidebar() {
 
         <div className="flex justify-center p-3 border-t dark:border-gray-700">
           <Avatar
-            color="primary"
             isBordered
+            color="primary"
             radius="lg"
             src="https://i.pravatar.cc/150?u=a04258114e29026302d"
           />
@@ -105,12 +105,14 @@ export default function Sidebar() {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold dark:text-white">{user?.username}</h4>
+              <h4 className="font-semibold dark:text-white">
+                {user?.username}
+              </h4>
               <span className="text-xs text-gray-600 dark:text-gray-400">
                 {user?.id}
               </span>
             </div>
-            <UserIcon size={20} className="dark:text-gray-400" />
+            <UserIcon className="dark:text-gray-400" size={20} />
           </div>
         </div>
       </nav>

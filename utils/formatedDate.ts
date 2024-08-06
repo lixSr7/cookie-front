@@ -1,4 +1,7 @@
-export function formatTimeDifference(dateString: string, language: string = 'en'): string {
+export function formatTimeDifference(
+  dateString: string,
+  language: string = "en",
+): string {
   const currentDate = new Date();
   const targetDate = new Date(dateString);
 
@@ -11,7 +14,7 @@ export function formatTimeDifference(dateString: string, language: string = 'en'
   const years = Math.floor(months / 12);
 
   const getLocalizedUnit = (unit: string, count: number): string => {
-    if (language === 'es') {
+    if (language === "es") {
       // Spanish
       return count === 1 ? unit : `${unit}s`;
     } else {
@@ -21,25 +24,26 @@ export function formatTimeDifference(dateString: string, language: string = 'en'
   };
 
   if (minutes < 60) {
-    return `${minutes} ${getLocalizedUnit('minute', minutes)}`;
+    return `${minutes} ${getLocalizedUnit("minute", minutes)}`;
   } else if (hours < 24) {
-    return `${hours} ${getLocalizedUnit('hour', hours)}`;
+    return `${hours} ${getLocalizedUnit("hour", hours)}`;
   } else if (days < 7) {
-    return `${days} ${getLocalizedUnit('day', days)}`;
+    return `${days} ${getLocalizedUnit("day", days)}`;
   } else if (weeks < 4) {
-    return `${weeks} ${getLocalizedUnit('week', weeks)}`;
+    return `${weeks} ${getLocalizedUnit("week", weeks)}`;
   } else if (months < 12) {
-    return `${months} ${getLocalizedUnit('month', months)}`;
+    return `${months} ${getLocalizedUnit("month", months)}`;
   } else {
     // Reset the date to extract day, month, and year
     targetDate.setDate(1);
-    const month = targetDate.toLocaleString(language, { month: 'long' });
+    const month = targetDate.toLocaleString(language, { month: "long" });
     const day = targetDate.getDate();
     const year = targetDate.getFullYear();
+
     return `${month} ${day}, ${year}`;
   }
 }
 
 // Ejemplo de uso:
-const fechaEjemplo = '2023-05-15T01:40:35.146Z';
+const fechaEjemplo = "2023-05-15T01:40:35.146Z";
 // console.log(formatTimeDifference(fechaEjemplo, 'es')); // Ejemplo de salida: "15 de mayo, 2023"

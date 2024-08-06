@@ -11,9 +11,11 @@ import {
   Spinner,
   Textarea,
 } from "@nextui-org/react";
-import { createPost } from "@/services/Posts";
 import { toast } from "sonner";
+
 import UploaderImagePost from "./UploaderImagePost";
+
+import { createPost } from "@/services/Posts";
 import socket from "@/app/config/socketConfig";
 
 export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
@@ -27,6 +29,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
       getMyProfile(storedToken);
@@ -42,12 +45,12 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   useEffect(() => {
     socket.connect();
 
-    socket.on('userUpdate', async (data) => {
+    socket.on("userUpdate", async (data) => {
       await getMyProfile(token);
     });
 
     return () => {
-      socket.off('userUpdate');
+      socket.off("userUpdate");
     };
   }, [token]);
 
@@ -61,11 +64,12 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        }
+        },
       );
 
       if (response.ok) {
         const data = await response.json();
+
         setUser(data);
       } else {
         console.error("Error:", await response.text());
@@ -85,22 +89,26 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
       setIsContentInvalid(true);
       setErrorContent(ERROS_CONTENT.empty);
       console.error("Error:", ERROS_CONTENT.empty);
+
       return false;
     } else if (content.trim().length > 3000) {
       setIsContentInvalid(true);
       setErrorContent(ERROS_CONTENT.maxLength);
       console.error("Error:", ERROS_CONTENT.maxLength);
+
       return false;
     }
+
     return true;
   }
 
   const handleSubmit = async (
     content: string,
     imageFile?: File | null,
-    onClose?: () => void
+    onClose?: () => void,
   ) => {
     const imageIsEmpty = !image; // Determine if image is empty
+
     if (validateContent(content, imageIsEmpty)) {
       try {
         setIsSending(true);
@@ -133,17 +141,17 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
         />
 
         <button
-          onClick={onOpen}
           className="w-full py-3 pl-4 font-semibold text-left rounded-md bg-slate-200 dark:bg-zinc-800 dark:text-zinc-200"
+          onClick={onOpen}
         >
           Create the best idea
         </button>
         <Modal
+          backdrop="blur"
+          isDismissable={false}
           isOpen={isOpen}
           placement="center"
           onOpenChange={onOpenChange}
-          isDismissable={false}
-          backdrop="blur"
         >
           <ModalContent>
             {(onClose) => (
@@ -151,14 +159,14 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 onSubmit={(e) => {
                   e.preventDefault();
                   const contentInput = e.currentTarget.elements.namedItem(
-                    "Content"
+                    "Content",
                   ) as HTMLTextAreaElement;
                   const content = contentInput.value;
 
                   // console.log("content:", content);
 
                   const imageInput = document.querySelector(
-                    ".inputImageCreatePost"
+                    ".inputImageCreatePost",
                   ) as HTMLInputElement;
                   const imageFile = imageInput.files?.[0];
 
@@ -171,25 +179,25 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 <ModalBody>
                   {isSending ? (
                     <Spinner
-                      label="Loading..."
-                      color="primary"
-                      labelColor="primary"
                       className="w-full h-full flex items-center justify-center"
+                      color="primary"
+                      label="Loading..."
+                      labelColor="primary"
                     />
                   ) : (
                     <>
                       <Textarea
-                        name="Content"
-                        variant="faded"
-                        label="What's on your mind?"
-                        placeholder="Hi, I am cookie"
                         className="max-w-s"
-                        maxLength={3000}
-                        isInvalid={isContentInvalid}
                         errorMessage={errorContent}
+                        isInvalid={isContentInvalid}
+                        label="What's on your mind?"
+                        maxLength={3000}
+                        name="Content"
+                        placeholder="Hi, I am cookie"
+                        variant="faded"
                       />
 
-                      <UploaderImagePost setImage={setImage} image={image} />
+                      <UploaderImagePost image={image} setImage={setImage} />
                     </>
                   )}
                 </ModalBody>

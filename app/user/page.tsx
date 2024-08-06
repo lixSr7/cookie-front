@@ -11,14 +11,12 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   useDisclosure,
   Tabs,
   Tab,
   Card,
   CardBody,
   Image,
-  Skeleton,
 } from "@nextui-org/react";
 import {
   FaSave,
@@ -32,8 +30,10 @@ import {
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import { userProfile } from "@/types/Users";
+
 import PageChat from "../chat/chatModal";
+
+import { userProfile } from "@/types/Users";
 
 function PROFILE() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -46,9 +46,11 @@ function PROFILE() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
       const decodedToken = jwtDecode<any>(storedToken);
+
       setId(decodedToken.id);
       setProfilePic(decodedToken.image.secure_url);
       getProfile(storedToken).then((data) => setProfile(data));
@@ -65,21 +67,23 @@ function PROFILE() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        }
+        },
       );
 
       if (response.ok) {
         const data: userProfile = await response.json();
+
         return data;
       } else {
         console.error("Error al obtener perfil:", await response.text());
         throw new Error(
-          "Error interno del servidor. Intente nuevamente más tarde."
+          "Error interno del servidor. Intente nuevamente más tarde.",
         );
       }
     } catch (error) {
       console.error("Error al obtener perfil:", error);
       alert("Error al obtener el perfil. Intente nuevamente más tarde.");
+
       return Promise.reject(error); // Maneja el error adecuadamente
     }
   };
@@ -90,7 +94,7 @@ function PROFILE() {
         "https://co-api-vjvb.onrender.com/api/auth/logout",
         {
           method: "POST",
-        }
+        },
       );
 
       if (response.ok) {
@@ -123,11 +127,11 @@ function PROFILE() {
               <Avatar
                 isBordered
                 as="button"
+                className="ml-1 transition-transform"
                 color="default"
+                fallback={<FaPlus />}
                 name="Profile Pic"
                 size="sm"
-                className="ml-1 transition-transform"
-                fallback={<FaPlus />}
                 src={profilePic}
               />
             </DropdownTrigger>
@@ -149,8 +153,8 @@ function PROFILE() {
               <DropdownItem
                 key="messages"
                 startContent={<FaEnvelope />}
-                onClick={handleOpenChat}
                 textValue="Messages"
+                onClick={handleOpenChat}
               >
                 Messages
               </DropdownItem>
@@ -173,15 +177,15 @@ function PROFILE() {
 
           <div>
             <Button
-              onPress={onOpen}
               className="flex flex-col items-center justify-between gap-0 bg-red-500 h-max"
+              onPress={onOpen}
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
                 className="w-5 h-5 p-0 m-0 font-extrabold text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m4.5 15.75 7.5-7.5 7.5 7.5" />
               </svg>
@@ -190,23 +194,23 @@ function PROFILE() {
               </span>
             </Button>
             <Modal
-              isOpen={isOpen}
-              scrollBehavior="inside"
-              onOpenChange={onOpenChange}
-              size="xl"
               backdrop="blur"
+              isOpen={isOpen}
               placement="center"
+              scrollBehavior="inside"
+              size="xl"
+              onOpenChange={onOpenChange}
             >
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader></ModalHeader>
+                    <ModalHeader />
                     <ModalBody className="flex flex-col items-center justify-center pt-10">
                       <div className="flex flex-col items-center w-full h-full">
                         <div className="flex flex-col items-center w-full h-max">
                           <Image
-                            className="w-[150px] h-[150px] rounded-full border-1.5"
                             isBlurred
+                            className="w-[150px] h-[150px] rounded-full border-1.5"
                             src={profilePic}
                           />
                           <p className="m-0 text-2xl font-bold">
@@ -232,18 +236,18 @@ function PROFILE() {
                                 .fill(null)
                                 .map((_, index) => (
                                   <Card
-                                    shadow="sm"
-                                    isPressable
                                     key={index}
+                                    isPressable
+                                    shadow="sm"
                                     onPress={() => console.log("item pressed")}
                                   >
                                     <CardBody className="p-0 overflow-visible">
                                       <Image
-                                        shadow="sm"
-                                        radius="lg"
-                                        width="100%"
-                                        src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
                                         className="w-full object-cover h-[140px]"
+                                        radius="lg"
+                                        shadow="sm"
+                                        src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+                                        width="100%"
                                       />
                                     </CardBody>
                                   </Card>
@@ -253,17 +257,17 @@ function PROFILE() {
                           <Tab key="save" title="Save">
                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                               <Card
-                                shadow="sm"
                                 isPressable
+                                shadow="sm"
                                 onPress={() => console.log("item pressed")}
                               >
                                 <CardBody className="p-0 overflow-visible">
                                   <Image
-                                    shadow="sm"
-                                    radius="lg"
-                                    width="100%"
-                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
                                     className="w-full object-cover h-[140px]"
+                                    radius="lg"
+                                    shadow="sm"
+                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+                                    width="100%"
                                   />
                                 </CardBody>
                               </Card>
@@ -272,17 +276,17 @@ function PROFILE() {
                           <Tab key="shared" title="Shared">
                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                               <Card
-                                shadow="sm"
                                 isPressable
+                                shadow="sm"
                                 onPress={() => console.log("item pressed")}
                               >
                                 <CardBody className="p-0 overflow-visible">
                                   <Image
-                                    shadow="sm"
-                                    radius="lg"
-                                    width="100%"
-                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
                                     className="w-full object-cover h-[140px]"
+                                    radius="lg"
+                                    shadow="sm"
+                                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+                                    width="100%"
                                   />
                                 </CardBody>
                               </Card>
@@ -302,10 +306,10 @@ function PROFILE() {
               <Avatar
                 isBordered
                 as="button"
+                className="mr-1 transition-transform"
                 color="default"
                 name="Profile Pic"
                 size="sm"
-                className="mr-1 transition-transform"
                 src={profilePic}
               />
             </DropdownTrigger>

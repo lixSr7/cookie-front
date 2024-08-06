@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Table,
   TableHeader,
@@ -19,20 +19,14 @@ import {
   ChipProps,
   SortDescriptor,
 } from "@nextui-org/react";
-
 import { useCallback, useMemo, useState } from "react";
+import { Plus as PlusIcon } from "@geist-ui/icons";
+import { MoreVertical as VerticalDotsIcon } from "@geist-ui/icons";
+import { ChevronDown as ChevronDownIcon } from "@geist-ui/icons";
+import { Search as SearchIcon } from "@geist-ui/icons";
 
-import { columns, users, statusOptions } from "@/app/admin/posts/data";
 import { capitalize } from "@/utils/Capitalize";
-
-import { Plus as PlusIcon } from '@geist-ui/icons'
-import { MoreVertical as VerticalDotsIcon  } from '@geist-ui/icons'
-import { ChevronDown as ChevronDownIcon } from '@geist-ui/icons'
-import { Search as SearchIcon } from '@geist-ui/icons'
-
-
-
-
+import { columns, users, statusOptions } from "@/app/admin/posts/data";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -46,11 +40,9 @@ type User = (typeof users)[0];
 
 export default function TableUserWithPosts() {
   const [filterValue, setFilterValue] = useState("");
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(
-    new Set([])
-  );
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(7);
@@ -67,7 +59,7 @@ export default function TableUserWithPosts() {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -76,7 +68,7 @@ export default function TableUserWithPosts() {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+        user.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (
@@ -84,7 +76,7 @@ export default function TableUserWithPosts() {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+        Array.from(statusFilter).includes(user.status),
       );
     }
 
@@ -183,7 +175,7 @@ export default function TableUserWithPosts() {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
-    []
+    [],
   );
 
   const onSearchChange = useCallback((value?: string) => {
@@ -336,8 +328,8 @@ export default function TableUserWithPosts() {
 
   return (
     <Table
-      aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
+      aria-label="Example table with custom cells, pagination and sorting"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       selectedKeys={selectedKeys}
