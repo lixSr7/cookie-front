@@ -2,10 +2,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { Heart as HeartIcon } from "@geist-ui/icons";
+import { jwtDecode } from "jwt-decode";
+
 import { createLike, deleteLike } from "@/services/Posts";
 import { userToken } from "@/types/Users";
 import { Like as typeLike } from "@/types/Post";
-import { jwtDecode } from "jwt-decode";
 
 /**
  * Componente para manejar el botón de dar like a un post.
@@ -14,7 +15,13 @@ import { jwtDecode } from "jwt-decode";
  * @param {typeLike[]} props.likes - Lista de likes asociados al post.
  * @returns {JSX.Element} - Elemento del botón de like.
  */
-function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }): JSX.Element {
+function LikeButton({
+  postId,
+  likes,
+}: {
+  postId: string;
+  likes: typeLike[];
+}): JSX.Element {
   const [userId, setUserId] = useState<string>("");
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeId, setLikeId] = useState<string | null>(null);
@@ -22,8 +29,10 @@ function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }): J
   // Efecto para obtener el userId desde el token almacenado en localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       const decodeToken: userToken = jwtDecode(storedToken);
+
       setUserId(decodeToken.id);
     }
   }, []);
@@ -31,10 +40,12 @@ function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }): J
   // Efecto para determinar si el usuario ha dado like al post
   useEffect(() => {
     const initialIsLiked = likes.some((like) => like.userId === userId);
+
     setIsLiked(initialIsLiked);
 
     if (initialIsLiked) {
       const userLike = likes.find((like) => like.userId === userId);
+
       setLikeId(userLike?._id || null);
     }
   }, [likes, userId]);
@@ -54,6 +65,7 @@ function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }): J
     } else {
       try {
         const newLike = await createLike(postId);
+
         setIsLiked(true);
         setLikeId(newLike._id);
       } catch (error) {
@@ -64,10 +76,10 @@ function LikeButton({ postId, likes }: { postId: string; likes: typeLike[] }): J
 
   return (
     <Button
-      onClick={handleLike}
       isIconOnly
-      color={isLiked ? "danger" : "default"}
       aria-label="Like"
+      color={isLiked ? "danger" : "default"}
+      onClick={handleLike}
     >
       <HeartIcon
         className={`w-6 h-6 cursor-pointer ${

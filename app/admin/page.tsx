@@ -1,16 +1,14 @@
-'use client';
+"use client";
 
 //? Components
-import { Card, ScrollShadow } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 
 import BarChart from "./components/charts/Bar";
-import { GenderPieChart, CategoryPieChart } from "./components/charts/Pie";
-import LineChart from "./posts/components/LineChartPosts";
-import { getAllPosts } from "@/services/Posts";
-
-import Counters from "./posts/components/Counters";
+import { GenderPieChart } from "./components/charts/Pie";
+import { LineChart } from "./components/charts/chats/charts";
 import { ChatsLineChart } from "./chats/components/firstChart";
 import PieChart from "./chats/components/secondChart";
+import Counters from "./components/Counters";
 
 function Dashboard() {
   return (
@@ -37,4 +35,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard
+export default Dashboard;

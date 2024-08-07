@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Chart, { ChartConfiguration } from "chart.js/auto";
-import { Card } from "@nextui-org/react";
 
 interface ChartProps {
   data: ChartConfiguration["data"];
@@ -18,6 +17,7 @@ const ChartComponent: React.FC<ChartProps> = ({ data, type, options }) => {
         chartInstance.current.destroy();
       }
       const ctx = chartRef.current.getContext("2d");
+
       if (ctx) {
         chartInstance.current = new Chart(ctx, {
           type: type,

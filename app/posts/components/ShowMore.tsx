@@ -1,5 +1,4 @@
 import { Eye } from "@geist-ui/icons";
-
 import {
   Button,
   Modal,
@@ -20,18 +19,18 @@ export default function ShowMore() {
   return (
     <>
       <Button
-        onPress={onOpen}
         isIconOnly
-        variant="ghost"
         aria-label="Options of Post"
+        variant="ghost"
+        onPress={onOpen}
       >
         <Eye className="w-5 h-5 opacity-65" />
       </Button>
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           {(onClose) => (

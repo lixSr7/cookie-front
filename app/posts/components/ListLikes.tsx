@@ -1,10 +1,5 @@
-
-
 function ListLikes() {
-  return (
-    <article>
-    </article>
-  );
+  return <article />;
 }
 
 export default ListLikes;

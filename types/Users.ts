@@ -35,7 +35,7 @@ export type userProfile = {
   username: string;
   fullname: string;
   email: string;
-  image: Image; 
+  image: Image;
 };
 
 export type userToken = {

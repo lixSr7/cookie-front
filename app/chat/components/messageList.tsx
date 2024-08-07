@@ -67,13 +67,13 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          `https://rest-api-cookie-u-c-p.onrender.com/api/chat/${selectedChat}`,
+          `https://cookie-rest-api-8fnl.onrender.com/api/chat/${selectedChat}`,
           {},
           {
             headers: {
               "x-access-token": token,
             },
-          }
+          },
         );
 
         setMessages(response.data.chat.messages);
@@ -156,12 +156,12 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     >
       {loading ? (
         <div className="grid place-content-center w-full h-full">
-          <Spinner label="Loading..." color="danger" className="flex m-auto" />
+          <Spinner className="flex m-auto" color="danger" label="Loading..." />
         </div>
       ) : selectedChat ? (
         <div
-          className="h-full flex-grow w-full"
           ref={messagesContainerRef}
+          className="h-full flex-grow w-full"
           style={{ overflowY: windowWidth <= 768 ? "auto" : "hidden" }}
         >
           {messages.map((message, index) => {

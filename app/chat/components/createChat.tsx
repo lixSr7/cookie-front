@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Input,
+} from "@nextui-org/react";
 import { jwtDecode } from "jwt-decode";
-import SearchUsers from '@/app/user/components/SearchUsers';
+
+import SearchUsers from "@/app/user/components/SearchUsers";
 
 interface User {
   _id: string;
@@ -23,17 +32,24 @@ const CreateChat: React.FC = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       const decodedToken = jwtDecode<DecodedToken>(storedToken);
+
       setId(decodedToken.id);
     }
   }, []);
 
   const handleUserSelect = (user: User) => {
     setSelectedUsers((prevUsers) => {
-      const isSelected = prevUsers.some(selectedUser => selectedUser._id === user._id);
+      const isSelected = prevUsers.some(
+        (selectedUser) => selectedUser._id === user._id,
+      );
+
       if (isSelected) {
-        return prevUsers.filter(selectedUser => selectedUser._id !== user._id);
+        return prevUsers.filter(
+          (selectedUser) => selectedUser._id !== user._id,
+        );
       } else {
         return [...prevUsers, user];
       }
@@ -43,13 +59,15 @@ const CreateChat: React.FC = () => {
   const createChat = async () => {
     if (selectedUsers.length > 1 && !chatName) {
       alert("Please provide a name for the group chat.");
+
       return;
     }
 
-    const usersToSend = [...selectedUsers.map(user => user._id), id];
+    const usersToSend = [...selectedUsers.map((user) => user._id), id];
+
     try {
       const response = await fetch(
-        "https://rest-api-cookie-u-c-p.onrender.com/api/chat/",
+        "https://cookie-rest-api-8fnl.onrender.com/api/chat/",
         {
           method: "POST",
           headers: {
@@ -60,13 +78,14 @@ const CreateChat: React.FC = () => {
             name: selectedUsers.length > 1 ? chatName : "",
             users: usersToSend,
           }),
-        }
+        },
       );
 
       if (response.ok) {
         clearFields();
       } else {
         const errorText = await response.text();
+
         console.error("Error al crear el chat:", errorText);
       }
     } catch (error) {
@@ -84,14 +103,14 @@ const CreateChat: React.FC = () => {
 
   const handleToggleModal = () => {
     setIsOpen(!isOpen);
-    if (isOpen) clearFields(); // Clear fields when closing the modal
+    if (isOpen) clearFields();
   };
 
   return (
     <section>
       <button
-        onClick={handleToggleModal}
         className="flex justify-center items-center w-12 h-10 hover:bg-neutral-300 dark:hover:bg-zinc-600 hover:transition-transform-background rounded-md cursor-pointer border-none outline-none"
+        onClick={handleToggleModal}
       >
         <IoChatboxEllipsesOutline />
       </button>
@@ -101,20 +120,20 @@ const CreateChat: React.FC = () => {
           <ModalHeader className="flex flex-col gap-1">Create Chat</ModalHeader>
           <ModalBody>
             <SearchUsers
-              onUserSelect={handleUserSelect}
-              selectedUsers={selectedUsers}
               searchTerm={searchTerm}
+              selectedUsers={selectedUsers}
               setSearchTerm={setSearchTerm}
+              onUserSelect={handleUserSelect}
             />
             {selectedUsers.length > 1 && (
               <Input
-                radius="lg"
-                placeholder="Group Chat Name"
+                required
                 label="Group Chat Name"
                 labelPlacement="outside"
+                placeholder="Group Chat Name"
+                radius="lg"
                 value={chatName}
                 onChange={(e) => setChatName(e.target.value)}
-                required
               />
             )}
           </ModalBody>

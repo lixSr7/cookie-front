@@ -1,4 +1,4 @@
-'use client'; 
+"use client";
 import React, { useState } from "react";
 import {
   Button,
@@ -9,8 +9,9 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/react";
-import { ValidateCodeSend } from "../recover/validateCode";
 import { useDisclosure } from "@nextui-org/react";
+
+import { ValidateCodeSend } from "../recover/validateCode";
 
 interface RecoverProps {
   isOpen: boolean;
@@ -29,7 +30,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
   const handleSendCode = async () => {
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/auth/recover",
+        "https://cookie-rest-api-8fnl.onrender.com/api/auth/recover",
         {
           method: "POST",
           headers: {
@@ -38,18 +39,19 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
           body: JSON.stringify({
             email,
           }),
-        }
+        },
       );
 
       if (response.ok) {
         const data = await response.json();
+
         setToken(data.token);
         onOpenChange(false);
         onValidateOpen();
       } else {
         console.error(
           "Error al enviar el código de recuperación:",
-          await response.text()
+          await response.text(),
         );
         throw new Error("Error al enviar el código de recuperación");
       }
@@ -69,18 +71,18 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
               </ModalHeader>
               <ModalBody>
                 <Input
-                  type="email"
+                  required
                   placeholder="Enter your email"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
                 />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button onClick={handleSendCode} color="primary">
+                <Button color="primary" onClick={handleSendCode}>
                   Send Code
                 </Button>
               </ModalFooter>
@@ -90,8 +92,8 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
       </Modal>
       <ValidateCodeSend
         isOpen={isValidateOpen}
-        onOpenChange={onValidateOpenChange}
         token={token}
+        onOpenChange={onValidateOpenChange}
       />
     </>
   );

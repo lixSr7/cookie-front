@@ -9,7 +9,7 @@ type PostUser = {
   _id: string;
   username: string;
   fullname: string;
-  mediaUrl?: mediaUrl;
+  image: UserImage;
 };
 type CommentUser = {
   _id: string;
@@ -17,7 +17,6 @@ type CommentUser = {
   fullname: string;
   image: string;
 };
-
 
 export type Like = {
   _id: string;

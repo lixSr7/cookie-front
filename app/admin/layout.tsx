@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+
 import { ReactNode } from "react";
+
 // import Sidbar from "./components/Sidbar";
 import Sidebar from "./components/sib-bar";
 
@@ -15,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="flex h-screen ">
-      <Sidebar/>
+      <Sidebar />
       {/* <Sidbar /> */}
       <div className="w-full h-full px-4 py-8">{children}</div>
     </div>

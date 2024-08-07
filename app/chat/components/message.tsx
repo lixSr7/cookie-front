@@ -69,7 +69,7 @@ const Message: React.FC<MessageProps> = ({
 
       try {
         await deleteMessage(messageId, chatId, token);
-        console.log("Mensaje eliminado");
+        // console.log("Mensaje eliminado");
         socket.emit("deleteMessage", messageId, chatId);
       } catch (error) {
         console.error("Error deleting message:", error);
@@ -78,7 +78,7 @@ const Message: React.FC<MessageProps> = ({
   };
 
   const TextAndImageMessage = () => (
-    <div className="relative p-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+    <div className="relative p-5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
       {mediaUrl && (
         <div className="flex justify-center">
           <Image
@@ -93,7 +93,9 @@ const Message: React.FC<MessageProps> = ({
       {content && (
         <p
           className={`${mediaUrl ? "mt-2" : ""} p-3 mb-2 rounded-md ${
-            isSender ? "bg-danger-500 text-white" : "bg-gray-200"
+            isSender
+              ? "bg-danger-500 text-white dark:text-black"
+              : "bg-gray-200 dark:text-black"
           }`}
         >
           {content}

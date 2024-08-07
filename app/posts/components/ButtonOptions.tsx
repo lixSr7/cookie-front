@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@nextui-org/react";
-import CommentModal from "./CommentModal";
-import { userToken } from "@/types/Users";
-import { Like as typeLike } from "@/types/Post";
 import { jwtDecode } from "jwt-decode";
 
+import ShareModal from "./ShareModal";
+import CommentModal from "./CommentModal";
 import LikeButton from "./LikeButton";
 import SaveButton from "./SaveButton";
-import ShareButton from "./ShareButton";
+
+import { userToken } from "@/types/Users";
+import { Like as typeLike } from "@/types/Post";
+
 /**
  * Componente principal que maneja las opciones de botones para un post.
  * @param {Object} props - Propiedades del componente.
@@ -28,8 +29,10 @@ function ButtonOptions({
   // Efecto para obtener el userId desde el token almacenado en localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       const decodeToken: userToken = jwtDecode(storedToken);
+
       setUserId(decodeToken.id);
     }
   }, []);
@@ -40,25 +43,20 @@ function ButtonOptions({
   };
 
   // Maneja la acción de compartir
-  const handleShare = () => {
-    // Lógica para manejar la acción de compartir
-    console.log("Share button clicked!");
-    // Aquí podrías implementar la lógica específica de compartir
-  };
 
   return (
     <div className="flex items-center justify-between w-full rounded-md">
       <div className="flex items-center gap-4">
         {/* Componente LikeButton para manejar el like */}
-        <LikeButton postId={postId} likes={likes} />
+        <LikeButton likes={likes} postId={postId} />
         {/* Modal de comentarios */}
         <CommentModal postId={postId} />
         {/* Componente ShareButton para manejar el ícono de compartir */}
-        <ShareButton onClick={handleShare} />
+        <ShareModal />
       </div>
       <div>
         {/* Componente SaveButton para manejar el botón de guardar */}
-        <SaveButton  postId={postId} />
+        <SaveButton postId={postId} />
       </div>
     </div>
   );

@@ -41,15 +41,15 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 
   return (
     <button
-      onClick={onChange}
       className={`grid p-2 rounded-lg place-content-center bg-[#dd2525]`}
+      onClick={onChange}
     >
       <Component
         {...getBaseProps({
           className: clsx(
             "px-px transition-opacity hover:opacity-80 cursor-pointer",
             className,
-            classNames?.base
+            classNames?.base,
           ),
         })}
       >
@@ -71,14 +71,14 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
                 "px-0",
                 "mx-0",
               ],
-              classNames?.wrapper
+              classNames?.wrapper,
             ),
           })}
         >
           {!isSelected || isSSR ? (
-            <SunIcon size={22} className="fill-white stroke-white" />
+            <SunIcon className="fill-white stroke-white" size={22} />
           ) : (
-            <MoonIcon size={22} className=" fill-white stroke-white" />
+            <MoonIcon className=" fill-white stroke-white" size={22} />
           )}
         </div>
       </Component>

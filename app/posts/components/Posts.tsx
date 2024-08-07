@@ -1,11 +1,13 @@
 "use client";
 import { ScrollShadow, Spinner } from "@nextui-org/react";
+import { useEffect, useState } from "react";
+
+import PostCard from "./PostCard";
+
 import { CreatePost } from "@/app/posts/components/CreatePost";
 import { Post as IPost } from "@/types/Post";
 import { getAllPosts } from "@/services/Posts";
-import PostCard from "./PostCard";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import socket from "@/app/config/socketConfig";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -14,15 +16,29 @@ function Posts() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
     }
     allPosts();
   }, []);
 
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("userUpdate", async (data) => {
+      await allPosts();
+    });
+
+    return () => {
+      socket.off("userUpdate");
+    };
+  }, [token]);
+
   const allPosts = async () => {
     try {
       const postsData = await getAllPosts();
+
       setPosts(postsData.reverse());
       setLoading(false);
     } catch (error) {
@@ -38,15 +54,15 @@ function Posts() {
           allPosts();
         }}
       />
-      <ScrollShadow className="w-full m-auto h-[75vh]" hideScrollBar>
+      <ScrollShadow hideScrollBar className="w-full m-auto h-[75vh]">
         {loading ? (
           <div className="flex items-center justify-center h-full">
-            <Spinner size="lg" color="danger" />
+            <Spinner color="danger" size="lg" />
           </div>
         ) : (
           posts.map((post: IPost) => (
             <article key={post._id}>
-              <PostCard token={token} post={post} updatePosts={allPosts} />
+              <PostCard post={post} token={token} updatePosts={allPosts} />
             </article>
           ))
         )}

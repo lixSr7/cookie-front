@@ -7,6 +7,7 @@ import {
   CardHeader,
   Avatar,
 } from "@nextui-org/react";
+import { jwtDecode } from "jwt-decode";
 
 import PostImage from "./PostImage";
 import ButtonOptions from "./ButtonOptions";
@@ -16,8 +17,6 @@ import ShowMore from "./ShowMore";
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { Post as IPost } from "@/types/Post";
 import { userToken } from "@/types/Users";
-
-import { jwtDecode } from "jwt-decode";
 
 export default function PostCard({
   post,
@@ -29,6 +28,7 @@ export default function PostCard({
   token: string;
 }) {
   const decodeToken: userToken = jwtDecode(token);
+
   if (!post.user) {
     return null;
   }
@@ -40,9 +40,9 @@ export default function PostCard({
           <div className="flex items-center gap-3">
             <Avatar
               isBordered
-              size="md"
               color="danger"
-              src={post.user.mediaUrl?.secure_url || ""}
+              size="md"
+              src={post.user.image?.secure_url || ""}
             />
             <div className="flex flex-col">
               <strong>{post.user.fullname}</strong>
@@ -55,7 +55,7 @@ export default function PostCard({
             <ShowMore />
             {(decodeToken.id === post.user._id ||
               decodeToken.role === "admin") && (
-              <DeletePost updatePosts={updatePosts} postId={post._id} />
+              <DeletePost postId={post._id} updatePosts={updatePosts} />
             )}
           </div>
         </CardHeader>
@@ -65,14 +65,14 @@ export default function PostCard({
           </p>
           {post.image && (
             <PostImage
-              src={post.image}
               alt={post.content}
               date={formatTimeDifference(post.createdAt)}
+              src={post.image}
             />
           )}
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
-          <ButtonOptions postId={post._id} likes={post.likes} />
+          <ButtonOptions likes={post.likes} postId={post._id} />
         </CardFooter>
       </Card>
     </article>

@@ -9,9 +9,9 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import React, { useState } from "react";
-import { ChangePassword } from "../recover/changePassword";
 import { useDisclosure } from "@nextui-org/react";
 
+import { ChangePassword } from "../recover/changePassword";
 
 interface ValidateCodeSendProps {
   isOpen: boolean;
@@ -35,7 +35,7 @@ export function ValidateCodeSend({
   const handleValidateCode = async () => {
     try {
       const response = await fetch(
-        "https://co-api-vjvb.onrender.com/api/auth/validate",
+        "https://cookie-rest-api-8fnl.onrender.com/api/auth/validate",
         {
           method: "POST",
           headers: {
@@ -43,11 +43,12 @@ export function ValidateCodeSend({
             "reset-pass-token": token,
           },
           body: JSON.stringify({ code }),
-        }
+        },
       );
 
       if (response.ok) {
         const data = await response.json();
+
         setToken2(data.token);
         alert("Código validado correctamente");
         onOpenChange(false);
@@ -55,7 +56,7 @@ export function ValidateCodeSend({
       } else {
         console.error(
           "Error al validar el código de recuperación:",
-          await response.text()
+          await response.text(),
         );
         throw new Error("Error al validar el código de recuperación");
       }
@@ -75,18 +76,18 @@ export function ValidateCodeSend({
               </ModalHeader>
               <ModalBody>
                 <Input
-                  type="text"
+                  required
                   placeholder="Enter code sent by email"
+                  type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  required
                 />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button onClick={handleValidateCode} color="primary">
+                <Button color="primary" onClick={handleValidateCode}>
                   Validate Code
                 </Button>
               </ModalFooter>
@@ -96,8 +97,8 @@ export function ValidateCodeSend({
       </Modal>
       <ChangePassword
         isOpen={isChangePasswordOpen}
-        onOpenChange={onChangePasswordOpenChange}
         token2={token2}
+        onOpenChange={onChangePasswordOpenChange}
       />
     </>
   );

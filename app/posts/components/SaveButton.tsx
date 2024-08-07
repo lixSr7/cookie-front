@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { Star as StarIcon } from "@geist-ui/icons";
+
 import { savePost, unsavePost, getSavedPosts } from "@/services/Posts";
 
 /**
@@ -18,6 +19,7 @@ function SaveButton({ postId }: { postId: string }): JSX.Element {
       try {
         const savedPosts = await getSavedPosts();
         const isPostSaved = savedPosts.includes(postId);
+
         setIsSaved(isPostSaved);
       } catch (error) {
         console.error("Error checking saved status:", error);
@@ -43,10 +45,10 @@ function SaveButton({ postId }: { postId: string }): JSX.Element {
 
   return (
     <Button
-      onClick={handleSave}
       isIconOnly
       color={isSaved ? "warning" : "default"}
       variant="shadow"
+      onClick={handleSave}
     >
       <StarIcon
         className={`w-5 h-5 cursor-pointer ${

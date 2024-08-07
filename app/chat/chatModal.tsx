@@ -1,55 +1,33 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
   ModalBody,
-  Input,
   ScrollShadow,
+  Input,
 } from "@nextui-org/react";
-import CreateChat from "./components/createChat";
-import ChatList from "./components/chatList";
 import { CiSearch } from "react-icons/ci";
+import { TbArrowBackUp } from "react-icons/tb";
+
+import ChatList from "./components/chatList";
+import CreateChat from "./components/createChat";
 import Messages from "./components/messageList";
 import CreateMessage from "./components/createMessage";
-import { jwtDecode } from "jwt-decode";
-import { TbArrowBackUp } from "react-icons/tb";
+import useWindowWidth from "./hooks/useWindowWidth";
+import useAuth from "./hooks/useAuth";
 
 interface PageChatProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface DecodedToken {
-  id: string;
-}
-
 const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"chatList" | "messages">("chatList");
   const idChat = selectedChat || "1234";
-  const [id, setId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [windowWidth, setWindowWidth] = useState<number>(0);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      const decodedToken = jwtDecode<DecodedToken>(storedToken);
-      setId(decodedToken.id);
-    }
-  }, []);
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+  const windowWidth = useWindowWidth();
+  const id = useAuth();
 
   useEffect(() => {
     if (windowWidth <= 789) {
@@ -59,29 +37,33 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
     }
   }, [windowWidth]);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   if (!isOpen) {
     return null;
   }
 
   return (
     <Modal
-      isOpen={isOpen}
-      onOpenChange={onClose}
-      size="5xl"
       className="bg-gray-100 dark:bg-zinc-800"
+      isOpen={isOpen}
+      size="5xl"
+      onOpenChange={onClose}
     >
-      <ModalContent>
+      <ModalContent className="flex items-center justify-center min-h-screen">
         <ModalBody>
-          <article className="flex p-4 h-full max-h-[500px] dark:bg-zinc-800 relative">
+          <article className="flex p-2 h-full max-h-[600px] dark:bg-zinc-800 relative">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
-                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full max-w-[500px] min-w-[100px] overflow-hidden h-full max-h-[600px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <div className="flex justify-center gap-2 mb-4 dark:bg-zinc-800">
                       <Input
-                        radius="lg"
-                        placeholder="Type to search..."
                         labelPlacement="outside"
+                        placeholder="Type to search..."
+                        radius="lg"
                         startContent={
                           <CiSearch className="flex-shrink-0 text-2xl pointer-events-none text-default-400" />
                         }
@@ -90,7 +72,6 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                       />
                       <CreateChat />
                     </div>
-
                     <ChatList
                       searchTerm={searchTerm}
                       onSelectChat={(chatId) => {
@@ -101,7 +82,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                   </section>
                 )}
                 {viewMode === "messages" && (
-                  <section className="flex flex-col w-full h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full max-w-[500px] min-w-[100px] h-full max-h-[600px] min-h-[600px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                       <div className="flex-grow overflow-y-auto">
                         <Messages selectedChat={selectedChat} />
@@ -115,12 +96,12 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
               </>
             ) : (
               <>
-                <section className="flex flex-col w-full max-w-[300px] h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                <section className="flex flex-col w-full max-w-[300px] h-full max-h-[450px] min-h-[400px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                   <div className="flex justify-center gap-2 mb-4">
                     <Input
-                      radius="lg"
-                      placeholder="Type to search..."
                       labelPlacement="outside"
+                      placeholder="Chat to search..."
+                      radius="lg"
                       startContent={
                         <CiSearch className="flex-shrink-0 text-2xl pointer-events-none text-default-400" />
                       }
@@ -142,7 +123,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                     />
                   </ScrollShadow>
                 </section>
-                <section className="flex flex-col flex-grow h-full max-h-[450px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4 ml-2">
+                <section className="flex flex-col flex-grow h-full max-h-[600px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4 ml-2">
                   <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                     <div className="flex-grow overflow-y-auto">
                       <Messages selectedChat={selectedChat} />
@@ -157,8 +138,8 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
             {windowWidth <= 500 && viewMode === "messages" && (
               <div className="absolute p-2 bg-gray-300 dark:bg-zinc-800 rounded-lg cursor-pointer top-6 left-6 hover:bg-gray-400">
                 <TbArrowBackUp
-                  onClick={() => setViewMode("chatList")}
                   className="text-gray-600 transition-colors rounded-lg hover:text-gray-800"
+                  onClick={() => setViewMode("chatList")}
                 />
               </div>
             )}

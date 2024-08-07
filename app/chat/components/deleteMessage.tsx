@@ -7,12 +7,12 @@ const deleteMessage = async (
 ) => {
   try {
     const response = await axios.delete(
-      `https://rest-api-cookie-u-c-p.onrender.com/api/chat/messages/${chatId}/messages/${messageId}`,
+      `https://cookie-rest-api-8fnl.onrender.com/api/chat/messages/${chatId}/messages/${messageId}`,
       {
         headers: {
           "x-access-token": token,
         },
-      }
+      },
     );
 
     return response.data;
