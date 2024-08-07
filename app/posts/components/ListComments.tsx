@@ -101,7 +101,7 @@ const Item = ({
                 isBordered
                 color="danger"
                 size="md"
-                src={comment.user.image || ""}
+                src={comment.user.image?.secure_url || ""}
               />
               <div className="flex flex-col">
                 <strong>{comment.user.username}</strong>
