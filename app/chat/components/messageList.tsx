@@ -145,6 +145,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
         month: "long",
         day: "numeric",
       };
+
       return date.toLocaleDateString(undefined, options);
     }
   };
