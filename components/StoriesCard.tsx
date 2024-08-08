@@ -5,6 +5,7 @@ import { Plus as PlusIcon } from "@geist-ui/icons";
 import { TbCookieFilled } from "react-icons/tb";
 import { jwtDecode } from "jwt-decode";
 import socket from "@/app/config/socketConfig";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 function StoriesCard() {
   const [token, setToken] = useState<string>("");
@@ -167,7 +168,7 @@ function StoriesCard() {
                 <TbCookieFilled className="text-[#fff] bg-[#dd2525] rounded-full text-2xl" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 1, }} />
                 <CardFooter>
                   <div>
-                    <User name={story.userId.fullname} description={`@${story.userId.username}`} avatarProps={{ src: story.userId.image?.secure_url }} />
+                    <User name={<div className="flex items-center" style={{ maxWidth: "70px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", }} > <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{story.userId.fullname}</span> {story.userId.verified && <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />} </div>} description={`@${story.userId.username}`} avatarProps={{ src: story.userId.image?.secure_url }} />
                   </div>
                 </CardFooter>
               </Card>
@@ -206,7 +207,6 @@ function StoriesCard() {
               <ModalBody className="min-h-60 relative min-w-80 h-full w-full overflow-hidden">
                 {selectedUserStories.length > 0 && (
                   <div className="relative min-w-80 min-h-60 w-full h-full flex items-center justify-center">
-                    {/* Button for previous slide */}
                     <button onClick={goToPreviousSlide} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent text-white p-2 rounded-full z-10">
                       &#10094;
                     </button>
@@ -223,7 +223,6 @@ function StoriesCard() {
                         </div>
                       ))}
                     </div>
-                    {/* Button for next slide */}
                     <button onClick={goToNextSlide} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent text-white p-2 rounded-full z-10">
                       &#10095;
                     </button>

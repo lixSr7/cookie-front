@@ -204,9 +204,8 @@ function NavBar() {
           <div className="lg:min-w-96">
             <div className="flex items-center justify-start gap-4">
               <Avatar
-                isBordered
                 color="success"
-                size="sm"
+                size="lg"
                 src={
                   user?.image?.secure_url || "https://via.placeholder.com/150"
                 }
