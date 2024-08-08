@@ -10,7 +10,7 @@ import { MessageCircle as MessageIcon } from "@geist-ui/icons";
 import { useEffect, useState } from "react";
 
 import CreateComment from "./CreateComment";
-import ListComments from "./ListComments";
+import Comments from "./ListComments";
 
 import { Comment as CommentType } from "@/types/Post";
 import { getAllComments } from "@/services/Posts";
@@ -71,7 +71,7 @@ function CommentModal({ postId }: { postId: string }) {
                 Comments
               </ModalHeader>
               <ModalBody>
-                <ListComments
+                <Comments
                   comments={comments}
                   postId={postId}
                   updateComments={allComments}
