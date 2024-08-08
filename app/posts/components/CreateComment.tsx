@@ -1,5 +1,5 @@
-import { Button, Input, Select, SelectItem, Avatar } from "@nextui-org/react";
-import { Send as SendIcon, Emoji as EmojiIcon } from "@geist-ui/icons";
+import { Button, Input, Avatar } from "@nextui-org/react";
+import { Send as SendIcon } from "@geist-ui/icons";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,59 +18,66 @@ function CreateComment({
   const [emoji, setEmoji] = useState("none");
   const [isSending, setIsSending] = useState(false);
 
-  const userDefault: userToken = {
-    fullname: "Alexis Gonzalez",
-    username: "DJ Zass",
-    role: "user",
-    id: "1",
-    iat: 0,
-  };
-
   const handleCreate = async () => {
+    if (content.trim() === "") {
+      toast.error("Comment content cannot be empty");
+      return;
+    }
+
     try {
       setIsSending(true);
-      await createComment(postId, content, emoji);
-      setContent("");
-      setEmoji("none");
-      updateComment();
-      toast.success("success creating comment");
+      // Solo se envía el emoji si no es "none"
+      const response = await createComment(
+        postId,
+        content,
+        emoji === "none" ? "" : emoji
+      );
+      if (response) {
+        setContent("");
+        setEmoji("none");
+        updateComment();
+        toast.success("Success creating comment");
+      } else {
+        throw new Error("Failed to create comment");
+      }
     } catch (error) {
-      // console.log(error);
       toast.error("Error creating comment");
     } finally {
       setIsSending(false);
     }
   };
-  const handleSelectionEmoji = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEmoji(e.target.value);
+
+  const handleEmojiClick = (emojiName: string) => {
+    setEmoji((prevEmoji) => (prevEmoji === emojiName ? "none" : emojiName));
   };
+
+  const selectedEmoji = emojis.find((e) => e.name === emoji);
 
   return (
     <div className="flex flex-col items-start justify-between w-full h-full gap-5">
-      <Select
-        className="w-20 "
-        defaultSelectedKeys={["none", "happy", "sad", "ungry"]}
-        placeholder="emoji"
-        startContent={<EmojiIcon />}
-        onChange={handleSelectionEmoji}
-      >
-        {emojis.map((emoji) => (
-          <SelectItem
-            key={emoji.name}
-            className="flex flex-col items-center justify-center "
-            value={emoji.name}
-          >
-            {!(emoji.name === "none") && (
-              <Avatar
-                alt={`Emoji cookie social network ${emoji.name}`}
+      <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2" style={{ height: "2.5em" }}>
+          {emojis
+            .filter((e) => e.name !== "none") // Filtrar el emoji "none"
+            .map((emojiItem) => (
+              <Button
+                key={emojiItem.name}
+                onClick={() => handleEmojiClick(emojiItem.name)}
                 size="sm"
-                src={emoji.svg}
-              />
-            )}
-            {emoji.name}
-          </SelectItem>
-        ))}
-      </Select>
+                className={`py-6 ${
+                  emoji === emojiItem.name ? "bg-gray-200" : ""
+                }`}
+                aria-label={`Select ${emojiItem.name} emoji`}
+              >
+                <Avatar
+                  alt={`Emoji ${emojiItem.name}`}
+                  size="sm"
+                  src={emojiItem.svg}
+                />
+              </Button>
+            ))}
+        </div>
+      </div>
       <div className="flex items-center justify-between w-full h-full gap-5">
         <Input
           disabled={isSending}
@@ -88,7 +95,7 @@ function CreateComment({
           variant="shadow"
           onClick={handleCreate}
         >
-          <SendIcon className="rotate-45 " />
+          <SendIcon className="rotate-45" />
         </Button>
       </div>
     </div>

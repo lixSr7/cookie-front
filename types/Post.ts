@@ -1,9 +1,5 @@
 import { Image as UserImage } from "./Users";
 
-type mediaUrl = {
-  public_id: string;
-  secure_url: string;
-};
 
 type PostUser = {
   _id: string;
@@ -15,7 +11,7 @@ type CommentUser = {
   _id: string;
   username: string;
   fullname: string;
-  image: string;
+  image: UserImage;
 };
 
 export type Like = {

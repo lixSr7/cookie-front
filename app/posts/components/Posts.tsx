@@ -1,5 +1,5 @@
 "use client";
-import { ScrollShadow, Spinner } from "@nextui-org/react";
+import { ScrollShadow } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 import PostCard from "./PostCard";
@@ -8,6 +8,7 @@ import { CreatePost } from "@/app/posts/components/CreatePost";
 import { Post as IPost } from "@/types/Post";
 import { getAllPosts } from "@/services/Posts";
 import socket from "@/app/config/socketConfig";
+import SkeletoPosts from "./SkeletonPosts";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -56,9 +57,7 @@ function Posts() {
       />
       <ScrollShadow hideScrollBar className="w-full m-auto h-[75vh]">
         {loading ? (
-          <div className="flex items-center justify-center h-full">
-            <Spinner color="danger" size="lg" />
-          </div>
+          <SkeletoPosts />
         ) : (
           posts.map((post: IPost) => (
             <article key={post._id}>

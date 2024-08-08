@@ -183,48 +183,16 @@ function FriendshipsCard() {
       ) : (
         users.map((user, index) => (
           <Card key={user._id} className="w-full">
-            <CardBody className="flex flex-col w-full gap-4 px-6 py-5">
-              <div className="flex justify-between w-full">
+            <CardBody className="flex flex-col w-full gap-4 px-6 py-3">
+              <div className="flex justify-between items-center w-full">
                 <div className="flex items-center">
-                  <NextUser
-                    avatarProps={{
-                      src:
-                        user.image?.secure_url ||
-                        "https://via.placeholder.com/150",
-                      isBordered: true,
-                      color: "danger",
-                    }}
-                    description={`@${user.username}`}
-                    name={
-                      <div
-                        className="flex items-center"
-                        style={{
-                          maxWidth: "150px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        <span
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {user.fullname}
-                        </span>
-                        {user.verified && (
-                          <RiVerifiedBadgeFill
-                            className="text-[#dd2525]"
-                            style={{ marginLeft: "5px", flexShrink: 0 }}
-                          />
-                        )}
-                      </div>
-                    }
-                  />
+                  <NextUser avatarProps={{ src: user.image?.secure_url || "https://via.placeholder.com/150", size: 'lg' }} description={`@${user.username}`} name={<div className="flex items-center" style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", }} > <span style={{ overflow: "hidden", textOverflow: "ellipsis", }} > {user.fullname} </span> {user.verified && (<RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />)} </div>} />
                 </div>
                 <Button
-                  color="danger"
+                  className={`${followed[index]
+                    ? "bg-[#dd2525] text-white shadow"
+                    : "bg-transparent border border-[#dd2525] text-[#dd2525]"
+                    }`}
                   variant={followed[index] ? "shadow" : "ghost"}
                   onClick={() => handleFollowToggle(index)}
                 >
@@ -234,8 +202,9 @@ function FriendshipsCard() {
             </CardBody>
           </Card>
         ))
-      )}
-    </article>
+      )
+      }
+    </article >
   );
 }
 

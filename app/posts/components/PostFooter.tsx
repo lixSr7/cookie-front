@@ -16,13 +16,7 @@ import { Like as typeLike } from "@/types/Post";
  * @param {typeLike[]} props.likes - Lista de likes asociados al post.
  * @returns {JSX.Element} - Elemento de las opciones de botones.
  */
-function ButtonOptions({
-  postId,
-  likes,
-}: {
-  postId: string;
-  likes: typeLike[];
-}) {
+function PostFooter({ postId, likes }: { postId: string; likes: typeLike[] }) {
   const [userId, setUserId] = useState<string>("");
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
@@ -62,4 +56,4 @@ function ButtonOptions({
   );
 }
 
-export default ButtonOptions;
+export default PostFooter;

@@ -20,6 +20,7 @@ function Home() {
           <FriendsCard />
         </article>
       </section>
+
       <NavBar />
     </div>
   );
