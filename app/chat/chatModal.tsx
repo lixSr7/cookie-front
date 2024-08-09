@@ -26,8 +26,8 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
   const [viewMode, setViewMode] = useState<"chatList" | "messages">("chatList");
   const idChat = selectedChat || "1234";
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const windowWidth = useWindowWidth();
   const id = useAuth();
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     if (windowWidth <= 789) {
@@ -58,7 +58,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
-                  <section className="flex flex-col w-full max-w-[100%] overflow-hidden h-full max-h-[480px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full h-full bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <div className="flex justify-center gap-2 mb-4 dark:bg-zinc-800">
                       <Input
                         labelPlacement="outside"
@@ -82,7 +82,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                   </section>
                 )}
                 {viewMode === "messages" && (
-                  <section className="flex flex-col w-full max-w-[400px] h-full max-h-[480px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full h-full bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                       <div className="flex-grow overflow-y-auto">
                         <Messages selectedChat={selectedChat} />
@@ -96,7 +96,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
               </>
             ) : (
               <>
-                <section className="flex flex-col max-w-[40%] w-full h-full max-h-[480px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                <section className="flex flex-col w-full h-full max-w-[30%] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                   <div className="flex justify-center gap-2 mb-4">
                     <Input
                       labelPlacement="outside"
@@ -123,7 +123,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                     />
                   </ScrollShadow>
                 </section>
-                <section className="flex flex-col w-full max-w-[60%] h-full max-h-[480px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4 ml-2 ">
+                <section className="flex flex-col w-full max-w-[70%] h-full bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                   <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                     <div className="flex-grow overflow-y-auto">
                       <Messages selectedChat={selectedChat} />
