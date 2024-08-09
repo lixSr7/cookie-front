@@ -204,7 +204,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 <ModalFooter className="flex flex-col ">
                   <div className="flex justify-end gap-4">
                     {isSending || (
-                      <Button color="primary" type="submit">
+                      <Button className="bg-[#dd2525]" type="submit">
                         Submit
                       </Button>
                     )}
