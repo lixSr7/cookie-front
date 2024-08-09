@@ -9,14 +9,14 @@ import {
 import { Trash2 as TrashIcon } from "@geist-ui/icons";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
+import socket from "@/app/config/socketConfig";
 import { Comment as CommentType } from "@/types/Post";
 import { deleteComment } from "@/services/Posts";
 import { emojis } from "@/app/consts/emojis";
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { userToken } from "@/types/Users";
 
-function ListComments({
+function Comments({
   comments,
   postId,
   updateComments,
@@ -35,7 +35,26 @@ function ListComments({
 
       setUserId(decodeToken.id);
     }
-  }, []);
+
+    // Escuchar eventos de socket para nuevos comentarios y comentarios eliminados
+    socket.on("comment:new", (data) => {
+      if (data.postId === postId) {
+        updateComments();
+      }
+    });
+
+    socket.on("comment:delete", (data) => {
+      if (data.postId === postId) {
+        updateComments();
+      }
+    });
+
+    // Limpiar los eventos de socket cuando el componente se desmonte
+    return () => {
+      socket.off("comment:new");
+      socket.off("comment:delete");
+    };
+  }, [postId, updateComments]);
 
   return (
     <ScrollShadow
@@ -85,17 +104,15 @@ const Item = ({
   let emojiURI = emojis.find((emoji) => emoji.name === comment.emoji)?.svg;
 
   const handleDelete = async () => {
-    // console.log(comment);
-    // console.log("Deleting comment with ID:", comment._id);
     await deleteComment(postId, id);
     updateComments();
   };
 
   return (
     <div key={comment._id} className="w-full">
-      <Card className=" dark:bg-zinc-800">
+      <Card className="dark:bg-zinc-800">
         <CardHeader className="flex items-center">
-          <div className="flex items-center justify-between w-full ">
+          <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
               <Avatar
                 isBordered
@@ -110,7 +127,7 @@ const Item = ({
                 </span>
               </div>
             </div>
-            <div className="flex gap-2 ">
+            <div className="flex gap-2">
               {isMeComment && (
                 <Button
                   isIconOnly
@@ -118,7 +135,7 @@ const Item = ({
                   variant="ghost"
                   onClick={handleDelete}
                 >
-                  <TrashIcon className=" stroke-zinc-500" />
+                  <TrashIcon className="stroke-zinc-500" />
                 </Button>
               )}
             </div>
@@ -129,7 +146,7 @@ const Item = ({
           {comment.content}
           {comment.emoji !== "none" ? (
             <div className="flex items-center justify-center w-full">
-              <img alt="" className=" w-24 m-auto" src={emojiURI} />
+              <img alt="" className="w-24 m-auto" src={emojiURI} />
             </div>
           ) : null}
           <strong className="font-bold text-md text-slate-500">
@@ -141,4 +158,4 @@ const Item = ({
   );
 };
 
-export default ListComments;
+export default Comments;
