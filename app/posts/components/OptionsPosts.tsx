@@ -13,11 +13,17 @@ import {
   Plus as AddNoteIcon,
   Copy as CopyDocumentIcon,
   Edit as EditDocumentIcon,
-  Archive as DeleteDocumentIcon,
 } from "@geist-ui/icons";
+import { Archive as DeleteDocumentIcon } from "@geist-ui/icons";
 
 import { ConfigIcon } from "@/components/Icons";
-function OptionsPosts() {
+function OptionsPosts({
+  postId,
+  updatePosts,
+}: {
+  postId: string;
+  updatePosts: () => void;
+}) {
   return (
     <Dropdown
       showArrow
@@ -61,16 +67,16 @@ function OptionsPosts() {
         </DropdownSection>
         <DropdownSection title="Danger zone">
           <DropdownItem
-            key="delete"
+            key="Delete post"
             className="text-danger"
             color="danger"
             shortcut="⌘⇧D"
-            description="Permanently delete the file"
+            description="Permanently delete the post"
             startContent={
               <DeleteDocumentIcon className={cn("", "text-danger")} />
             }
           >
-            Delete file
+            Delete
           </DropdownItem>
         </DropdownSection>
       </DropdownMenu>

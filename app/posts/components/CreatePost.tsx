@@ -18,13 +18,19 @@ import UploaderImagePost from "./UploaderImagePost";
 import { createPost } from "@/services/Posts";
 import socket from "@/app/config/socketConfig";
 
+/**
+ * Propiedades para el componente CreatePost.
+ *
+ * @typedef {Object} CreatePostProps
+ * @property {() => void} updatePosts - Función para actualizar la lista de publicaciones.
+ */
 export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isContentInvalid, setIsContentInvalid] = useState(false);
   const [errorContent, setErrorContent] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [token, setToken] = useState("");
-  const [image, setImage] = useState<string | null>(null); // State for image
+  const [image, setImage] = useState<string | null>(null); //? Estado para la imagen
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -38,7 +44,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
 
   useEffect(() => {
     if (!isOpen) {
-      resetForm(); // Reset the form when modal is closed
+      resetForm();
     }
   }, [isOpen]);
 
@@ -54,6 +60,11 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
     };
   }, [token]);
 
+  /**
+   * Obtiene el perfil del usuario.
+   *
+   * @param {string} token - Token de autenticación del usuario.
+   */
   const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
@@ -64,7 +75,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -79,10 +90,17 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
     }
   };
 
+  /**
+   * Valida el contenido de la publicación.
+   *
+   * @param {string} content - Contenido de la publicación.
+   * @param {boolean} imageIsEmpty - Indica si la imagen está vacía.
+   * @returns {boolean} - `true` si el contenido es válido, `false` en caso contrario.
+   */
   function validateContent(content: string, imageIsEmpty: boolean) {
     const ERROS_CONTENT = {
-      empty: "The content cannot be empty",
-      maxLength: "The content cannot be longer than 3000 characters",
+      empty: "El contenido no puede estar vacío",
+      maxLength: "El contenido no puede ser mayor de 3000 caracteres",
     };
 
     if (content.trim() === "" && imageIsEmpty) {
@@ -102,22 +120,29 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
     return true;
   }
 
+  /**
+   * Maneja el envío del formulario de creación de publicación.
+   *
+   * @param {string} content - Contenido de la publicación.
+   * @param {File | null} [imageFile] - Archivo de imagen opcional.
+   * @param {() => void} [onClose] - Función opcional para cerrar el modal.
+   */
   const handleSubmit = async (
     content: string,
     imageFile?: File | null,
-    onClose?: () => void,
+    onClose?: () => void
   ) => {
-    const imageIsEmpty = !image; // Determine if image is empty
+    const imageIsEmpty = !image; // Determina si la imagen está vacía
 
     if (validateContent(content, imageIsEmpty)) {
       try {
         setIsSending(true);
         await createPost(content, imageFile, token);
         updatePosts();
-        toast.success("Success creating post");
+        toast.success("Publicación creada exitosamente");
       } catch (error) {
-        console.error("Error in handleSubmit:", error);
-        toast.error("Error creating post");
+        console.error("Error en handleSubmit:", error);
+        toast.error("Error al crear la publicación");
       } finally {
         setIsSending(false);
         onClose?.();
@@ -125,6 +150,9 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
     }
   };
 
+  /**
+   * Restablece el formulario de creación de publicación.
+   */
   const resetForm = () => {
     setImage(null);
     setIsContentInvalid(false);
@@ -159,14 +187,12 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 onSubmit={(e) => {
                   e.preventDefault();
                   const contentInput = e.currentTarget.elements.namedItem(
-                    "Content",
+                    "Content"
                   ) as HTMLTextAreaElement;
                   const content = contentInput.value;
 
-                  // console.log("content:", content);
-
                   const imageInput = document.querySelector(
-                    ".inputImageCreatePost",
+                    ".inputImageCreatePost"
                   ) as HTMLInputElement;
                   const imageFile = imageInput.files?.[0];
 
@@ -174,14 +200,14 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 }}
               >
                 <ModalHeader className="flex flex-col gap-1">
-                  Create Posts
+                  Crear Publicación
                 </ModalHeader>
                 <ModalBody>
                   {isSending ? (
                     <Spinner
                       className="w-full h-full flex items-center justify-center"
                       color="primary"
-                      label="Loading..."
+                      label="Cargando..."
                       labelColor="primary"
                     />
                   ) : (
@@ -190,10 +216,10 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                         className="max-w-s"
                         errorMessage={errorContent}
                         isInvalid={isContentInvalid}
-                        label="What's on your mind?"
+                        label="¿Qué tienes en mente?"
                         maxLength={3000}
                         name="Content"
-                        placeholder="Hi, I am cookie"
+                        placeholder="Hola, soy cookie"
                         variant="faded"
                       />
 
@@ -205,7 +231,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                   <div className="flex justify-end gap-4">
                     {isSending || (
                       <Button className="bg-[#dd2525]" type="submit">
-                        Submit
+                        Enviar
                       </Button>
                     )}
                   </div>

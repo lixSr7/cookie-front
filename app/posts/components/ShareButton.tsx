@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Share2 as ShareIcon } from "@geist-ui/icons";
+import { button } from "@nextui-org/react";
 
 /**
  * Componente para manejar el botón de compartir.
@@ -10,10 +11,12 @@ import { Share2 as ShareIcon } from "@geist-ui/icons";
  */
 function ShareButton({ onClick }: { onClick: () => void }): JSX.Element {
   return (
-    <ShareIcon
-      className="w-6 h-6 cursor-pointer opacity-60"
-      onClick={onClick}
-    />
+    <button>
+      <ShareIcon
+        className="w-6 h-6 cursor-pointer opacity-60"
+        onClick={onClick}
+      />
+    </button>
   );
 }
 

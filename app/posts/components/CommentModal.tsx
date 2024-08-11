@@ -15,6 +15,14 @@ import Comments from "./ListComments";
 import { Comment as CommentType } from "@/types/Post";
 import { getAllComments } from "@/services/Posts";
 
+/**
+ * Componente modal para mostrar y crear comentarios en una publicación.
+ *
+ * @param {Object} props - Las propiedades del componente.
+ * @param {string} props.postId - El ID de la publicación para la que se muestran y crean los comentarios.
+ *
+ * @returns {JSX.Element} - El componente CommentModal renderizado.
+ */
 function CommentModal({ postId }: { postId: string }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -23,6 +31,12 @@ function CommentModal({ postId }: { postId: string }) {
     allComments();
   }, []);
 
+  /**
+   * Obtiene todos los comentarios para la publicación y actualiza el estado.
+   * Maneja errores si ocurre algún problema durante la solicitud.
+   *
+   * @returns {Promise<void>} - Una promesa que se resuelve cuando se han actualizado los comentarios.
+   */
   const allComments = async () => {
     try {
       const commentsData = await getAllComments(postId).then((commentsData) => {

@@ -1,11 +1,15 @@
 import axios from "axios";
+import { toast } from "sonner";
 
 const API_URI = "https://cookie-rest-api-8fnl.onrender.com/api/posts";
 
+/**
+ * Obtiene todas las publicaciones.
+ * @returns {Promise<Object[]>} - La lista de publicaciones.
+ */
 export const getAllPosts = async () => {
   try {
     const response = await axios.get(API_URI);
-
     return response.data;
   } catch (error) {
     console.error("Error fetching all posts:", error);
@@ -13,10 +17,14 @@ export const getAllPosts = async () => {
   }
 };
 
+/**
+ * Obtiene una publicación por su ID.
+ * @param {string} id - El ID de la publicación.
+ * @returns {Promise<Object>} - La publicación solicitada.
+ */
 export const getPostById = async (id: string) => {
   try {
     const response = await axios.get(`${API_URI}/${id}`);
-
     return response.data;
   } catch (error) {
     console.error(`Error fetching post with id ${id}:`, error);
@@ -24,13 +32,19 @@ export const getPostById = async (id: string) => {
   }
 };
 
+/**
+ * Crea una nueva publicación.
+ * @param {string} content - El contenido de la publicación.
+ * @param {File|null} [imageFile=null] - El archivo de imagen (opcional).
+ * @param {string} [token] - El token de autenticación (opcional).
+ * @returns {Promise<Object>} - La publicación creada.
+ */
 export const createPost = async (
   content: string,
   imageFile?: File | null,
-  token?: string,
+  token?: string
 ) => {
   const formData = new FormData();
-
   formData.append("content", content);
   if (imageFile) {
     formData.append("image", imageFile);
@@ -43,7 +57,6 @@ export const createPost = async (
         "Content-Type": "multipart/form-data",
       },
     });
-
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -51,6 +64,11 @@ export const createPost = async (
   }
 };
 
+/**
+ * Elimina una publicación por su ID.
+ * @param {string} id - El ID de la publicación.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
 export const deletePost = async (id: string) => {
   try {
     const response = await axios.delete(`${API_URI}/${id}`, {
@@ -58,7 +76,6 @@ export const deletePost = async (id: string) => {
         "x-access-token": localStorage.getItem("token") || "",
       },
     });
-
     return response.data;
   } catch (error) {
     console.error(`Error deleting post with id ${id}:`, error);
@@ -66,10 +83,18 @@ export const deletePost = async (id: string) => {
   }
 };
 
+/**
+ * Crea un nuevo comentario en una publicación.
+ * @param {string} postId - El ID de la publicación en la que se creará el comentario.
+ * @param {string} content - El contenido del comentario.
+ * @param {string} [emoji="none"] - El emoji asociado al comentario (opcional).
+ * @param {File|null} [imageFile=null] - El archivo de imagen asociado al comentario (opcional).
+ * @returns {Promise<Object>} - El comentario creado con los datos del usuario y del comentario.
+ */
 export const createComment = async (
   postId: string,
   content: string,
-  emoji?: string,
+  emoji?: string
 ) => {
   try {
     const commentData = {
@@ -83,7 +108,7 @@ export const createComment = async (
         headers: {
           "x-access-token": localStorage.getItem("token") || "",
         },
-      },
+      }
     );
 
     return response.data;
@@ -92,11 +117,14 @@ export const createComment = async (
     throw error;
   }
 };
-
+/**
+ * Obtiene todos los comentarios de una publicación.
+ * @param {string} postId - El ID de la publicación.
+ * @returns {Promise<Object[]>} - La lista de comentarios.
+ */
 export const getAllComments = async (postId: string) => {
   try {
     const response = await axios.get(`${API_URI}/${postId}/comments`);
-
     return response.data;
   } catch (error) {
     console.error(`Error fetching comments for post ${postId}:`, error);
@@ -104,6 +132,12 @@ export const getAllComments = async (postId: string) => {
   }
 };
 
+/**
+ * Elimina un comentario por su ID.
+ * @param {string} postId - El ID de la publicación.
+ * @param {string} id - El ID del comentario.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
 export const deleteComment = async (postId: string, id: string) => {
   try {
     const response = await axios.delete(`${API_URI}/${postId}/comments/${id}`, {
@@ -111,21 +145,24 @@ export const deleteComment = async (postId: string, id: string) => {
         "x-access-token": localStorage.getItem("token") || "",
       },
     });
-
     return response.data;
   } catch (error) {
     console.error(
       `Error deleting comment with id ${id} for post ${postId}:`,
-      error,
+      error
     );
     throw error;
   }
 };
 
+/**
+ * Obtiene todos los likes de una publicación.
+ * @param {string} postId - El ID de la publicación.
+ * @returns {Promise<Object[]>} - La lista de likes.
+ */
 export const getAllLikes = async (postId: string) => {
   try {
     const response = await axios.get(`${API_URI}/${postId}/likes`);
-
     return response.data;
   } catch (error) {
     console.error(`Error fetching likes for post ${postId}:`, error);
@@ -133,6 +170,11 @@ export const getAllLikes = async (postId: string) => {
   }
 };
 
+/**
+ * Crea un nuevo like en una publicación.
+ * @param {string} postId - El ID de la publicación.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
 export const createLike = async (postId: string) => {
   try {
     const token = localStorage.getItem("token") || "";
@@ -141,7 +183,6 @@ export const createLike = async (postId: string) => {
         "x-access-token": token,
       },
     });
-
     return response.data;
   } catch (error) {
     console.error(`Error creating like for post ${postId}:`, error);
@@ -149,6 +190,12 @@ export const createLike = async (postId: string) => {
   }
 };
 
+/**
+ * Elimina un like en una publicación.
+ * @param {string} postId - El ID de la publicación.
+ * @param {string} id - El ID del like.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
 export const deleteLike = async (postId: string, id: string) => {
   try {
     const token = localStorage.getItem("token") || "";
@@ -157,17 +204,21 @@ export const deleteLike = async (postId: string, id: string) => {
         "x-access-token": token,
       },
     });
-
     return response.data;
   } catch (error) {
     console.error(
       `Error deleting like with id ${id} for post ${postId}:`,
-      error,
+      error
     );
     throw error;
   }
 };
 
+/**
+ * Guarda una publicación.
+ * @param {string} postId - El ID de la publicación.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
 export const savePost = async (postId: string) => {
   try {
     const token = localStorage.getItem("token") || "";
@@ -176,7 +227,6 @@ export const savePost = async (postId: string) => {
         "x-access-token": token,
       },
     });
-
     return response.data;
   } catch (error) {
     console.error(`Error saving post ${postId}:`, error);
@@ -184,6 +234,11 @@ export const savePost = async (postId: string) => {
   }
 };
 
+/**
+ * Elimina una publicación guardada.
+ * @param {string} postId - El ID de la publicación.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
 export const unsavePost = async (postId: string) => {
   try {
     const token = localStorage.getItem("token") || "";
@@ -192,7 +247,6 @@ export const unsavePost = async (postId: string) => {
         "x-access-token": token,
       },
     });
-
     return response.data;
   } catch (error) {
     console.error(`Error unsave post ${postId}:`, error);
@@ -200,6 +254,10 @@ export const unsavePost = async (postId: string) => {
   }
 };
 
+/**
+ * Obtiene todas las publicaciones guardadas.
+ * @returns {Promise<Object[]>} - La lista de publicaciones guardadas.
+ */
 export const getSavedPosts = async () => {
   try {
     const response = await axios.get(`${API_URI}/save`, {
@@ -207,7 +265,6 @@ export const getSavedPosts = async () => {
         "x-access-token": localStorage.getItem("token") || "",
       },
     });
-
     return response.data;
   } catch (error) {
     console.error("Error fetching saved posts:", error);
@@ -215,10 +272,13 @@ export const getSavedPosts = async () => {
   }
 };
 
+/**
+ * Obtiene las estadísticas de la plataforma.
+ * @returns {Promise<Object>} - Las estadísticas de la plataforma.
+ */
 export const getStatsPlatform = async () => {
   try {
     const response = await axios.get(`${API_URI}/stats-platform`);
-
     return response.data;
   } catch (error) {
     console.error("Error fetching stats platform:", error);

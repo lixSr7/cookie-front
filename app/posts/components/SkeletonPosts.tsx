@@ -1,6 +1,11 @@
 import { Skeleton, Card } from "@nextui-org/react";
 
-function SkeletonPosts() {
+/**
+ * Componente que renderiza una lista de tarjetas de publicaciones con un esqueleto de carga.
+ *
+ * @returns {JSX.Element} - El componente SkeletonPosts renderizado.
+ */
+function SkeletonPosts(): JSX.Element {
   return (
     <>
       <SkeletonPostCard />
@@ -10,7 +15,12 @@ function SkeletonPosts() {
   );
 }
 
-export function SkeletonPostCard() {
+/**
+ * Componente que renderiza una tarjeta de publicación con un esqueleto de carga.
+ *
+ * @returns {JSX.Element} - El componente SkeletonPostCard renderizado.
+ */
+export function SkeletonPostCard(): JSX.Element {
   return (
     <article className="block w-full max-w-3xl p-4 m-auto rounded-md">
       <Card className="block w-full rounded-md">
@@ -22,7 +32,12 @@ export function SkeletonPostCard() {
   );
 }
 
-function SkeletonPostCardHeader() {
+/**
+ * Componente que renderiza el encabezado de una tarjeta de publicación con un esqueleto de carga.
+ *
+ * @returns {JSX.Element} - El componente SkeletonPostCardHeader renderizado.
+ */
+function SkeletonPostCardHeader(): JSX.Element {
   return (
     <div className="flex justify-between gap-3 p-4">
       <div className="flex items-center gap-3">
@@ -39,7 +54,12 @@ function SkeletonPostCardHeader() {
   );
 }
 
-function SkeletonPostCardBody() {
+/**
+ * Componente que renderiza el cuerpo de una tarjeta de publicación con un esqueleto de carga.
+ *
+ * @returns {JSX.Element} - El componente SkeletonPostCardBody renderizado.
+ */
+function SkeletonPostCardBody(): JSX.Element {
   return (
     <div className="flex flex-col items-center justify-center w-full p-4">
       <Skeleton className="w-full h-4 mb-3 rounded-md" />
@@ -48,7 +68,12 @@ function SkeletonPostCardBody() {
   );
 }
 
-function SkeletonPostCardFooter() {
+/**
+ * Componente que renderiza el pie de una tarjeta de publicación con un esqueleto de carga.
+ *
+ * @returns {JSX.Element} - El componente SkeletonPostCardFooter renderizado.
+ */
+function SkeletonPostCardFooter(): JSX.Element {
   return (
     <div className="flex items-center justify-between w-full p-4">
       <div className="flex items-center justify-between gap-4 w-full">

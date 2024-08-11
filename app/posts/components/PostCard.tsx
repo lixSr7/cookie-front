@@ -12,13 +12,25 @@ import { jwtDecode } from "jwt-decode";
 import PostImage from "./PostImage";
 import PostFooter from "./PostFooter";
 import DeletePost from "./DeletePost";
-import ShowMore from "./ShowMore";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { Post as IPost } from "@/types/Post";
 import { userToken } from "@/types/Users";
 import OptionsPosts from "./OptionsPosts";
 
+/**
+ * Componente que representa una tarjeta de publicación.
+ * Muestra el contenido de la publicación, la imagen asociada (si la hay),
+ * y proporciona opciones para eliminar la publicación si el usuario es el propietario
+ * o un administrador.
+ *
+ * @param {Object} props - Las propiedades del componente.
+ * @param {IPost} props.post - Los datos de la publicación que se muestra en la tarjeta.
+ * @param {Function} props.updatePosts - Función para actualizar la lista de publicaciones.
+ * @param {string} props.token - Token JWT del usuario para la autenticación y autorización.
+ *
+ * @returns {JSX.Element | null} - El componente PostCard renderizado o null si no hay usuario en la publicación.
+ */
 export default function PostCard({
   post,
   updatePosts,
@@ -52,7 +64,7 @@ export default function PostCard({
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
-            <OptionsPosts />
+            <OptionsPosts postId={post._id} updatePosts={updatePosts} />
             {(decodeToken.id === post.user._id ||
               decodeToken.role === "admin") && (
               <DeletePost postId={post._id} updatePosts={updatePosts} />

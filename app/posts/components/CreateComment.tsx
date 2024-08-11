@@ -3,10 +3,16 @@ import { Send as SendIcon } from "@geist-ui/icons";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { userToken } from "@/types/Users";
 import { emojis } from "@/app/consts/emojis";
 import { createComment } from "@/services/Posts";
 
+/**
+ * Propiedades para el componente CreateComment.
+ *
+ * @typedef {Object} CreateCommentProps
+ * @property {() => void} updateComment - Función para actualizar los comentarios.
+ * @property {string} postId - ID de la publicación a la que se añade el comentario.
+ */
 function CreateComment({
   updateComment,
   postId,
@@ -18,9 +24,12 @@ function CreateComment({
   const [emoji, setEmoji] = useState("none");
   const [isSending, setIsSending] = useState(false);
 
+  /**
+   * Maneja la creación del comentario. Envía el comentario y el emoji seleccionado a la API.
+   */
   const handleCreate = async () => {
     if (content.trim() === "") {
-      toast.error("Comment content cannot be empty");
+      toast.error("El contenido del comentario no puede estar vacío");
       return;
     }
 
@@ -36,17 +45,22 @@ function CreateComment({
         setContent("");
         setEmoji("none");
         updateComment();
-        toast.success("Success creating comment");
+        toast.success("Comentario creado con éxito");
       } else {
-        throw new Error("Failed to create comment");
+        throw new Error("Error al crear el comentario");
       }
     } catch (error) {
-      toast.error("Error creating comment");
+      toast.error("Error al crear el comentario");
     } finally {
       setIsSending(false);
     }
   };
 
+  /**
+   * Maneja el clic en un emoji para seleccionarlo o deseleccionarlo.
+   *
+   * @param {string} emojiName - Nombre del emoji seleccionado.
+   */
   const handleEmojiClick = (emojiName: string) => {
     setEmoji((prevEmoji) => (prevEmoji === emojiName ? "none" : emojiName));
   };
@@ -67,7 +81,7 @@ function CreateComment({
                 className={`py-6 ${
                   emoji === emojiItem.name ? "bg-gray-200" : ""
                 }`}
-                aria-label={`Select ${emojiItem.name} emoji`}
+                aria-label={`Seleccionar emoji ${emojiItem.name}`}
               >
                 <Avatar
                   alt={`Emoji ${emojiItem.name}`}
@@ -83,7 +97,7 @@ function CreateComment({
           disabled={isSending}
           id="content"
           labelPlacement="outside"
-          placeholder="What are you thinking today?"
+          placeholder="¿Qué estás pensando hoy?"
           type="text"
           value={content}
           onChange={(e) => setContent(e.target.value)}

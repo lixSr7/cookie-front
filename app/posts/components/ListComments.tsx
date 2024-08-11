@@ -15,7 +15,19 @@ import { deleteComment } from "@/services/Posts";
 import { emojis } from "@/app/consts/emojis";
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { userToken } from "@/types/Users";
+import SkeletonCommentCard from "./SkeletonCommentCard";
 
+/**
+ * Componente que muestra una lista de comentarios para una publicación.
+ * Utiliza un marcador de posición de carga (SkeletonCommentCard) mientras se cargan los comentarios.
+ *
+ * @param {Object} props - Las propiedades del componente.
+ * @param {CommentType[]} props.comments - La lista de comentarios para mostrar.
+ * @param {string} props.postId - El ID de la publicación a la que pertenecen los comentarios.
+ * @param {Function} props.updateComments - Función para actualizar la lista de comentarios.
+ *
+ * @returns {JSX.Element} - El componente Comments renderizado.
+ */
 function Comments({
   comments,
   postId,
@@ -26,6 +38,7 @@ function Comments({
   updateComments: () => void;
 }) {
   const [userId, setUserId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -36,7 +49,6 @@ function Comments({
       setUserId(decodeToken.id);
     }
 
-    // Escuchar eventos de socket para nuevos comentarios y comentarios eliminados
     socket.on("comment:new", (data) => {
       if (data.postId === postId) {
         updateComments();
@@ -49,19 +61,30 @@ function Comments({
       }
     });
 
-    // Limpiar los eventos de socket cuando el componente se desmonte
     return () => {
       socket.off("comment:new");
       socket.off("comment:delete");
     };
   }, [postId, updateComments]);
 
+  useEffect(() => {
+    const loadComments = async () => {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoading(false);
+    };
+
+    loadComments();
+  }, []);
+
   return (
     <ScrollShadow
       hideScrollBar
       className="w-full h-full max-h-[25em] flex flex-col justify-start items-center p-4 gap-4"
     >
-      {comments.length > 0 ? (
+      {loading ? (
+        <SkeletonCommentCard />
+      ) : comments.length > 0 ? (
         comments.map((comment) => (
           <Item
             key={comment._id}
@@ -88,6 +111,19 @@ function Comments({
   );
 }
 
+/**
+ * Componente que representa un comentario individual en una publicación.
+ * Permite la eliminación del comentario si el comentario pertenece al usuario actual.
+ *
+ * @param {Object} props - Las propiedades del componente.
+ * @param {CommentType} props.comment - El comentario a mostrar.
+ * @param {string} props.postId - El ID de la publicación a la que pertenece el comentario.
+ * @param {string} props.id - El ID del comentario.
+ * @param {boolean} [props.isMeComment=false] - Indica si el comentario es del usuario actual.
+ * @param {Function} props.updateComments - Función para actualizar la lista de comentarios.
+ *
+ * @returns {JSX.Element} - El componente Item renderizado.
+ */
 const Item = ({
   comment,
   postId,

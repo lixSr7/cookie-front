@@ -21,10 +21,10 @@ function DeletePost({
   postId: string;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isSending, setIsSending] = useState(false); // State for loading
+  const [isSending, setIsSending] = useState(false);
 
   const handleDelete = async (onClose: () => void) => {
-    setIsSending(true); // Set loading to true
+    setIsSending(true);
     try {
       await deletePost(postId);
       updatePosts();
@@ -33,7 +33,7 @@ function DeletePost({
       console.error("Error deleting post:", error);
       toast.error("Post could not be deleted");
     } finally {
-      setIsSending(false); // Set loading to false
+      setIsSending(false);
       onClose();
     }
   };
