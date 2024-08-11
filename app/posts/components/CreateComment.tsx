@@ -6,13 +6,6 @@ import { toast } from "sonner";
 import { emojis } from "@/app/consts/emojis";
 import { createComment } from "@/services/Posts";
 
-/**
- * Propiedades para el componente CreateComment.
- *
- * @typedef {Object} CreateCommentProps
- * @property {() => void} updateComment - Función para actualizar los comentarios.
- * @property {string} postId - ID de la publicación a la que se añade el comentario.
- */
 function CreateComment({
   updateComment,
   postId,
@@ -65,6 +58,19 @@ function CreateComment({
     setEmoji((prevEmoji) => (prevEmoji === emojiName ? "none" : emojiName));
   };
 
+  /**
+   * Maneja el evento de tecla presionada en el campo de entrada.
+   * Si la tecla presionada es Enter, se envía el comentario.
+   *
+   * @param {React.KeyboardEvent<HTMLInputElement>} e - Evento de teclado.
+   */
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Previene el comportamiento por defecto del Enter
+      handleCreate();
+    }
+  };
+
   const selectedEmoji = emojis.find((e) => e.name === emoji);
 
   return (
@@ -101,6 +107,7 @@ function CreateComment({
           type="text"
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onKeyDown={handleKeyDown} // Añadir el manejador de eventos onKeyDown
         />
         <Button
           color="primary"
