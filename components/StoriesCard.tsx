@@ -1,14 +1,10 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
-import { Card, Image, CardFooter, User, ScrollShadow, Modal, useDisclosure, Button, ModalBody, ModalContent, ModalFooter, ModalHeader, Input, CardBody, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from "@nextui-org/react";
-import { UploadCloud as CloudIcon } from "@geist-ui/icons";
-import { Trash2 as TrashIcon } from "@geist-ui/icons";
-import { Heart as HeartIcon } from "@geist-ui/icons";
-import { Plus as PlusIcon } from "@geist-ui/icons";
+import { Card, Image, CardFooter, User, ScrollShadow, Modal, useDisclosure, Button, ModalBody, ModalContent, ModalFooter, ModalHeader, Input, CardBody, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu, Spinner, Skeleton } from "@nextui-org/react";
+import { UploadCloud as CloudIcon, Trash2 as TrashIcon, Heart as HeartIcon, Plus as PlusIcon } from "@geist-ui/icons";
 import { TbCookieFilled } from "react-icons/tb";
 import socket from "@/app/config/socketConfig";
 import { jwtDecode } from "jwt-decode";
-
 
 function StoriesCard() {
   const [token, setToken] = useState<string>("");
@@ -30,6 +26,7 @@ function StoriesCard() {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isOpen: isStoryOpen, onOpen: onStoryOpen, onOpenChange: onStoryOpenChange } = useDisclosure();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -123,15 +120,14 @@ function StoriesCard() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('my stories:', data);
         setMyStories(data);
       } else {
-        console.error("Error fetching stories:", await response.text());
         throw new Error("Error fetching stories");
       }
     } catch (error) {
       console.error("Error fetching stories:", error);
-      throw new Error("Error fetching stories");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -293,15 +289,14 @@ function StoriesCard() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('other stories:', data);
         setOtherStories(data);
       } else {
-        console.error("Error fetching stories:", await response.text());
         throw new Error("Error fetching stories");
       }
     } catch (error) {
       console.error("Error fetching stories:", error);
-      throw new Error("Error fetching stories");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -368,38 +363,48 @@ function StoriesCard() {
       <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto">
         <div className="w-full h-full p-1 m-0 flex gap-2">
           <div className="flex flex-row space-x-2 min-w-fit">
-            <Card className="w-40 min-h-full p-0 m-0 relative flex-shrink-0 flex justify-center items-center" isPressable onPress={onOpen}>
-              <CardBody style={{ backgroundImage: `url(${myProfile?.image?.secure_url})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px)', backgroundRepeat: 'no-repeat', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-                <PlusIcon className="stroke-white w-20 h-20" />
-              </CardBody>
-              <CardFooter className="justify-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                <p>CREATE STORY</p>
-              </CardFooter>
-            </Card>
-            {filteredStories.map((story, index) => (
-              <Card key={index} className="w-40 min-h-full p-0 m-0 relative flex-shrink-0" isPressable onPress={() => handleStoryOpen(story.userId._id)}>
-                {story.image ? (
-                  <Image removeWrapper className="z-0 w-full h-full object-cover" style={{ filter: "blur(3px)", backgroundColor: "#000", opacity: 0.5 }} src={story.image.secure_url} />
-                ) : (
-                  <div className="z-0 w-full h-full flex items-center justify-center" style={{ filter: "blur(3px)", backgroundColor: "#dd2525", opacity: 0.5 }}>
-                    <p className="text-white text-center">{story.content}</p>
-                  </div>
-                )}
-                {story.userId._id !== userId && (
-                  <TbCookieFilled className="text-[#fff] bg-[#dd2525] rounded-full text-2xl w-6 h-6 flex justify-center items-center" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 1, }} />
-                )}
-                {story.userId._id === userId && (
-                  <div className="text-[#fff] bg-[#dd2525] text-2xl p-2 w-6 h-6 rounded-full flex justify-center items-center" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 1, }} >
-                    <span className="text-xs">{story.isViewed.length}</span>
-                  </div>
-                )}
-                <CardFooter>
-                  <div className="overflow-x-auto">
-                    <User name={truncateText(story.userId._id === userId ? "Tu" : story.userId.fullname, 8)} description={`@${story.userId.username}`} avatarProps={{ src: story.userId.image?.secure_url }} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} />
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
+            {loading ? (
+              <div className="flex flex-row gap-2">
+                <Skeleton className="w-40 min-h-full rounded-lg" />
+                <Skeleton className="w-40 min-h-full rounded-lg" />
+                <Skeleton className="w-40 min-h-full rounded-lg" />
+              </div>
+            ) : (
+              <>
+                <Card className="w-40 min-h-full p-0 m-0 relative flex-shrink-0 flex justify-center items-center" isPressable onPress={onOpen}>
+                  <CardBody style={{ backgroundImage: `url(${myProfile?.image?.secure_url})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px)', backgroundRepeat: 'no-repeat', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                    <PlusIcon className="stroke-white w-20 h-20" />
+                  </CardBody>
+                  <CardFooter className="justify-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                    <p>CREATE STORY</p>
+                  </CardFooter>
+                </Card>
+                {filteredStories.map((story, index) => (
+                  <Card key={index} className="w-40 min-h-full p-0 m-0 relative flex-shrink-0" isPressable onPress={() => handleStoryOpen(story.userId._id)}>
+                    {story.image ? (
+                      <Image removeWrapper className="z-0 w-full h-full object-cover" style={{ filter: "blur(3px)", backgroundColor: "#000", opacity: 0.5 }} src={story.image.secure_url} />
+                    ) : (
+                      <div className="z-0 w-full h-full flex items-center justify-center" style={{ filter: "blur(3px)", backgroundColor: "#dd2525", opacity: 0.5 }}>
+                        <p className="text-white text-center">{story.content}</p>
+                      </div>
+                    )}
+                    {story.userId._id !== userId && (
+                      <TbCookieFilled className="text-[#fff] bg-[#dd2525] rounded-full text-2xl w-6 h-6 flex justify-center items-center" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 1, }} />
+                    )}
+                    {story.userId._id === userId && (
+                      <div className="text-[#fff] bg-[#dd2525] text-2xl p-2 w-6 h-6 rounded-full flex justify-center items-center" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 1, }} >
+                        <span className="text-xs">{story.isViewed.length}</span>
+                      </div>
+                    )}
+                    <CardFooter>
+                      <div className="overflow-x-auto">
+                        <User name={truncateText(story.userId._id === userId ? "Tu" : story.userId.fullname, 8)} description={`@${story.userId.username}`} avatarProps={{ src: story.userId.image?.secure_url }} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} />
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </>
+            )}
           </div>
         </div>
       </ScrollShadow>

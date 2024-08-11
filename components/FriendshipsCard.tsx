@@ -1,9 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
-import { User as NextUser, Spinner } from "@nextui-org/react";
-import { Card, CardBody, Button } from "@nextui-org/react";
-import { jwtDecode } from "jwt-decode";
+import { User as NextUser, Spinner, Card, CardBody, Button, Skeleton } from "@nextui-org/react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 interface User {
   _id: string;
@@ -173,12 +172,40 @@ function FriendshipsCard() {
     }
   };
 
+
+  const userSkeleton = () => (
+    <div className="max-w-full w-full flex items-center gap-4 my-3">
+      <div>
+        <Skeleton className="flex rounded-full w-12 h-12" />
+      </div>
+      <div className="w-full flex flex-col gap-2">
+        <Skeleton className="h-3 w-3/5 rounded-lg" />
+        <Skeleton className="h-3 w-4/5 rounded-lg" />
+      </div>
+      <div className="flex items-center gap-2">
+        <Skeleton className="w-24 h-8 rounded-full" />
+      </div>
+    </div>
+  )
+
+  const skeleton = () => (
+    <Card className="w-full">
+      <CardBody className="flex flex-col gap-2 px-6">
+        {Array(3).fill(null).map((_, index) => (
+          <div key={index} className="flex justify-between items-center w-full">
+            {userSkeleton()}
+          </div>
+        ))}
+      </CardBody>
+    </Card>
+  )
+
   return (
     <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] min-h-[55%] max-h-[55%] flex flex-col gap-4 ">
       {error && <div className="error-message">{error}</div>}
       {loading ? (
-        <div className="flex justify-center items-center w-full h-full">
-          <Spinner color="danger" size="lg" />
+        <div className="flex flex-col justify-center items-center w-full h-full gap-3">
+          {skeleton()}
         </div>
       ) : (
         users.map((user, index) => (
@@ -188,14 +215,7 @@ function FriendshipsCard() {
                 <div className="flex items-center">
                   <NextUser avatarProps={{ src: user.image?.secure_url || "https://via.placeholder.com/150", size: 'lg' }} description={`@${user.username}`} name={<div className="flex items-center" style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", }} > <span style={{ overflow: "hidden", textOverflow: "ellipsis", }} > {user.fullname} </span> {user.verified && (<RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />)} </div>} />
                 </div>
-                <Button
-                  className={`${followed[index]
-                    ? "bg-[#dd2525] text-white shadow"
-                    : "bg-transparent border border-[#dd2525] text-[#dd2525]"
-                    }`}
-                  variant={followed[index] ? "shadow" : "ghost"}
-                  onClick={() => handleFollowToggle(index)}
-                >
+                <Button className={`${followed[index] ? "bg-[#dd2525] text-white shadow" : "bg-transparent border border-[#dd2525] text-[#dd2525]"}`} variant={followed[index] ? "shadow" : "ghost"} onClick={() => handleFollowToggle(index)} >
                   {followed[index] ? "Unfollow" : "Follow"}
                 </Button>
               </div>
