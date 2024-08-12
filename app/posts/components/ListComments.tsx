@@ -5,6 +5,7 @@ import {
   CardBody,
   ScrollShadow,
   Button,
+  Image,
 } from "@nextui-org/react";
 import { Trash2 as TrashIcon } from "@geist-ui/icons";
 import { useEffect, useState } from "react";
@@ -180,11 +181,22 @@ const Item = ({
 
         <CardBody className="flex flex-col justify-center w-full gap-2">
           {comment.content}
-          {comment.emoji !== "none" ? (
-            <div className="flex items-center justify-center w-full">
-              <img alt="" className="w-24 m-auto" src={emojiURI} />
-            </div>
-          ) : null}
+          <div className=" flex justify-between gap-4">
+            {comment.emoji !== "none" && (
+              <div className="flex items-center justify-center w-full">
+                <img alt="" className="w-24 m-auto" src={emojiURI} />
+              </div>
+            )}
+            {comment.image?.secure_url && (
+              <div className="flex items-center justify-center w-full">
+                <Image
+                  className="w-full object-cover"
+                  src={comment.image.secure_url}
+                  alt="Image cookie comentario"
+                />
+              </div>
+            )}
+          </div>
           <strong className="font-bold text-md text-slate-500">
             {formatTimeDifference(comment.createdAt)}
           </strong>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Input, Avatar } from "@nextui-org/react";
 import { Send as SendIcon } from "@geist-ui/icons";
 import { useState } from "react";
@@ -7,6 +9,14 @@ import { emojis } from "@/app/consts/emojis";
 import { createComment } from "@/services/Posts";
 import UploaderImageComment from "./UploaderImageComment";
 
+/**
+ * Componente para crear un nuevo comentario en una publicación.
+ *
+ * @param {Object} props - Propiedades del componente.
+ * @param {Function} props.updateComment - Función para actualizar la lista de comentarios.
+ * @param {string} props.postId - ID de la publicación a la que se añadirá el comentario.
+ * @returns {JSX.Element} - El componente de creación de comentarios.
+ */
 function CreateComment({
   updateComment,
   postId,
@@ -14,11 +24,18 @@ function CreateComment({
   updateComment: () => void;
   postId: string;
 }) {
-  const [content, setContent] = useState("");
-  const [emoji, setEmoji] = useState("none");
-  const [image, setImage] = useState<File | undefined>(undefined);
-  const [isSending, setIsSending] = useState(false);
+  const [content, setContent] = useState<string>(""); // Estado para el contenido del comentario.
+  const [emoji, setEmoji] = useState<string>("none"); // Estado para el emoji seleccionado.
+  const [image, setImage] = useState<File | undefined>(undefined); // Estado para la imagen adjunta.
+  const [isSending, setIsSending] = useState<boolean>(false); // Estado para manejar el estado de carga.
 
+  /**
+   * Maneja la creación del comentario, enviando la solicitud al servidor.
+   *
+   * @async
+   * @function
+   * @returns {Promise<void>} - No retorna nada.
+   */
   const handleCreate = async () => {
     if (content.trim() === "" && !image) {
       toast.error("El contenido del comentario no puede estar vacío");
@@ -31,7 +48,6 @@ function CreateComment({
       if (response) {
         setContent("");
         setEmoji("none");
-        setImage(undefined);
         updateComment();
         toast.success("Comentario creado con éxito");
       } else {
@@ -44,10 +60,23 @@ function CreateComment({
     }
   };
 
+  /**
+   * Maneja el clic en un emoji, actualizando el emoji seleccionado.
+   *
+   * @param {string} emojiName - El nombre del emoji seleccionado.
+   * @returns {void}
+   */
   const handleEmojiClick = (emojiName: string) => {
     setEmoji((prevEmoji) => (prevEmoji === emojiName ? "none" : emojiName));
   };
 
+  /**
+   * Maneja el evento de presionar una tecla en el campo de entrada.
+   * Si se presiona Enter, se crea el comentario.
+   *
+   * @param {React.KeyboardEvent<HTMLInputElement>} e - El evento de teclado.
+   * @returns {void}
+   */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();

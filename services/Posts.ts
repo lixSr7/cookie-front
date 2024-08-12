@@ -3,6 +3,12 @@ import { toast } from "sonner";
 
 const API_URI = "https://cookie-rest-api-8fnl.onrender.com/api/posts";
 
+function logFormData(formData: any): any {
+  for (const [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+}
+
 /**
  * Obtiene todas las publicaciones.
  * @returns {Promise<Object[]>} - La lista de publicaciones.
@@ -108,6 +114,9 @@ export const createComment = async (
       formData.append("image", image); // Añadir la imagen si está disponible
     }
 
+    const data = logFormData(formData);
+    console.log(data);
+
     const response = await axios.post(
       `${API_URI}/${postId}/comments`,
       formData,
@@ -118,6 +127,8 @@ export const createComment = async (
         },
       }
     );
+
+    console.log(response.data);
 
     return response.data;
   } catch (error) {

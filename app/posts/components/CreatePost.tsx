@@ -200,7 +200,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                 }}
               >
                 <ModalHeader className="flex flex-col gap-1">
-                  Crear Publicación
+                  Create the best idea
                 </ModalHeader>
                 <ModalBody>
                   {isSending ? (
@@ -216,10 +216,10 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                         className="max-w-s"
                         errorMessage={errorContent}
                         isInvalid={isContentInvalid}
-                        label="¿Qué tienes en mente?"
+                        label="What do you have in mind?"
                         maxLength={3000}
                         name="Content"
-                        placeholder="Hola, soy cookie"
+                        placeholder="Hi, I am cookie"
                         variant="faded"
                       />
 
@@ -231,7 +231,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
                   <div className="flex justify-end gap-4">
                     {isSending || (
                       <Button className="bg-[#dd2525]" type="submit">
-                        Enviar
+                        Submit
                       </Button>
                     )}
                   </div>

@@ -1,3 +1,4 @@
+"use client";
 import { UploadCloud as CloudIcon } from "@geist-ui/icons";
 import { useState, ChangeEvent } from "react";
 
@@ -26,6 +27,7 @@ const UploaderImageComment: React.FC<UploaderImageCommentProps> = ({
       if (file.type.startsWith("image/")) {
         const imageUrl = URL.createObjectURL(file);
         setImage(file); // Actualiza el archivo de imagen
+
         setPreviewUrl(imageUrl); // Genera la URL de previsualización
         setError(null);
       } else {

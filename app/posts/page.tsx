@@ -32,14 +32,7 @@ function Home() {
         </article>
       </section>
       <NavBar />
-      <Toaster
-        richColors
-        closeButton
-        position="top-right"
-        toastOptions={{
-          duration: 5000,
-        }}
-      />
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 }

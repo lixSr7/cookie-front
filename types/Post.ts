@@ -1,17 +1,16 @@
-import { Image as UserImage } from "./Users";
-
+import { Image } from "./Users";
 
 type PostUser = {
   _id: string;
   username: string;
   fullname: string;
-  image: UserImage;
+  image: Image;
 };
 type CommentUser = {
   _id: string;
   username: string;
   fullname: string;
-  image: UserImage;
+  image: Image;
 };
 
 export type Like = {
@@ -27,6 +26,7 @@ export type Comment = {
   date: string;
   emoji?: "happy" | "ungry" | "sad" | "none";
   createdAt: string;
+  image?: Image;
 };
 
 export type Post = {
