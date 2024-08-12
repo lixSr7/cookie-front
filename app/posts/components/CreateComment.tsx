@@ -23,7 +23,7 @@ function CreateComment({
 }: {
   updateComment: () => void;
   postId: string;
-}) {
+}): JSX.Element {
   const [content, setContent] = useState<string>(""); // Estado para el contenido del comentario.
   const [emoji, setEmoji] = useState<string>("none"); // Estado para el emoji seleccionado.
   const [image, setImage] = useState<File | undefined>(undefined); // Estado para la imagen adjunta.
@@ -37,11 +37,6 @@ function CreateComment({
    * @returns {Promise<void>} - No retorna nada.
    */
   const handleCreate = async () => {
-    if (content.trim() === "" && !image) {
-      toast.error("El contenido del comentario no puede estar vacío");
-      return;
-    }
-
     try {
       setIsSending(true);
       const response = await createComment(postId, content, emoji, image);

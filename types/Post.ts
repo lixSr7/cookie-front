@@ -1,5 +1,20 @@
 import { Image } from "./Users";
 
+type reportPost = {
+  type: string;
+  userId: string;
+  postId: string;
+  reason: string;
+  createdAt: string;
+};
+type reportComment = {
+  type: string;
+  userId: string;
+  postId: string;
+  commentId: string;
+  reason: string;
+  createdAt: string;
+};
 type PostUser = {
   _id: string;
   username: string;
@@ -27,6 +42,7 @@ export type Comment = {
   emoji?: "happy" | "ungry" | "sad" | "none";
   createdAt: string;
   image?: Image;
+  reports: reportComment[];
 };
 
 export type Post = {
@@ -34,6 +50,7 @@ export type Post = {
   content: string;
   image: string;
   user: PostUser;
+  reports: reportPost[];
   likes: Like[];
   comments: Comment[];
   createdAt: string;
