@@ -84,29 +84,37 @@ export const deletePost = async (id: string) => {
 };
 
 /**
- * Crea un nuevo comentario en una publicación.
- * @param {string} postId - El ID de la publicación en la que se creará el comentario.
- * @param {string} content - El contenido del comentario.
- * @param {string} [emoji="none"] - El emoji asociado al comentario (opcional).
- * @param {File|null} [imageFile=null] - El archivo de imagen asociado al comentario (opcional).
- * @returns {Promise<Object>} - El comentario creado con los datos del usuario y del comentario.
+ * Crea un comentario en un post específico.
+ *
+ * @param {string} postId - ID del post en el que se creará el comentario.
+ * @param {string} content - Contenido del comentario.
+ * @param {File | undefined} image - Archivo de imagen (opcional).
+ * @param {string} emoji - Emoji seleccionado (opcional).
+ * @returns {Promise<any>} - Respuesta de la API.
+ * @throws {Error} - Lanza un error si la creación del comentario falla.
  */
 export const createComment = async (
   postId: string,
   content: string,
-  emoji?: string
+  emoji?: string,
+  image?: File
 ) => {
   try {
-    const commentData = {
-      content,
-      emoji: emoji ? emoji : "none",
-    };
+    const formData = new FormData();
+    formData.append("content", content);
+    formData.append("emoji", emoji ? emoji : "none");
+
+    if (image) {
+      formData.append("image", image); // Añadir la imagen si está disponible
+    }
+
     const response = await axios.post(
       `${API_URI}/${postId}/comments`,
-      commentData,
+      formData,
       {
         headers: {
           "x-access-token": localStorage.getItem("token") || "",
+          "Content-Type": "multipart/form-data", // Especificar multipart/form-data
         },
       }
     );

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { emojis } from "@/app/consts/emojis";
 import { createComment } from "@/services/Posts";
+import UploaderImageComment from "./UploaderImageComment";
 
 function CreateComment({
   updateComment,
@@ -15,28 +16,22 @@ function CreateComment({
 }) {
   const [content, setContent] = useState("");
   const [emoji, setEmoji] = useState("none");
+  const [image, setImage] = useState<File | undefined>(undefined);
   const [isSending, setIsSending] = useState(false);
 
-  /**
-   * Maneja la creación del comentario. Envía el comentario y el emoji seleccionado a la API.
-   */
   const handleCreate = async () => {
-    if (content.trim() === "") {
+    if (content.trim() === "" && !image) {
       toast.error("El contenido del comentario no puede estar vacío");
       return;
     }
 
     try {
       setIsSending(true);
-      // Solo se envía el emoji si no es "none"
-      const response = await createComment(
-        postId,
-        content,
-        emoji === "none" ? "" : emoji
-      );
+      const response = await createComment(postId, content, emoji, image);
       if (response) {
         setContent("");
         setEmoji("none");
+        setImage(undefined);
         updateComment();
         toast.success("Comentario creado con éxito");
       } else {
@@ -49,36 +44,23 @@ function CreateComment({
     }
   };
 
-  /**
-   * Maneja el clic en un emoji para seleccionarlo o deseleccionarlo.
-   *
-   * @param {string} emojiName - Nombre del emoji seleccionado.
-   */
   const handleEmojiClick = (emojiName: string) => {
     setEmoji((prevEmoji) => (prevEmoji === emojiName ? "none" : emojiName));
   };
 
-  /**
-   * Maneja el evento de tecla presionada en el campo de entrada.
-   * Si la tecla presionada es Enter, se envía el comentario.
-   *
-   * @param {React.KeyboardEvent<HTMLInputElement>} e - Evento de teclado.
-   */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Previene el comportamiento por defecto del Enter
+      e.preventDefault();
       handleCreate();
     }
   };
 
-  const selectedEmoji = emojis.find((e) => e.name === emoji);
-
   return (
-    <div className="flex flex-col items-start justify-between w-full h-full gap-5">
+    <div className="flex flex-col items-start justify-between w-full h-full gap-6">
       <div className="flex items-center gap-2">
         <div className="flex flex-wrap gap-2" style={{ height: "2.5em" }}>
           {emojis
-            .filter((e) => e.name !== "none") // Filtrar el emoji "none"
+            .filter((e) => e.name !== "none")
             .map((emojiItem) => (
               <Button
                 key={emojiItem.name}
@@ -107,8 +89,9 @@ function CreateComment({
           type="text"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          onKeyDown={handleKeyDown} // Añadir el manejador de eventos onKeyDown
+          onKeyDown={handleKeyDown}
         />
+        <UploaderImageComment image={image} setImage={setImage} />
         <Button
           color="primary"
           isLoading={isSending}
