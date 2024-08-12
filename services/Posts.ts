@@ -1,7 +1,8 @@
 import axios from "axios";
-import { toast } from "sonner";
 
 const API_URI = "https://cookie-rest-api-8fnl.onrender.com/api/posts";
+
+import { UserWithPosts } from "@/types/Post";
 
 function logFormData(formData: any): any {
   for (const [key, value] of formData.entries()) {
@@ -29,7 +30,7 @@ export const getAllPosts = async () => {
  * @returns {Promise<Object>} - La publicación solicitada.
  */
 export const getPostById = async (id: string) => {
-  try {
+  try {   
     const response = await axios.get(`${API_URI}/${id}`);
     return response.data;
   } catch (error) {
@@ -301,6 +302,94 @@ export const getStatsPlatform = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching stats platform:", error);
+    throw error;
+  }
+};
+/**
+ * @method getAllUsersWithPosts
+ * @description Obtiene todos los usuarios con sus publicaciones. Incluye detalles de la publicación como comentarios.
+ * @returns {Promise<UserWithPosts[]>} - La lista de usuarios con sus publicaciones.
+ **/
+
+export const getAllUsersWithPosts = async (): Promise<UserWithPosts[]> => {
+  try {
+    const response = await axios.get(`${API_URI}/users-with-posts`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users with posts:", error);
+    throw error;
+  }
+};
+
+/**
+ * @method getRecommendedPosts
+ * @description Obtiene publicaciones recomendadas basadas en likes, comentarios y si son creadas por amigos o personas que el usuario sigue.
+ * @returns {Promise<Object[]>} - La lista de publicaciones recomendadas.
+ */
+
+export const getRecommendedPosts = async (): Promise<object[]> => {
+  try {
+    const response = await axios.get(`${API_URI}/recommended/`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recommended posts:", error);
+    throw error;
+  }
+};
+
+/**
+ * @method getPostAnalytics
+ * @description Obtiene datos para generar gráficos específicos sobre los posts de un usuario.
+ * @returns {Promise<Object[]>} - La lista de datos para generar gráficos.
+ */
+
+export const getPostAnalytics = async (userId: string): Promise<object[]> => {
+  try {
+    const response = await axios.get(`${API_URI}/analytics/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching post analytics:", error);
+    throw error;
+  }
+};
+
+/**
+ * @method reportPost
+ * @description Reporta una publicación para que sea revisada por un administrador.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
+
+export const reportPost = async (postId: string, reason: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await axios.post(
+      `${API_URI}/report/${postId}`,
+      { reason },
+      {
+        headers: {
+          "x-access-token": token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error reporting post ${postId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * @method getPlatformAnalytics
+ * @description Obtiene datos analíticos de toda la plataforma sobre las publicaciones.
+ * @returns {Promise<Object>} - La respuesta del servidor.
+ */
+
+export const getPlatformAnalytics = async () => {
+  try {
+    const response = await axios.get(`${API_URI}/analytics`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching platform analytics:", error);
     throw error;
   }
 };

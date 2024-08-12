@@ -50,44 +50,51 @@ function LikeButton({
     }
   }, [likes, userId]);
 
-  // Maneja la acción de dar o quitar like
-  const handleLike = async () => {
-    if (isLiked) {
-      if (likeId) {
-        try {
-          await deleteLike(postId, likeId);
-          setIsLiked(false);
-          setLikeId(null);
-        } catch (error) {
-          console.error("Error deleting like:", error);
-        }
-      }
-    } else {
+  // Maneja la acción de quitar el like
+  const handleUnlike = async () => {
+    if (likeId) {
       try {
-        const newLike = await createLike(postId);
-
-        setIsLiked(true);
-        setLikeId(newLike._id);
+        await deleteLike(postId, likeId);
+        setIsLiked(false);
+        setLikeId(null);
       } catch (error) {
-        console.error("Error creating like:", error);
+        console.error("Error deleting like:", error);
       }
     }
   };
 
-  return (
+  // Maneja la acción de dar like
+  const handleLike = async () => {
+    try {
+      const newLike = await createLike(postId);
+
+      setIsLiked(true);
+      setLikeId(newLike._id);
+    } catch (error) {
+      console.error("Error creating like:", error);
+    }
+  };
+
+  // Botón cuando el post ya tiene un like del usuario
+  const LikedButton = () => (
     <Button
       isIconOnly
-      aria-label="Like"
-      color={isLiked ? "danger" : "default"}
-      onClick={handleLike}
+      aria-label="Unlike"
+      color="danger"
+      onClick={handleUnlike}
     >
-      <HeartIcon
-        className={`w-6 h-6 cursor-pointer ${
-          isLiked ? "fill-white" : "opacity-60"
-        }`}
-      />
+      <HeartIcon className="w-6 h-6 cursor-pointer fill-white" />
     </Button>
   );
+
+  // Botón cuando el post no tiene un like del usuario
+  const UnlikedButton = () => (
+    <Button isIconOnly aria-label="Like" color="default" onClick={handleLike}>
+      <HeartIcon className="w-6 h-6 cursor-pointer opacity-60" />
+    </Button>
+  );
+
+  return <div>{isLiked ? <LikedButton /> : <UnlikedButton />}</div>;
 }
 
 export default LikeButton;

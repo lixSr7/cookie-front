@@ -19,14 +19,17 @@ import {
   ChipProps,
   SortDescriptor,
 } from "@nextui-org/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus as PlusIcon } from "@geist-ui/icons";
 import { MoreVertical as VerticalDotsIcon } from "@geist-ui/icons";
 import { ChevronDown as ChevronDownIcon } from "@geist-ui/icons";
 import { Search as SearchIcon } from "@geist-ui/icons";
 
 import { capitalize } from "@/utils/Capitalize";
-import { columns, users, statusOptions } from "@/app/admin/posts/data";
+import { columns, statusOptions } from "@/app/admin/posts/data";
+import { UserWithPosts as typeUser } from "@/types/Post";
+
+import { getAllUsersWithPosts } from "@/services/Posts";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -34,15 +37,20 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
-
-type User = (typeof users)[0];
+const INITIAL_VISIBLE_COLUMNS = [
+  "username",
+  "fullname",
+  "email",
+  "role",
+  "status",
+  "actions",
+];
 
 export default function TableUserWithPosts() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(7);
@@ -51,7 +59,20 @@ export default function TableUserWithPosts() {
     direction: "ascending",
   });
 
+  function fechData() {
+    getAllUsersWithPosts()
+      .then((data: typeUser[]) => {
+        setUsers(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch users:", error);
+      });
+  }
+  useEffect(() => {
+    fechData();
+  });
   const [page, setPage] = useState(1);
+  const [users, setUsers] = useState<typeUser[]>([]);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -59,7 +80,7 @@ export default function TableUserWithPosts() {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -68,7 +89,7 @@ export default function TableUserWithPosts() {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        user.username.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -76,7 +97,7 @@ export default function TableUserWithPosts() {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+        Array.from(statusFilter).includes(user.status)
       );
     }
 
@@ -93,23 +114,23 @@ export default function TableUserWithPosts() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: typeUser, b: typeUser) => {
+      const first = a[sortDescriptor.column as keyof typeUser] as number;
+      const second = b[sortDescriptor.column as keyof typeUser] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((user: User, columnKey: React.Key) => {
+  const renderCell = useCallback((user: typeUser, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
 
     switch (columnKey) {
-      case "name":
+      case "username":
         return (
           <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
+            avatarProps={{ radius: "lg", src: user.image }}
             description={user.email}
             name={cellValue}
           >
@@ -120,9 +141,6 @@ export default function TableUserWithPosts() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.team}
-            </p>
           </div>
         );
       case "status":
@@ -175,7 +193,7 @@ export default function TableUserWithPosts() {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
-    [],
+    []
   );
 
   const onSearchChange = useCallback((value?: string) => {
@@ -333,7 +351,6 @@ export default function TableUserWithPosts() {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       selectedKeys={selectedKeys}
-      selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"

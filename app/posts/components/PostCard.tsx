@@ -11,7 +11,6 @@ import { jwtDecode } from "jwt-decode";
 
 import PostImage from "./PostImage";
 import PostFooter from "./PostFooter";
-import DeletePost from "./DeletePost";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { Post as IPost } from "@/types/Post";
@@ -65,10 +64,6 @@ export default function PostCard({
           </div>
           <div className="flex items-center justify-end gap-2">
             <OptionsPosts postId={post._id} updatePosts={updatePosts} />
-            {(decodeToken.id === post.user._id ||
-              decodeToken.role === "admin") && (
-              <DeletePost postId={post._id} updatePosts={updatePosts} />
-            )}
           </div>
         </CardHeader>
         <CardBody className="flex flex-col items-center justify-center w-full">

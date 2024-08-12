@@ -54,18 +54,16 @@ interface CounterProps {
 
 function Counter({ title, value, loading }: CounterProps) {
   return (
-    <div className="relative p-16 rounded-md text-xl font-bold bg-gradient-to-r from-gradient-start to-gradient-end animate-bg-gradient text-white">
+    <>
       {loading ? (
-        <div className="absolute inset-0 bg-gray-300" style={{ zIndex: 1 }}>
-          <Skeleton className="h-full w-full" />
-        </div>
+        <Skeleton className="h-[155px] w-full rounded-md" />
       ) : (
-        <>
+        <div className="relative p-16 rounded-md text-xl font-bold bg-gradient-to-r from-gradient-start to-gradient-end animate-bg-gradient text-white">
           + <CountUp duration={3} end={value} separator="," start={0} />
           <span className="ml-2">{title}</span>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

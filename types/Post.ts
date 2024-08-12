@@ -56,3 +56,15 @@ export type Post = {
   createdAt: string;
   updatedAt: string;
 };
+
+
+export type UserWithPosts = {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  status: string;
+  fullname: string;
+  image: string;
+  posts: Post[];
+};
