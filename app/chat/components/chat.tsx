@@ -62,7 +62,7 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
 
   const deleteChat = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this chat?",
+      "Are you sure you want to delete this chat?"
     );
 
     if (!confirmed) return;
@@ -77,12 +77,12 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
       }
 
       await axios.delete(
-        `https://cookie-rest-api-8fnl.onrender.com/api/chat/${id}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/chat/${id}`,
         {
           headers: {
             "x-access-token": token,
           },
-        },
+        }
       );
 
       // console.log("Chat deleted successfully");

@@ -3,16 +3,16 @@ import axios from "axios";
 const deleteMessage = async (
   messageId: string,
   chatId: string,
-  token: string,
+  token: string
 ) => {
   try {
     const response = await axios.delete(
-      `https://cookie-rest-api-8fnl.onrender.com/api/chat/messages/${chatId}/messages/${messageId}`,
+      `https://rest-api-cookie-u-c.onrender.com/api/chat/messages/${chatId}/messages/${messageId}`,
       {
         headers: {
           "x-access-token": token,
         },
-      },
+      }
     );
 
     return response.data;

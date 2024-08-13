@@ -67,13 +67,13 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          `https://cookie-rest-api-8fnl.onrender.com/api/chat/${selectedChat}`,
+          `https://rest-api-cookie-u-c.onrender.com/api/chat/${selectedChat}`,
           {},
           {
             headers: {
               "x-access-token": token,
             },
-          },
+          }
         );
 
         setMessages(response.data.chat.messages);
@@ -83,7 +83,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       } catch (error: any) {
         console.error(
           "Failed to join chat:",
-          error.response?.data || error.message,
+          error.response?.data || error.message
         );
       } finally {
         setLoading(false);
@@ -106,7 +106,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     const handleDeleteMessage = (messageId: string, chatId: string) => {
       if (chatId === selectedChat) {
         setMessages((prevMessages) =>
-          prevMessages.filter((message) => message._id !== messageId),
+          prevMessages.filter((message) => message._id !== messageId)
         );
       }
     };
@@ -152,7 +152,9 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
 
   return (
     <article
-      className={`flex-grow w-full h-full min-h-[400px] flex flex-col ${windowWidth <= 768 ? "overflow-y-auto" : ""}`}
+      className={`flex-grow w-full h-full min-h-[400px] flex flex-col ${
+        windowWidth <= 768 ? "overflow-y-auto" : ""
+      }`}
     >
       {loading ? (
         <div className="grid place-content-center w-full h-full">

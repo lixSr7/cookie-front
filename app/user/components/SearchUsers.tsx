@@ -37,15 +37,15 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
       setLoading(true);
       try {
         const response = await axios.post(
-          "https://cookie-rest-api-8fnl.onrender.com/api/users/search",
+          "https://rest-api-cookie-u-c.onrender.com/api/users/search",
           { term: searchTerm },
           {
             headers: { "x-access-token": token },
-          },
+          }
         );
 
         const filteredResults = response.data.filter(
-          (user: User) => user.role && user.role.name === "user",
+          (user: User) => user.role && user.role.name === "user"
         );
 
         setResults(filteredResults);
@@ -74,7 +74,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
 
   const paginatedResults = results.slice(
     (page - 1) * resultsPerPage,
-    page * resultsPerPage,
+    page * resultsPerPage
   );
 
   return (
@@ -100,7 +100,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
               key={user._id}
               className={`flex items-center p-2 transition-colors duration-200 rounded-lg w-full max-w-[8em]${
                 selectedUsers.some(
-                  (selectedUser) => selectedUser._id === user._id,
+                  (selectedUser) => selectedUser._id === user._id
                 )
                   ? "bg-gray-200 dark:bg-zinc-700"
                   : "hover:bg-gray-100 dark:hover:bg-zinc-600"
@@ -116,7 +116,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
               </Avatar>
               <div className="flex-1 justify-between">{user.username}</div>
               {selectedUsers.some(
-                (selectedUser) => selectedUser._id === user._id,
+                (selectedUser) => selectedUser._id === user._id
               ) && <GrCheckboxSelected color="danger" />}
             </button>
           ))

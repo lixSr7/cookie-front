@@ -58,7 +58,7 @@ function FriendsCard() {
 
   const fetchFriends = async () => {
     try {
-      const url = `https://cookie-rest-api-8fnl.onrender.com/api/users/following/${userId}`;
+      const url = `https://rest-api-cookie-u-c.onrender.com/api/users/following/${userId}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -99,36 +99,79 @@ function FriendsCard() {
         <Skeleton className="w-8 h-8 rounded-full" />
       </div>
     </div>
-  )
+  );
 
   const skeleton = () => (
     <Card className="w-full">
       <CardBody className="flex flex-col gap-2 px-6 py-5">
-        {Array(8).fill(null).map((_, index) => (
-          <div key={index} className="flex justify-between items-center w-full">
-            {userSkeleton()}
-          </div>
-        ))}
+        {Array(8)
+          .fill(null)
+          .map((_, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center w-full"
+            >
+              {userSkeleton()}
+            </div>
+          ))}
       </CardBody>
     </Card>
-  )
+  );
 
   return (
     <article className="w-full max-w-[22em] min-[1920px]:max-w-[25em] min-h-[100%] max-h-[100%] flex flex-col gap-6">
       {loading ? (
         <div className="flex flex-col justify-center items-center w-full h-full gap-3">
-          {Array(1).fill(null).map((_, index) => (
-            <div key={index} className="w-full">
-              {skeleton()}
-            </div>
-          ))}
+          {Array(1)
+            .fill(null)
+            .map((_, index) => (
+              <div key={index} className="w-full">
+                {skeleton()}
+              </div>
+            ))}
         </div>
       ) : (
         <Card className="w-full">
           <CardBody className="flex flex-col gap-6 px-6 py-5">
             {friends.slice(0, 8).map((friend) => (
-              <div key={friend._id} className="flex justify-between items-center w-full">
-                <User avatarProps={{ src: friend.image?.secure_url || "https://via.placeholder.com/150", isBordered: true, color: getColor(friend.sesion), }} description={`@${friend.username}`} name={<div className="flex items-center" style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}> <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{friend.fullname}</span> {friend.verified && (<RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />)} </div>} />
+              <div
+                key={friend._id}
+                className="flex justify-between items-center w-full"
+              >
+                <User
+                  avatarProps={{
+                    src:
+                      friend.image?.secure_url ||
+                      "https://via.placeholder.com/150",
+                    isBordered: true,
+                    color: getColor(friend.sesion),
+                  }}
+                  description={`@${friend.username}`}
+                  name={
+                    <div
+                      className="flex items-center"
+                      style={{
+                        maxWidth: "150px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {" "}
+                      <span
+                        style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                      >
+                        {friend.fullname}
+                      </span>{" "}
+                      {friend.verified && (
+                        <RiVerifiedBadgeFill
+                          className="text-[#dd2525]"
+                          style={{ marginLeft: "5px", flexShrink: 0 }}
+                        />
+                      )}{" "}
+                    </div>
+                  }
+                />
                 <Badge color="danger" content={1} shape="circle" size="sm">
                   <BellIcon size={25} />
                 </Badge>

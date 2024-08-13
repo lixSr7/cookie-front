@@ -170,14 +170,14 @@ function ProfileUser() {
   const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -197,14 +197,14 @@ function ProfileUser() {
   const getPosts = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/posts",
+        "https://rest-api-cookie-u-c.onrender.com/api/posts",
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -222,14 +222,14 @@ function ProfileUser() {
   const getFollowing = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/following/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/following/${userId}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -253,14 +253,14 @@ function ProfileUser() {
   const getFollowers = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/followers/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/followers/${userId}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -284,14 +284,14 @@ function ProfileUser() {
   const getFriends = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/friends/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/friends/${userId}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -329,14 +329,14 @@ function ProfileUser() {
       if (selectedImage) formData.append("image", selectedImage);
 
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "PUT",
           headers: {
             "x-access-token": token,
           },
           body: formData,
-        },
+        }
       );
 
       if (response.ok) {
@@ -353,14 +353,14 @@ function ProfileUser() {
   const getSavedPosts = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/posts/save",
+        "https://rest-api-cookie-u-c.onrender.com/api/posts/save",
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -371,7 +371,7 @@ function ProfileUser() {
       } else {
         console.error(
           "Error al obtener las publicaciones guardadas:",
-          await response.text(),
+          await response.text()
         );
       }
     } catch (error) {
@@ -382,14 +382,14 @@ function ProfileUser() {
   const unfollow = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/unfollow/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/unfollow/${userId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -408,14 +408,14 @@ function ProfileUser() {
   const addFriend = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/addFriend/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/addFriend/${userId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -434,14 +434,14 @@ function ProfileUser() {
   const removeFriend = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/removeFriend/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/removeFriend/${userId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -464,14 +464,14 @@ function ProfileUser() {
   const logout = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/logout",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/logout",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -489,7 +489,7 @@ function ProfileUser() {
   const changePassword = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile/change-password",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile/change-password",
         {
           method: "PUT",
           headers: {
@@ -500,14 +500,14 @@ function ProfileUser() {
             currentPassword,
             newPassword,
           }),
-        },
+        }
       );
 
       if (response.ok) {
         onEditClose();
         onClose();
         toast.success(
-          "The password has been changed successfully, your session will be closed for security.",
+          "The password has been changed successfully, your session will be closed for security."
         );
         setTimeout(() => {
           logout();
@@ -522,10 +522,10 @@ function ProfileUser() {
   };
 
   const postsWithImages = posts.filter(
-    (post) => post.userId === userId && post.image,
+    (post) => post.userId === userId && post.image
   );
   const postsWithoutImages = posts.filter(
-    (post) => post.userId === userId && !post.image,
+    (post) => post.userId === userId && !post.image
   );
 
   // Paginación
@@ -535,7 +535,7 @@ function ProfileUser() {
   const currentFollowingData = Array.isArray(following)
     ? following.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
+        currentPage * itemsPerPage
       )
     : [];
 
@@ -545,7 +545,7 @@ function ProfileUser() {
   const currentFollowersData = Array.isArray(followers)
     ? followers.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
+        currentPage * itemsPerPage
       )
     : [];
 
@@ -555,7 +555,7 @@ function ProfileUser() {
   const currentFriendsData = Array.isArray(friends)
     ? friends.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
+        currentPage * itemsPerPage
       )
     : [];
 
@@ -666,7 +666,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      post.createdAt,
+                                      post.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>
@@ -694,7 +694,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      post.createdAt,
+                                      post.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>
@@ -731,7 +731,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      post.createdAt,
+                                      post.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>
@@ -767,7 +767,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      like.createdAt,
+                                      like.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>

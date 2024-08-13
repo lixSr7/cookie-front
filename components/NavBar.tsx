@@ -85,14 +85,14 @@ function NavBar() {
   const handleLogout = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/logout",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/logout",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -111,14 +111,14 @@ function NavBar() {
   const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -137,14 +137,14 @@ function NavBar() {
   const getAllUsers = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/users/",
+        "https://rest-api-cookie-u-c.onrender.com/api/users/",
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -167,7 +167,7 @@ function NavBar() {
       const filteredUsers = users.filter(
         (user) =>
           user.fullname.toLowerCase().includes(query.toLowerCase()) ||
-          user.username.toLowerCase().includes(query.toLowerCase()),
+          user.username.toLowerCase().includes(query.toLowerCase())
       );
 
       setSearchResults(filteredUsers);
@@ -189,7 +189,7 @@ function NavBar() {
 
   const handleKeyPress = (
     event: KeyboardEvent<HTMLDivElement>,
-    callback: () => void,
+    callback: () => void
   ) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();

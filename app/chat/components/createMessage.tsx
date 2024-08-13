@@ -58,14 +58,14 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
       }
 
       const response = await axios.post(
-        `https://cookie-rest-api-8fnl.onrender.com/api/chat/messages/${chatId}/messages`,
+        `https://rest-api-cookie-u-c.onrender.com/api/chat/messages/${chatId}/messages`,
         formData,
         {
           headers: {
             "x-access-token": token,
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       setMessage("");
@@ -80,7 +80,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ chatId }) => {
     } catch (error: any) {
       console.error(
         "Error sending message:",
-        error.response?.data || error.message,
+        error.response?.data || error.message
       );
     } finally {
       setIsSending(false);

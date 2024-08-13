@@ -60,7 +60,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
 
     socket.on("chatDeleted", (deletedChatId: string) => {
       setChats((prevChats) =>
-        prevChats.filter((chat) => chat._id !== deletedChatId),
+        prevChats.filter((chat) => chat._id !== deletedChatId)
       );
     });
 
@@ -75,12 +75,12 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
 
     try {
       const response = await axios.get(
-        "https://cookie-rest-api-8fnl.onrender.com/api/chat/",
+        "https://rest-api-cookie-u-c.onrender.com/api/chat/",
         {
           headers: {
             "x-access-token": token,
           },
-        },
+        }
       );
 
       setChats(response.data);
@@ -101,7 +101,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
   };
 
   const filteredChats = chats.filter((chat) =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
