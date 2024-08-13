@@ -20,8 +20,11 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Plus as PlusIcon } from "@geist-ui/icons";
-import { MoreVertical as VerticalDotsIcon } from "@geist-ui/icons";
+import { AlertCircle as AlertIcon } from "@geist-ui/icons";
+
+import ChartsOfPost from "./ChartsOfPost";
+import PostsOfUser from "./PostsOfUser";
+
 import { ChevronDown as ChevronDownIcon } from "@geist-ui/icons";
 import { Search as SearchIcon } from "@geist-ui/icons";
 
@@ -165,19 +168,9 @@ export default function TableUserWithPosts() {
         );
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className=" flex justify-center items-center gap-2">
+            <PostsOfUser user={user} />
+            <ChartsOfPost user={user} />
           </div>
         );
       default:
@@ -281,8 +274,8 @@ export default function TableUserWithPosts() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
-              Add New
+            <Button color="danger" startContent={<AlertIcon />}>
+              Reports
             </Button>
           </div>
         </div>
