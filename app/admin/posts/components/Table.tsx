@@ -27,7 +27,7 @@ import { Search as SearchIcon } from "@geist-ui/icons";
 
 import { capitalize } from "@/utils/Capitalize";
 import { columns, statusOptions } from "@/app/admin/posts/data";
-import { UserWithPosts as typeUser } from "@/types/Post";
+import { UserWithPosts as typeUser, Post as typePost } from "@/types/Post";
 
 import { getAllUsersWithPosts } from "@/services/Posts";
 
@@ -58,6 +58,8 @@ export default function TableUserWithPosts() {
     column: "age",
     direction: "ascending",
   });
+
+  const [isSending, setIsSending] = useState(true);
 
   function fechData() {
     getAllUsersWithPosts()
@@ -127,7 +129,7 @@ export default function TableUserWithPosts() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((user: typeUser, columnKey: string) => {
+  const renderCell = useCallback((user: any, columnKey: any) => {
     // Ensure columnKey is a valid key of typeUser
     const cellValue = user[columnKey as keyof typeUser];
 
@@ -375,7 +377,11 @@ export default function TableUserWithPosts() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody
+        emptyContent={"No users found"}
+        items={sortedItems}
+        isLoading={isSending}
+      >
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
