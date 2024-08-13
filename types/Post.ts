@@ -61,10 +61,10 @@ export type Post = {
 export type UserWithPosts = {
   id: string;
   username: string;
-  email: string;
+  email?: string;
   role: string;
   status: string;
-  fullname: string;
-  image: string;
+  fullname?: string;
+  image?: string;
   posts: Post[];
 };

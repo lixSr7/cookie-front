@@ -19,7 +19,7 @@ import {
   ChipProps,
   SortDescriptor,
 } from "@nextui-org/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus as PlusIcon } from "@geist-ui/icons";
 import { MoreVertical as VerticalDotsIcon } from "@geist-ui/icons";
 import { ChevronDown as ChevronDownIcon } from "@geist-ui/icons";
@@ -115,16 +115,21 @@ export default function TableUserWithPosts() {
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a: typeUser, b: typeUser) => {
-      const first = a[sortDescriptor.column as keyof typeUser] as number;
-      const second = b[sortDescriptor.column as keyof typeUser] as number;
+      const first = a[sortDescriptor.column as keyof typeUser] as
+        | number
+        | string;
+      const second = b[sortDescriptor.column as keyof typeUser] as
+        | number
+        | string;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((user: typeUser, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = useCallback((user: typeUser, columnKey: string) => {
+    // Ensure columnKey is a valid key of typeUser
+    const cellValue = user[columnKey as keyof typeUser];
 
     switch (columnKey) {
       case "username":
@@ -132,7 +137,7 @@ export default function TableUserWithPosts() {
           <User
             avatarProps={{ radius: "lg", src: user.image }}
             description={user.email}
-            name={cellValue}
+            name={cellValue?.toString()}
           >
             {user.email}
           </User>
@@ -140,7 +145,9 @@ export default function TableUserWithPosts() {
       case "role":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue?.toString()}
+            </p>
           </div>
         );
       case "status":
@@ -151,7 +158,7 @@ export default function TableUserWithPosts() {
             size="sm"
             variant="flat"
           >
-            {cellValue}
+            {cellValue?.toString()}
           </Chip>
         );
       case "actions":
@@ -189,7 +196,7 @@ export default function TableUserWithPosts() {
   }, [page]);
 
   const onRowsPerPageChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+    (e: ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
