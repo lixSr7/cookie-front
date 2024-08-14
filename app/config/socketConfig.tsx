@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const URL = "https://cookie-rest-api-8fnl.onrender.com";
+const URL = "https://rest-api-cookie-u-c.onrender.com";
 
 const socket = io(URL, {
   autoConnect: true,
