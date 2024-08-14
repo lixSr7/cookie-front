@@ -52,9 +52,9 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
       size="5xl"
       onOpenChange={onClose}
     >
-      <ModalContent className="flex items-center justify-between min-md:h-screen">
+      <ModalContent className="flex items-center min-h-[600px]">
         <ModalBody>
-          <article className="flex justify-between p-2 h-full w-full max-h-[500px] dark:bg-zinc-800 relative">
+          <article className="flex p-2 h-full w-full max-w-[900px] max-h-[500px] justify-between dark:bg-zinc-800 relative">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
@@ -82,7 +82,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                   </section>
                 )}
                 {viewMode === "messages" && (
-                  <section className="flex flex-col w-full h-full bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                  <section className="flex flex-col w-full h-full max-h-[550px] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
                     <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                       <div className="flex-grow overflow-y-auto">
                         <Messages selectedChat={selectedChat} />
@@ -96,8 +96,8 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
               </>
             ) : (
               <>
-                <section className="flex flex-col w-full h-full max-w-[30%] bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
-                  <div className="flex justify-center gap-2 mb-4">
+                <section className=" flex flex-col bg-white dark:bg-zinc-800 rounded-md p-3 h-full w-full max-h-[550px] max-w-[350px]">
+                  <div className="flex justify-center gap-2 mb-2">
                     <Input
                       labelPlacement="outside"
                       placeholder="Chat to search..."
@@ -123,7 +123,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
                     />
                   </ScrollShadow>
                 </section>
-                <section className="flex flex-col w-full max-w-[70%] h-full bg-white dark:bg-zinc-800 shadow-lg rounded-md p-4">
+                <section className="flex flex-col bg-white dark:bg-zinc-800 rounded-md p-3 h-full w-full max-h-[550px] max-w-[500px]">
                   <ScrollShadow hideScrollBar className="w-full h-full mb-4">
                     <div className="flex-grow overflow-y-auto">
                       <Messages selectedChat={selectedChat} />

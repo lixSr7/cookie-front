@@ -152,18 +152,18 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
 
   return (
     <article
-      className={`flex-grow w-full h-full min-h-[400px] flex flex-col ${
+      className={`flex-grow w-full h-full flex flex-col ${
         windowWidth <= 768 ? "overflow-y-auto" : ""
       }`}
     >
       {loading ? (
-        <div className="grid place-content-center w-full h-full">
+        <div className="grid place-content-center w-full h-full min-h-[500px]">
           <Spinner className="flex m-auto" color="danger" label="Loading..." />
         </div>
       ) : selectedChat ? (
         <div
           ref={messagesContainerRef}
-          className="h-full flex-grow w-full"
+          className="h-full flex-grow w-full h-full min-h-[500px]"
           style={{ overflowY: windowWidth <= 768 ? "auto" : "hidden" }}
         >
           {messages.map((message, index) => {
