@@ -54,7 +54,7 @@ const PageChat: React.FC<PageChatProps> = ({ isOpen, onClose }) => {
     >
       <ModalContent className="flex items-center min-h-[600px]">
         <ModalBody>
-          <article className="flex p-2 h-full w-full max-w-[900px] max-h-[500px] justify-between dark:bg-zinc-800 relative">
+          <article className="flex p-2 h-full max-[930px]:min-w-[300px]  min-w-[900px] max-h-[500px] justify-between dark:bg-zinc-800 relative">
             {windowWidth <= 789 ? (
               <>
                 {viewMode === "chatList" && (
