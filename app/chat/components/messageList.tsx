@@ -105,6 +105,21 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
 
     const handleDeleteMessage = (messageId: string, chatId: string) => {
       if (chatId === selectedChat) {
+        setMessages((prevMessages) => {
+          const updatedMessages = prevMessages.map((message) =>
+            message._id === messageId
+              ? { ...message, content: "Eliminando mensaje..." }
+              : message,
+          );
+
+          setTimeout(() => {
+            setMessages(
+              prevMessages.filter((message) => message._id !== messageId),
+            );
+          }, 1000);
+
+          return updatedMessages;
+        });
         setMessages((prevMessages) =>
           prevMessages.filter((message) => message._id !== messageId)
         );
