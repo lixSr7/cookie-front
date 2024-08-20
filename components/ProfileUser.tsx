@@ -170,7 +170,7 @@ function ProfileUser() {
   const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "GET",
           headers: {
@@ -197,7 +197,7 @@ function ProfileUser() {
   const getPosts = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/posts",
+        "https://rest-api-cookie-u-c.onrender.com/api/posts",
         {
           method: "GET",
           headers: {
@@ -222,7 +222,7 @@ function ProfileUser() {
   const getFollowing = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/following/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/following/${userId}`,
         {
           method: "GET",
           headers: {
@@ -253,7 +253,7 @@ function ProfileUser() {
   const getFollowers = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/followers/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/followers/${userId}`,
         {
           method: "GET",
           headers: {
@@ -284,7 +284,7 @@ function ProfileUser() {
   const getFriends = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/friends/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/friends/${userId}`,
         {
           method: "GET",
           headers: {
@@ -329,7 +329,7 @@ function ProfileUser() {
       if (selectedImage) formData.append("image", selectedImage);
 
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "PUT",
           headers: {
@@ -353,7 +353,7 @@ function ProfileUser() {
   const getSavedPosts = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/posts/save",
+        "https://rest-api-cookie-u-c.onrender.com/api/posts/save",
         {
           method: "GET",
           headers: {
@@ -382,7 +382,7 @@ function ProfileUser() {
   const unfollow = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/unfollow/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/unfollow/${userId}`,
         {
           method: "POST",
           headers: {
@@ -408,7 +408,7 @@ function ProfileUser() {
   const addFriend = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/addFriend/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/addFriend/${userId}`,
         {
           method: "POST",
           headers: {
@@ -434,7 +434,7 @@ function ProfileUser() {
   const removeFriend = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/removeFriend/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/removeFriend/${userId}`,
         {
           method: "POST",
           headers: {
@@ -464,7 +464,7 @@ function ProfileUser() {
   const logout = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/logout",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/logout",
         {
           method: "POST",
           headers: {
@@ -489,7 +489,7 @@ function ProfileUser() {
   const changePassword = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile/change-password",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile/change-password",
         {
           method: "PUT",
           headers: {

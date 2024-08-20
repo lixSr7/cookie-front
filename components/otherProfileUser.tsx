@@ -55,7 +55,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/${userId}`,
         {
           method: "GET",
           headers: {
@@ -86,7 +86,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
   const follow = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/follow/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/follow/${userId}`,
         {
           method: "POST",
           headers: {
@@ -111,7 +111,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
   const unfollow = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/unfollow/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/unfollow/${userId}`,
         {
           method: "POST",
           headers: {
@@ -136,7 +136,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
   const addfriend = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/addFriend/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/addFriend/${userId}`,
         {
           method: "POST",
           headers: {
@@ -161,7 +161,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
   const removefriend = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/removeFriend/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/removeFriend/${userId}`,
         {
           method: "POST",
           headers: {

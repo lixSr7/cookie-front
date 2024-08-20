@@ -37,7 +37,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({
       setLoading(true);
       try {
         const response = await axios.post(
-          "https://cookie-rest-api-8fnl.onrender.com/api/users/search",
+          "https://rest-api-cookie-u-c.onrender.com/api/users/search",
           { term: searchTerm },
           {
             headers: { "x-access-token": token },

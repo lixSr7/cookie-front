@@ -35,7 +35,7 @@ export function ValidateCodeSend({
   const handleValidateCode = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/validate",
+        "https://rest-api-cookie-u-c.onrender.comapi/auth/validate",
         {
           method: "POST",
           headers: {

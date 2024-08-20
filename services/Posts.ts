@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URI = "https://cookie-rest-api-8fnl.onrender.com/api/posts";
+const API_URI = "https://rest-api-cookie-u-c.onrender.com/api/posts";
 
 import { UserWithPosts } from "@/types/Post";
 

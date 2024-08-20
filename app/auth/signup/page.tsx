@@ -66,7 +66,7 @@ export default function SIGNUP() {
     setIsSending(true);
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/signup?",
+        "https://rest-api-cookie-u-c.onrender.comi/auth/signup?",
         {
           method: "POST",
           headers: {

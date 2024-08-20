@@ -58,7 +58,7 @@ function FriendsCard() {
 
   const fetchFriends = async () => {
     try {
-      const url = `https://cookie-rest-api-8fnl.onrender.com/api/users/following/${userId}`;
+      const url = `https://rest-api-cookie-u-c.onrender.com/api/users/following/${userId}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {

@@ -67,7 +67,7 @@ const CreateChat: React.FC = () => {
 
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/chat/",
+        "https://rest-api-cookie-u-c.onrender.com/api/chat/",
         {
           method: "POST",
           headers: {

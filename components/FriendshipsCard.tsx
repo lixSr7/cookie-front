@@ -70,7 +70,7 @@ function FriendshipsCard() {
   const getAllUsers = async (token: string): Promise<User[] | null> => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/users/",
+        "https://rest-api-cookie-u-c.onrender.com/api/users/",
         {
           method: "GET",
           headers: {
@@ -103,7 +103,7 @@ function FriendshipsCard() {
   const getFollowing = async (userId: string, token: string) => {
     try {
       const response = await fetch(
-        `https://cookie-rest-api-8fnl.onrender.com/api/users/following/${userId}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/users/following/${userId}`,
         {
           method: "GET",
           headers: {
@@ -139,8 +139,8 @@ function FriendshipsCard() {
     const userIdToToggle = users[index]._id;
     const followStatus = !followed[index];
     const endpoint = followStatus
-      ? `https://cookie-rest-api-8fnl.onrender.com/api/users/follow/${userIdToToggle}`
-      : `https://cookie-rest-api-8fnl.onrender.com/api/users/unfollow/${userIdToToggle}`;
+      ? `https://rest-api-cookie-u-c.onrender.com/api/users/follow/${userIdToToggle}`
+      : `https://rest-api-cookie-u-c.onrender.com/api/users/unfollow/${userIdToToggle}`;
     const method = "POST";
 
     try {

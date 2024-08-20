@@ -77,7 +77,7 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
       }
 
       await axios.delete(
-        `https://cookie-rest-api-8fnl.onrender.com/api/chat/${id}`,
+        `https://rest-api-cookie-u-c.onrender.comi/chat/${id}`,
         {
           headers: {
             "x-access-token": token,

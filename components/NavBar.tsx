@@ -85,7 +85,7 @@ function NavBar() {
   const handleLogout = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/logout",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/logout",
         {
           method: "POST",
           headers: {
@@ -111,7 +111,7 @@ function NavBar() {
   const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "GET",
           headers: {
@@ -137,7 +137,7 @@ function NavBar() {
   const getAllUsers = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/users/",
+        "https://rest-api-cookie-u-c.onrender.com/api/users/",
         {
           method: "GET",
           headers: {

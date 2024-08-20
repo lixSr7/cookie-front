@@ -75,7 +75,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
 
     try {
       const response = await axios.get(
-        "https://cookie-rest-api-8fnl.onrender.com/api/chat/",
+        "https://rest-api-cookie-u-c.onrender.com/api/chat/",
         {
           headers: {
             "x-access-token": token,
@@ -105,7 +105,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
   );
 
   return (
-    <div className="w-full min-w-[250px] mt-3 text-white h-full md:h-screen sm:h-screen overflow-hidden">
+    <div className="w-full min-w-[250px] mt-3 text-white h-full max-h-[480px] overflow-hidden">
       <ScrollShadow
         hideScrollBar
         className="w-full h-full overflow-y-auto flex flex-col m-auto"

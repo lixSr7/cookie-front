@@ -67,7 +67,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          `https://cookie-rest-api-8fnl.onrender.com/api/chat/${selectedChat}`,
+          `https://rest-api-cookie-u-c.onrender.com/api/chat/${selectedChat}`,
           {},
           {
             headers: {
@@ -152,7 +152,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
 
   return (
     <article
-      className={`flex-grow w-full h-full min-h-[400px] flex flex-col ${windowWidth <= 768 ? "overflow-y-auto" : ""}`}
+      className={`flex-grow w-full h-full max-h-[480px] min-h-[400px] flex flex-col ${windowWidth <= 768 ? "overflow-y-auto" : ""}`}
     >
       {loading ? (
         <div className="grid place-content-center w-full h-full">

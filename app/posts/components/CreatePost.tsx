@@ -68,7 +68,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
   const getMyProfile = async (token: string) => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/profile",
+        "https://rest-api-cookie-u-c.onrender.com/api/profile",
         {
           method: "GET",
           headers: {

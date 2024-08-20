@@ -26,7 +26,7 @@ export function ChangePassword({
   const handleChangePassword = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/changePassword",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/changePassword",
         {
           method: "POST",
           headers: {

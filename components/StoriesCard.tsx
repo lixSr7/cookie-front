@@ -111,7 +111,7 @@ function StoriesCard() {
 
   const getMyStories = async (token: string) => {
     try {
-      const response = await fetch("https://cookie-rest-api-8fnl.onrender.com/api/stories/my", {
+      const response = await fetch("https://rest-api-cookie-u-c.onrender.com/api/stories/my", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +148,7 @@ function StoriesCard() {
 
   const deleteStory = async (storyId: string) => {
     try {
-      const response = await fetch(`https://cookie-rest-api-8fnl.onrender.com/api/stories/${storyId}`, {
+      const response = await fetch(`https://rest-api-cookie-u-c.onrender.com/api/stories/${storyId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -173,7 +173,7 @@ function StoriesCard() {
   const viewStories = async (storyIds: string[]) => {
     try {
       await Promise.all(storyIds.map(async (storyId) => {
-        const response = await fetch(`https://cookie-rest-api-8fnl.onrender.com/api/stories/${storyId}/view`, {
+        const response = await fetch(`https://rest-api-cookie-u-c.onrender.com/api/stories/${storyId}/view`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -197,7 +197,7 @@ function StoriesCard() {
 
   const getStoryViewers = async (storyId: string) => {
     try {
-      const response = await fetch(`https://cookie-rest-api-8fnl.onrender.com/api/stories/${storyId}/view`, {
+      const response = await fetch(`https://rest-api-cookie-u-c.onrender.com/api/stories/${storyId}/view`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -220,7 +220,7 @@ function StoriesCard() {
 
   const getMyProfile = async (token: string) => {
     try {
-      const response = await fetch("https://cookie-rest-api-8fnl.onrender.com/api/profile/", {
+      const response = await fetch("https://rest-api-cookie-u-c.onrender.com/api/profile/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -256,7 +256,7 @@ function StoriesCard() {
     }
 
     try {
-      const response = await fetch("https://cookie-rest-api-8fnl.onrender.com/api/stories/", {
+      const response = await fetch("https://rest-api-cookie-u-c.onrender.com/api/stories/", {
         method: "POST",
         headers: {
           "x-access-token": token,
@@ -280,7 +280,7 @@ function StoriesCard() {
 
   const getOtherStories = async (token: string) => {
     try {
-      const response = await fetch("https://cookie-rest-api-8fnl.onrender.com/api/stories/", {
+      const response = await fetch("https://rest-api-cookie-u-c.onrender.com/api/stories/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

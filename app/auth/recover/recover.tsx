@@ -30,7 +30,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
   const handleSendCode = async () => {
     try {
       const response = await fetch(
-        "https://cookie-rest-api-8fnl.onrender.com/api/auth/recover",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/recover",
         {
           method: "POST",
           headers: {
