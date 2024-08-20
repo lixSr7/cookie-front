@@ -64,9 +64,18 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
       );
     });
 
+    socket.on("updateChat", (updatedChat: ChatData) => {
+      setChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat._id === updatedChat._id ? updatedChat : chat
+        )
+      );
+    });
+
     return () => {
       socket.off("newChat");
       socket.off("chatDeleted");
+      socket.off("updateChat");
     };
   }, []);
 
