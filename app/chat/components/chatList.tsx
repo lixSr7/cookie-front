@@ -60,7 +60,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
 
     socket.on("chatDeleted", (deletedChatId: string) => {
       setChats((prevChats) =>
-        prevChats.filter((chat) => chat._id !== deletedChatId),
+        prevChats.filter((chat) => chat._id !== deletedChatId)
       );
     });
 
@@ -80,7 +80,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
           headers: {
             "x-access-token": token,
           },
-        },
+        }
       );
 
       setChats(response.data);
@@ -101,7 +101,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
   };
 
   const filteredChats = chats.filter((chat) =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -116,9 +116,9 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, searchTerm }) => {
           filteredChats.map((chat) => (
             <div
               key={chat._id}
-              className={`cursor-pointer mb-3 ${
+              className={`cursor-pointer ${
                 selectedChatId === chat._id ? "" : ""
-              } 0 p-4 rounded-lg`}
+              } 0 p-2 rounded-lg`}
               role="button"
               tabIndex={0}
               onClick={() => handleSelectChat(chat._id)}

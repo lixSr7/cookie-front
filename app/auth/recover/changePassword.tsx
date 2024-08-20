@@ -36,7 +36,7 @@ export function ChangePassword({
           body: JSON.stringify({
             password,
           }),
-        },
+        }
       );
 
       if (response.ok) {

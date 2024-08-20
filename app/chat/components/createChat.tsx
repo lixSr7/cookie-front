@@ -43,12 +43,12 @@ const CreateChat: React.FC = () => {
   const handleUserSelect = (user: User) => {
     setSelectedUsers((prevUsers) => {
       const isSelected = prevUsers.some(
-        (selectedUser) => selectedUser._id === user._id,
+        (selectedUser) => selectedUser._id === user._id
       );
 
       if (isSelected) {
         return prevUsers.filter(
-          (selectedUser) => selectedUser._id !== user._id,
+          (selectedUser) => selectedUser._id !== user._id
         );
       } else {
         return [...prevUsers, user];
@@ -78,7 +78,7 @@ const CreateChat: React.FC = () => {
             name: selectedUsers.length > 1 ? chatName : "",
             users: usersToSend,
           }),
-        },
+        }
       );
 
       if (response.ok) {

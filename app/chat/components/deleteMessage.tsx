@@ -3,7 +3,7 @@ import axios from "axios";
 const deleteMessage = async (
   messageId: string,
   chatId: string,
-  token: string,
+  token: string
 ) => {
   try {
     const response = await axios.delete(
@@ -12,7 +12,7 @@ const deleteMessage = async (
         headers: {
           "x-access-token": token,
         },
-      },
+      }
     );
 
     return response.data;

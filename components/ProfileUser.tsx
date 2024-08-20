@@ -177,7 +177,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -204,7 +204,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -229,7 +229,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -260,7 +260,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -291,7 +291,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -336,7 +336,7 @@ function ProfileUser() {
             "x-access-token": token,
           },
           body: formData,
-        },
+        }
       );
 
       if (response.ok) {
@@ -360,7 +360,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -371,7 +371,7 @@ function ProfileUser() {
       } else {
         console.error(
           "Error al obtener las publicaciones guardadas:",
-          await response.text(),
+          await response.text()
         );
       }
     } catch (error) {
@@ -389,7 +389,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -415,7 +415,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -441,7 +441,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -471,7 +471,7 @@ function ProfileUser() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -500,14 +500,14 @@ function ProfileUser() {
             currentPassword,
             newPassword,
           }),
-        },
+        }
       );
 
       if (response.ok) {
         onEditClose();
         onClose();
         toast.success(
-          "The password has been changed successfully, your session will be closed for security.",
+          "The password has been changed successfully, your session will be closed for security."
         );
         setTimeout(() => {
           logout();
@@ -522,10 +522,10 @@ function ProfileUser() {
   };
 
   const postsWithImages = posts.filter(
-    (post) => post.userId === userId && post.image,
+    (post) => post.userId === userId && post.image
   );
   const postsWithoutImages = posts.filter(
-    (post) => post.userId === userId && !post.image,
+    (post) => post.userId === userId && !post.image
   );
 
   // Paginación
@@ -535,7 +535,7 @@ function ProfileUser() {
   const currentFollowingData = Array.isArray(following)
     ? following.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
+        currentPage * itemsPerPage
       )
     : [];
 
@@ -545,7 +545,7 @@ function ProfileUser() {
   const currentFollowersData = Array.isArray(followers)
     ? followers.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
+        currentPage * itemsPerPage
       )
     : [];
 
@@ -555,7 +555,7 @@ function ProfileUser() {
   const currentFriendsData = Array.isArray(friends)
     ? friends.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
+        currentPage * itemsPerPage
       )
     : [];
 
@@ -666,7 +666,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      post.createdAt,
+                                      post.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>
@@ -694,7 +694,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      post.createdAt,
+                                      post.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>
@@ -731,7 +731,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      post.createdAt,
+                                      post.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>
@@ -767,7 +767,7 @@ function ProfileUser() {
                                     variant="flat"
                                   >
                                     {new Date(
-                                      like.createdAt,
+                                      like.createdAt
                                     ).toLocaleDateString()}
                                   </Button>
                                 </CardFooter>

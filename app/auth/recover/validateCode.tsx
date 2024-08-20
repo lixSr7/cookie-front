@@ -35,7 +35,7 @@ export function ValidateCodeSend({
   const handleValidateCode = async () => {
     try {
       const response = await fetch(
-        "https://rest-api-cookie-u-c.onrender.comapi/auth/validate",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/validate",
         {
           method: "POST",
           headers: {
@@ -43,7 +43,7 @@ export function ValidateCodeSend({
             "reset-pass-token": token,
           },
           body: JSON.stringify({ code }),
-        },
+        }
       );
 
       if (response.ok) {
@@ -56,7 +56,7 @@ export function ValidateCodeSend({
       } else {
         console.error(
           "Error al validar el código de recuperación:",
-          await response.text(),
+          await response.text()
         );
         throw new Error("Error al validar el código de recuperación");
       }

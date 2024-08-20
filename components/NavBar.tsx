@@ -92,7 +92,7 @@ function NavBar() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -118,7 +118,7 @@ function NavBar() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -144,7 +144,7 @@ function NavBar() {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
-        },
+        }
       );
 
       if (response.ok) {
@@ -167,7 +167,7 @@ function NavBar() {
       const filteredUsers = users.filter(
         (user) =>
           user.fullname.toLowerCase().includes(query.toLowerCase()) ||
-          user.username.toLowerCase().includes(query.toLowerCase()),
+          user.username.toLowerCase().includes(query.toLowerCase())
       );
 
       setSearchResults(filteredUsers);
@@ -189,7 +189,7 @@ function NavBar() {
 
   const handleKeyPress = (
     event: KeyboardEvent<HTMLDivElement>,
-    callback: () => void,
+    callback: () => void
   ) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();

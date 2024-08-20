@@ -37,6 +37,11 @@ function CreateComment({
    * @returns {Promise<void>} - No retorna nada.
    */
   const handleCreate = async () => {
+    //! Validate content, emoji and image
+    if (!content && emoji == "none" && !image) {
+      toast.error("please add something to comment");
+      return;
+    }
     try {
       setIsSending(true);
       const response = await createComment(postId, content, emoji, image);

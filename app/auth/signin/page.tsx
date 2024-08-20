@@ -41,7 +41,7 @@ export default function SIGNIN() {
     setIsSending(true);
     try {
       const response = await fetch(
-        "https://rest-api-cookie-u-c.onrender.comapi/auth/signin",
+        "https://rest-api-cookie-u-c.onrender.com/api/auth/signin",
         {
           method: "POST",
           headers: {
@@ -51,7 +51,7 @@ export default function SIGNIN() {
             emailOrUsername,
             password,
           }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -86,7 +86,7 @@ export default function SIGNIN() {
         break;
       case 403:
         toast.error(
-          message || "User is inactive. Please contact the administrator.",
+          message || "User is inactive. Please contact the administrator."
         );
         break;
       case 404:

@@ -62,7 +62,7 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
 
   const deleteChat = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this chat?",
+      "Are you sure you want to delete this chat?"
     );
 
     if (!confirmed) return;
@@ -77,12 +77,12 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
       }
 
       await axios.delete(
-        `https://rest-api-cookie-u-c.onrender.comi/chat/${id}`,
+        `https://rest-api-cookie-u-c.onrender.com/api/chat/${id}`,
         {
           headers: {
             "x-access-token": token,
           },
-        },
+        }
       );
 
       // console.log("Chat deleted successfully");
@@ -101,7 +101,7 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
   const otherUserName = names.find((n) => n.trim() !== username.trim()) || "";
 
   return (
-    <div className="flex bg-white dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:hover:transition-transform-background p-3 rounded-md shadow w-full max-w-[300px] gap-4 justify-between hover:bg-slate-200 transition-transform-background">
+    <div className="flex bg-white dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:hover:transition-transform-background p-3 rounded-md shadow w-full max-w-[300px] justify-between hover:bg-slate-200 transition-transform-background">
       <div className="flex items-center gap-4 w-full">
         <Badge
           color="danger"

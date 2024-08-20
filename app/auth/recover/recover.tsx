@@ -39,7 +39,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
           body: JSON.stringify({
             email,
           }),
-        },
+        }
       );
 
       if (response.ok) {
@@ -51,7 +51,7 @@ export default function RECOVER({ isOpen, onOpenChange }: RecoverProps) {
       } else {
         console.error(
           "Error al enviar el código de recuperación:",
-          await response.text(),
+          await response.text()
         );
         throw new Error("Error al enviar el código de recuperación");
       }
