@@ -52,7 +52,6 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -63,7 +62,6 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
   useEffect(() => {
     const joinChat = async () => {
       if (!selectedChat || !token) return;
-
       try {
         setLoading(true);
         const response = await axios.post(
@@ -72,10 +70,9 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
           {
             headers: {
               "x-access-token": token,
-            },
+            }
           }
         );
-
         setMessages(response.data.chat.messages);
         setChatId(response.data.chat._id);
         socket.emit("joinRoom", selectedChat);
@@ -83,13 +80,12 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       } catch (error: any) {
         console.error(
           "Failed to join chat:",
-          error.response?.data || error.message
+          error.response?.data || error.message,
         );
       } finally {
         setLoading(false);
       }
     };
-
     joinChat();
   }, [selectedChat, token]);
 
@@ -103,25 +99,12 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       }
     };
 
-    const handleDeleteMessage = (messageId: string, chatId: string) => {
-      if (chatId === selectedChat) {
-        setMessages((prevMessages) => {
-          const updatedMessages = prevMessages.map((message) =>
-            message._id === messageId
-              ? { ...message, content: "Eliminando mensaje..." }
-              : message,
-          );
+    const handleDeleteMessage = (data: { messageId: string, chatId: string }) => {
+      console.log("messageDeleted event received:", data); // Log para verificar el evento
 
-          setTimeout(() => {
-            setMessages(
-              prevMessages.filter((message) => message._id !== messageId),
-            );
-          }, 1000);
-
-          return updatedMessages;
-        });
+      if (data.chatId === selectedChat) {
         setMessages((prevMessages) =>
-          prevMessages.filter((message) => message._id !== messageId)
+          prevMessages.filter((message) => message._id !== data.messageId)
         );
       }
     };
@@ -167,9 +150,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
 
   return (
     <article
-      className={`flex-grow w-full h-full flex flex-col ${
-        windowWidth <= 768 ? "overflow-y-auto" : ""
-      }`}
+      className={`flex-grow w-full h-full flex flex-col ${windowWidth <= 768 ? "overflow-y-auto" : ""}`}
     >
       {loading ? (
         <div className="grid place-content-center w-full h-full min-h-[500px]">

@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Avatar, Badge } from "@nextui-org/react";
-import { MdOutlineDelete } from "react-icons/md";
+import React, { useState, useEffect } from 'react';
+import {
+  Button,
+  Avatar,
+  Tooltip,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem
+} from "@nextui-org/react";
+import { MdOutlineEdit, MdOutlineDelete } from "react-icons/md";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
+import UpdateChatForm from "./modalUpdateChat";
 import socket from "@/app/config/socketConfig";
 
 interface ChatProps {
@@ -22,26 +32,23 @@ interface Message {
 }
 
 const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
-  const { id, name, messages, users } = chatData;
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>(() => {
-    return messages.length > 0 ? messages[messages.length - 1].content : "";
+    return chatData.messages.length > 0 ? chatData.messages[chatData.messages.length - 1].content : "";
   });
-
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [username, setUsername] = useState<string | null>(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+  const { id, name, users } = chatData;
 
+  useEffect(() => {
     if (!token) {
       console.error("No token found");
-
       return;
     }
 
     const decodedToken: any = jwtDecode(token);
-
     setUsername(decodedToken.username);
 
     const socketInstance = socket;
@@ -58,21 +65,15 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
     return () => {
       socketInstance.off("newMessage", handleNewMessage);
     };
-  }, [id]);
+  }, [id, token]);
 
   const deleteChat = async () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this chat?"
-    );
-
+    const confirmed = window.confirm("Are you sure you want to delete this chat?");
     if (!confirmed) return;
 
     try {
-      const token = localStorage.getItem("token");
-
       if (!token) {
         console.error("No token found");
-
         return;
       }
 
@@ -85,7 +86,6 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
         }
       );
 
-      // console.log("Chat deleted successfully");
       onDeleteChat(id);
     } catch (error) {
       console.error("Failed to delete chat:", error);
@@ -100,34 +100,63 @@ const Chat: React.FC<ChatProps> = ({ chatData, userId, onDeleteChat }) => {
   const otherUserId = users.find((user) => user !== userId) || "";
   const otherUserName = names.find((n) => n.trim() !== username.trim()) || "";
 
+  const isEditDisabled = users.length === 2;
+
   return (
     <div className="flex bg-white dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:hover:transition-transform-background p-3 rounded-md shadow w-full max-w-[300px] justify-between hover:bg-slate-200 transition-transform-background">
       <div className="flex items-center gap-4 w-full">
-        <Badge
+        <Avatar
+          isBordered
           color="danger"
-          content={unreadMessages > 0 ? unreadMessages : ""}
-          shape="circle"
-          showOutline={false}
-        >
-          <Avatar
-            isBordered
-            color="danger"
-            radius="full"
-            src={`https://i.pravatar.cc/150?u=${otherUserId}`}
-          />
-        </Badge>
+          radius="full"
+          src={`https://i.pravatar.cc/150?u=${otherUserId}`}
+        />
         <div className="flex flex-col">
-          <h3 className="text-lg text-black dark:text-white">
-            {otherUserName}
-          </h3>
+          <h3 className="text-lg text-black dark:text-white">{otherUserName}</h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm truncate">
             {unreadMessages > 0 ? lastMessage : ""}
           </p>
         </div>
       </div>
-      <button className="text-red-600 hover:text-red-800" onClick={deleteChat}>
-        <MdOutlineDelete size={24} />
-      </button>
+      <Dropdown>
+        <DropdownTrigger>
+          <Button aria-label="Actions" variant="bordered">
+            <BsThreeDotsVertical size={24} />
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu aria-label="Actions Menu" className="flex">
+          <DropdownItem
+            className="flex m-auto items-center justify-between"
+            key="edit"
+            isDisabled={isEditDisabled}
+            onClick={() => !isEditDisabled && setIsModalOpen(true)}
+          >
+            <MdOutlineEdit className="mr-2" size={24} />
+            Update
+          </DropdownItem>
+          <DropdownItem
+            key="delete"
+            color="danger"
+            onClick={() => deleteChat()}
+          >
+            <MdOutlineDelete size={24} className="mr-2" />
+            Delete
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+
+      {isModalOpen && (
+        <UpdateChatForm
+          chatId={id}
+          token={token || ""}
+          onClose={() => setIsModalOpen(false)}
+          onUpdate={() => {
+            setIsModalOpen(false);
+          }}
+          initialName={name}
+          initialUsers={users.map((userId) => ({ _id: userId, username: "" }))}
+        />
+      )}
     </div>
   );
 };

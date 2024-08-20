@@ -7,7 +7,6 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Button,
 } from "@nextui-org/react";
 import { jwtDecode } from "jwt-decode";
 import { IoIosArrowDown } from "react-icons/io";
@@ -69,7 +68,6 @@ const Message: React.FC<MessageProps> = ({
 
       try {
         await deleteMessage(messageId, chatId, token);
-        // console.log("Mensaje eliminado");
         socket.emit("deleteMessage", messageId, chatId);
       } catch (error) {
         console.error("Error deleting message:", error);
@@ -126,55 +124,23 @@ const Message: React.FC<MessageProps> = ({
     </div>
   );
 
-  const ImageOnlyMessage = () => (
-    <Card
-      isFooterBlurred
-      className="border-none relative hover:bg-gray-100 dark:hover:bg-gray-700"
-      radius="lg"
-    >
-      {mediaUrl && (
-        <>
-          <Image
-            alt="Message media"
-            className="object-cover"
-            height={200}
-            src={mediaUrl.secure_url}
-            width={200}
-          />
-          <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-            <p className="text-tiny text-white/80">{formattedTime}</p>
-          </CardFooter>
-          {isSender && (
-            <div className="absolute top-0 right-0 mt-2 mr-2">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button>
-                    <IoIosArrowDown />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem
-                    key="delete"
-                    className="text-danger"
-                    color="danger"
-                    onClick={handleDelete}
-                  >
-                    Delete message
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          )}
-        </>
-      )}
-    </Card>
-  );
-
   return (
-    <div
-      className={`${isSender ? "justify-end" : "justify-start"} p-3 mb-2 w-full flex`}
-    >
-      {content || mediaUrl ? <TextAndImageMessage /> : <ImageOnlyMessage />}
+    <div className={`flex ${isSender ? "justify-end" : "justify-start"}`}>
+      <Card className="max-w-xs mx-2 my-2">
+        <TextAndImageMessage />
+        {mediaUrl && (
+          <CardFooter>
+            <a
+              className="text-blue-500 hover:underline"
+              href={mediaUrl.secure_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View full image
+            </a>
+          </CardFooter>
+        )}
+      </Card>
     </div>
   );
 };

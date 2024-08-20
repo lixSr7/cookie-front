@@ -4,9 +4,9 @@ const deleteMessage = async (
   messageId: string,
   chatId: string,
   token: string
-) => {
+): Promise<void> => {
   try {
-    const response = await axios.delete(
+    await axios.delete(
       `https://rest-api-cookie-u-c.onrender.com/api/chat/messages/${chatId}/messages/${messageId}`,
       {
         headers: {
@@ -14,10 +14,9 @@ const deleteMessage = async (
         },
       }
     );
-
-    return response.data;
+    console.log("Delete message sucess")
   } catch (error) {
-    console.error("Error deleting message:", error);
+    console.error("Failed to delete message:", error);
     throw error;
   }
 };
