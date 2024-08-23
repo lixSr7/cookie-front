@@ -13,6 +13,8 @@ import {
   useDisclosure,
   ModalContent,
   Spinner,
+  Textarea,
+  Checkbox,
 } from "@nextui-org/react";
 
 import {
@@ -26,18 +28,15 @@ import { ConfigIcon } from "@/components/Icons";
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { deletePost } from "@/services/Posts";
+import { deletePost, reportPost } from "@/services/Posts";
 import AnalyticsPosts from "./AnalyticsPosts";
+import FormReport from "./FormReport";
 
 const ACTIONS: { [key: string]: string } = {
   ANALYTICS: "ANALYTICS",
   COPY: "COPY",
   REPORT: "REPORT",
   DELETE: "DELETE",
-};
-
-const FormReport = () => {
-  return <div>FormReport</div>;
 };
 
 const Actions = ({
@@ -85,7 +84,13 @@ const Actions = ({
     case ACTIONS.ANALYTICS:
       return <AnalyticsPosts />;
     case ACTIONS.REPORT:
-      return <FormReport />;
+      return (
+        <FormReport
+          postId={postId}
+          onClose={onClose}
+          updatePosts={updatePosts}
+        />
+      );
     default:
       return null;
   }

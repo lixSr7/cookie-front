@@ -363,7 +363,7 @@ export const reportPost = async (postId: string, reason: string) => {
   try {
     const token = localStorage.getItem("token") || "";
     const response = await axios.post(
-      `${API_URI}/report/${postId}`,
+      `${API_URI}/reports/${postId}`,
       { reason },
       {
         headers: {
