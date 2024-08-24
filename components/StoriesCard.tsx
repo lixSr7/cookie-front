@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
-import { Card, Image, CardFooter, User, ScrollShadow, Modal, useDisclosure, Button, ModalBody, ModalContent, ModalFooter, ModalHeader, Input, CardBody, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu, Spinner, Skeleton } from "@nextui-org/react";
-import { UploadCloud as CloudIcon, Trash2 as TrashIcon, Heart as HeartIcon, Plus as PlusIcon } from "@geist-ui/icons";
+import { Card, Image, CardFooter, User, ScrollShadow, Modal, useDisclosure, Button, ModalBody, ModalContent, ModalFooter, ModalHeader, Input, CardBody, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu, Skeleton } from "@nextui-org/react";
+import { UploadCloud as CloudIcon, Trash2 as TrashIcon, Plus as PlusIcon } from "@geist-ui/icons";
 import { TbCookieFilled } from "react-icons/tb";
 import socket from "@/app/config/socketConfig";
 import { jwtDecode } from "jwt-decode";
@@ -63,6 +63,10 @@ function StoriesCard() {
       await getOtherStories(token);
     });
 
+    socket.on('storyViewed', async () => {
+      await getMyStories(token);
+    });
+
     socket.on('storyDeleted', async () => {
       await getMyStories(token);
       await getOtherStories(token);
@@ -71,32 +75,9 @@ function StoriesCard() {
     return () => {
       socket.off("storyCreated");
       socket.off('storyDeleted');
+      socket.off('storyViewed');
     };
   }, [token]);
-
-  useEffect(() => {
-    if (selectedUserStories.length === 0) return;
-
-    const interval = setInterval(async () => {
-      if (isViewersModalOpen) {
-        return;
-      }
-
-      const nextSlide = (currentSlide + 1) % selectedUserStories.length;
-
-      if (selectedUserStories[nextSlide].userId._id !== userId && selectedUserStories[nextSlide].isViewed.length === 0) {
-        await viewStories(selectedUserStories.map(story => story._id));
-      }
-
-      if (nextSlide === 0) {
-        onStoryOpenChange();
-        setSelectedUserStories([]);
-      }
-      setCurrentSlide(nextSlide);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [selectedUserStories, currentSlide, onStoryOpenChange, userId, token, isViewersModalOpen]);
 
   useEffect(() => {
     const fetchViewers = async () => {
@@ -323,15 +304,15 @@ function StoriesCard() {
   };
 
   const goToPreviousSlide = () => {
-    setCurrentSlide((prevSlide) =>
-      (prevSlide - 1 + selectedUserStories.length) % selectedUserStories.length
-    );
+    const newSlideIndex = (currentSlide - 1 + selectedUserStories.length) % selectedUserStories.length;
+    setCurrentSlide(newSlideIndex);
+    viewStories([selectedUserStories[newSlideIndex]._id]);
   };
 
   const goToNextSlide = () => {
-    setCurrentSlide((prevSlide) =>
-      (prevSlide + 1) % selectedUserStories.length
-    );
+    const newSlideIndex = (currentSlide + 1) % selectedUserStories.length;
+    setCurrentSlide(newSlideIndex);
+    viewStories([selectedUserStories[newSlideIndex]._id]);
   };
 
   const timeAgo = (date: string) => {
@@ -384,7 +365,7 @@ function StoriesCard() {
                 {filteredStories.map((story, index) => (
                   <Card key={index} className="w-40 min-h-full p-0 m-0 relative flex-shrink-0" isPressable onPress={() => handleStoryOpen(story.userId._id)}>
                     {story.image ? (
-                      <Image removeWrapper className="z-0 w-full h-full object-cover" style={{ filter: "blur(3px)", backgroundColor: "#000", opacity: 0.5 }} src={story.image.secure_url} />
+                      <Image removeWrapper className="z-0 w-40 h-48 object-cover" style={{ filter: "blur(3px)", backgroundColor: "#000", opacity: 0.5 }} src={story.image.secure_url} />
                     ) : (
                       <div className="z-0 w-full h-full flex items-center justify-center" style={{ filter: "blur(3px)", backgroundColor: "#dd2525", opacity: 0.5 }}>
                         <p className="text-white text-center">{story.content}</p>
@@ -399,7 +380,7 @@ function StoriesCard() {
                       </div>
                     )}
                     <CardFooter>
-                      <div className="overflow-x-auto">
+                      <div>
                         <User name={truncateText(story.userId._id === userId ? "Tu" : story.userId.fullname, 8)} description={`@${story.userId.username}`} avatarProps={{ src: story.userId.image?.secure_url }} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} />
                       </div>
                     </CardFooter>
@@ -429,7 +410,7 @@ function StoriesCard() {
                     <div className="flex flex-col items-center justify-center w-full h-full text-gray-500">
                       <CloudIcon className="w-20 h-20 stroke-[#dd2525]" />
                     </div>
-                  )}
+                  )};
                 </label>
               </ModalBody>
               <ModalFooter>
@@ -455,7 +436,7 @@ function StoriesCard() {
                   <Button isIconOnly aria-label="Delete Post" variant="ghost" onClick={() => deleteStory(selectedUserStories[currentSlide]._id)}>
                     <TrashIcon className="w-5 h-5 opacity-65" />
                   </Button>
-                )}
+                )};
               </div>
             )}
           </ModalHeader>
@@ -464,7 +445,6 @@ function StoriesCard() {
             {selectedUserStories.length > 0 && (
               <div className="relative min-w-80 min-h-60 w-full h-full flex flex-col items-center justify-center">
                 <p className="text-xs text-left self-start">{selectedUserStories[currentSlide].content}</p>
-                {/* Button for previous slide */}
                 <button onClick={goToPreviousSlide} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent text-white p-2 rounded-full z-10">
                   &#10094;
                 </button>
@@ -477,9 +457,9 @@ function StoriesCard() {
                         <div className="w-full h-full flex items-center justify-center rounded-xl">
                           <p className="text-white text-center">{story.content}</p>
                         </div>
-                      )}
+                      )};
                     </div>
-                  ))}
+                  ))};
                 </div>
                 {/* Button for next slide */}
                 <button onClick={goToNextSlide} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent text-white p-2 rounded-full z-10">
@@ -495,12 +475,9 @@ function StoriesCard() {
                 <div>
                   {selectedUserStories[0].userId._id === userId && (
                     renderViewersDropdown()
-                  )}
+                  )};
                 </div>
-              )}
-              <Button isIconOnly aria-label="Like" color={isLiked ? "danger" : "default"} >
-                <HeartIcon className={`w-6 h-6 cursor-pointer ${isLiked ? "fill-white" : "opacity-60"}`} />
-              </Button>
+              )};
             </div>
           </ModalFooter>
         </ModalContent>
