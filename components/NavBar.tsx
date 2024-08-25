@@ -262,7 +262,6 @@ function NavBar() {
                   <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: "auto", scrollbarWidth: "none" }} >
                     {searchResults.slice(0, 5).map((result) => (
                       <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" role="button" tabIndex={0} onKeyPress={(e) => handleKeyPress(e, () => handleUserClick(result._id))} onMouseDown={() => handleUserClick(result._id)} >
-                        {/* <User avatarProps={{ src: result.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg", }} description={`@${result.username}`} name={result.fullname} /> */}
                         <div className="flex items-center justify-start gap-4">
                           <Avatar className="object-cover" size="sm" src={result.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
                           <div className="flex flex-col">
