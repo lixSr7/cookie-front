@@ -165,7 +165,7 @@ export function CreatePost({ updatePosts }: { updatePosts: () => void }) {
         <Avatar
           isBordered
           color="danger"
-          src={user?.image?.secure_url || "https://via.placeholder.com/150"}
+          src={user?.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"}
         />
 
         <button

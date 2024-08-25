@@ -142,7 +142,7 @@ function FriendsCard() {
                   avatarProps={{
                     src:
                       friend.image?.secure_url ||
-                      "https://via.placeholder.com/150",
+                      "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg",
                     isBordered: true,
                     color: getColor(friend.sesion),
                   }}

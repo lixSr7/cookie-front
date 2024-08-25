@@ -2,27 +2,9 @@
 
 import { useEffect, useState, KeyboardEvent } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import {
-  Avatar,
-  Input,
-  Dropdown,
-  DropdownMenu,
-  DropdownTrigger,
-  DropdownItem,
-  Button,
-  User,
-  Card,
-  CardBody,
-  ButtonGroup,
-} from "@nextui-org/react";
+import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, User, Card, CardBody, ButtonGroup, } from "@nextui-org/react";
 import Link from "next/link";
-import {
-  MessageCircle as ChatIcon,
-  Home as HomeIcon,
-  Search as SearchIcon,
-  Menu as MenuIcon,
-  ArrowLeftCircle as CloseIcon,
-} from "@geist-ui/icons";
+import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon, PieChart as ChartIcon } from "@geist-ui/icons";
 import { TiUserAdd } from "react-icons/ti";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 
@@ -39,6 +21,7 @@ interface User {
   username: string;
   image?: { secure_url: string };
   verified?: boolean;
+  role: { _id: string; name: string };
 }
 
 function NavBar() {
@@ -161,6 +144,31 @@ function NavBar() {
     }
   };
 
+  const addFriend = async (userId: string) => {
+    try {
+      const response = await fetch(
+        `https://rest-api-cookie-u-c.onrender.com/api/users/addFriend/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log("Followed:", await response.json());
+      } else {
+        const errorData = await response.json();
+
+        console.error(errorData.message);
+      }
+    } catch (error) {
+      console.error("Error toggling follow status:", error);
+    }
+  };
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query) {
@@ -203,13 +211,7 @@ function NavBar() {
         <nav className="flex items-center justify-between flex-grow w-full h-full px-4 bg-white border-2 rounded-lg border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700">
           <div className="lg:min-w-96">
             <div className="flex items-center justify-start gap-4">
-              <Avatar
-                color="success"
-                size="lg"
-                src={
-                  user?.image?.secure_url || "https://via.placeholder.com/150"
-                }
-              />
+              <Avatar color="success" size="lg" src={user?.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
               <div className="flex flex-col">
                 <strong className="text-base m-0 flex justify-center items-center">
                   {user?.fullname}{" "}
@@ -228,11 +230,10 @@ function NavBar() {
 
           <div className="flex items-center justify-between w-full gap-4 max-w-64 max-lg:hidden">
             <Link
-              className={`flex items-center gap-2 py-2 px-6 rounded-lg ${
-                pathname === "/posts"
-                  ? "bg-[#dd2525] text-white"
-                  : "text-zinc-600 dark:text-white"
-              }`}
+              className={`flex items-center gap-2 py-2 px-6 rounded-lg ${pathname === "/posts"
+                ? "bg-[#dd2525] text-white"
+                : "text-zinc-600 dark:text-white"
+                }`}
               href="/posts"
             >
               {pathname === "/posts" && <HomeIcon />}
@@ -242,11 +243,10 @@ function NavBar() {
             <ProfileUser />
 
             <button
-              className={`py-2 px-6 rounded-lg ${
-                pathname === "/Chats"
-                  ? "bg-[#dd2525] text-white"
-                  : "text-zinc-600 dark:text-white"
-              }`}
+              className={`py-2 px-6 rounded-lg ${pathname === "/Chats"
+                ? "bg-[#dd2525] text-white"
+                : "text-zinc-600 dark:text-white"
+                }`}
               onClick={() => setIsChatOpen(true)}
             >
               {pathname === "/Chats" && <ChatIcon />}
@@ -256,49 +256,38 @@ function NavBar() {
 
           <div className="flex justify-end gap-4 pl-4 xl:min-w-96">
             <div className="relative">
-              <Input
-                className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden"
-                placeholder="Search..."
-                startContent={<SearchIcon />}
-                value={searchQuery}
-                onBlur={() => setShowSearchResults(false)}
-                onChange={(e) => handleSearch(e.target.value)}
-                onFocus={() => searchQuery && setShowSearchResults(true)}
-              />
+              <Input className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden" placeholder="Search..." startContent={<SearchIcon />} value={searchQuery} onBlur={() => setShowSearchResults(false)} onChange={(e) => handleSearch(e.target.value)} onFocus={() => searchQuery && setShowSearchResults(true)} />
               {showSearchResults && searchResults.length > 0 && (
-                <Card
-                  className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[400px]"
-                  style={{ maxHeight: "calc(5 * 4rem)" }}
-                >
-                  <CardBody
-                    className="flex flex-col w-full gap-4 px-6 py-5"
-                    style={{ overflowY: "auto", scrollbarWidth: "none" }}
-                  >
+                <Card className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[300px]" style={{ maxHeight: "calc(5 * 4rem)" }} >
+                  <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: "auto", scrollbarWidth: "none" }} >
                     {searchResults.slice(0, 5).map((result) => (
-                      <div
-                        key={result._id}
-                        className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer"
-                        role="button"
-                        tabIndex={0}
-                        onKeyPress={(e) =>
-                          handleKeyPress(e, () => handleUserClick(result._id))
-                        }
-                        onMouseDown={() => handleUserClick(result._id)}
-                      >
-                        <User
-                          avatarProps={{
-                            src:
-                              result.image?.secure_url ||
-                              "https://via.placeholder.com/150",
-                          }}
-                          description={`@${result.username}`}
-                          name={result.fullname}
-                        />
-                        <ButtonGroup>
-                          <Button color="danger" variant="ghost">
-                            <TiUserAdd />
-                          </Button>
-                        </ButtonGroup>
+                      <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" role="button" tabIndex={0} onKeyPress={(e) => handleKeyPress(e, () => handleUserClick(result._id))} onMouseDown={() => handleUserClick(result._id)} >
+                        {/* <User avatarProps={{ src: result.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg", }} description={`@${result.username}`} name={result.fullname} /> */}
+                        <div className="flex items-center justify-start gap-4">
+                          <Avatar className="object-cover" size="sm" src={result.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
+                          <div className="flex flex-col">
+                            <strong className="text-base m-0 flex justify-center items-center">
+                              {(() => {
+                                const words = result.fullname.split(" ");
+                                if (words.length === 4) {
+                                  return `${words[0]} ${words[2]}`;
+                                } else if (words.length === 3) {
+                                  return `${words[0]} ${words[1]}`;
+                                } else {
+                                  return result.fullname;
+                                }
+                              })()}
+                              <span className="ml-2">
+                                {result.verified && (
+                                  <RiVerifiedBadgeFill className="text-xl text-[#dd2525]" />
+                                )}
+                              </span>
+                            </strong>
+                            <span className="text-xs text-gray-400">
+                              @{result.username}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </CardBody>
@@ -308,17 +297,9 @@ function NavBar() {
 
             <ThemeSwitch />
 
-            <Dropdown
-              showArrow
-              backdrop="blur"
-              classNames={{
-                base: "before:bg-default-200",
-                content:
-                  "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
-              }}
-            >
-              <DropdownTrigger className="grid place-content-center">
-                <button className="w-10 p-2 transition-colors duration-100 rounded-md bg-[#dd2525] hover:bg-danger-700 dark:hover:bg-zinc-600 max-md:grid place-content-center">
+            <Dropdown showArrow backdrop="blur" classNames={{ base: "before:bg-default-200", content: "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black", }} >
+              <DropdownTrigger>
+                <button className="w-10 h-10 flex items-center justify-center transition-colors duration-100 rounded-md bg-[#dd2525] hover:bg-[#b21d1d] dark:bg-zinc-700 dark:hover:bg-zinc-600">
                   <MenuIcon className="w-5 h-5 stroke-white" />
                 </button>
               </DropdownTrigger>
@@ -326,8 +307,16 @@ function NavBar() {
                 <DropdownItem key="Logout" onClick={() => handleLogout()}>
                   <div className="flex items-center gap-2">
                     <CloseIcon className="w-5 h-5" />
-                    <span className="text-sm ">Logout</span>
+                    <span className="text-sm">Logout</span>
                   </div>
+                </DropdownItem>
+                <DropdownItem key="Dashboard" className={`${pathname === "/dashboard" ? "bg-danger-600 text-white" : "fill-zinc-600 dark:fill-slate-300"}`} >
+                  {user?.role.name === "admin" ? (
+                    <Link href="/admin" className="flex items-center gap-2">
+                      <ChartIcon className="w-5 h-5" />
+                      <span className="text-sm ">Dashboard</span>
+                    </Link>
+                  ) : null}
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

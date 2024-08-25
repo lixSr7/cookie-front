@@ -61,13 +61,7 @@ export default function SIGNIN() {
         const userRole = decodedToken.role;
 
         localStorage.setItem("token", data.token);
-        if (userRole === "user") {
-          router.push("/posts");
-        } else if (userRole === "admin") {
-          router.push("/admin");
-        } else if (userRole === "moderator") {
-          router.push("/moder");
-        }
+        router.push("/posts");
       } else {
         handleErrors(response.status, data.message);
       }
