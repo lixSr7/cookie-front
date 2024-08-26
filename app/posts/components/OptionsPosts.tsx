@@ -129,18 +129,6 @@ function OptionsPosts({
           <DropdownSection title="Actions">
             <DropdownItem
               onClick={() => {
-                setaction(ACTIONS.ANALYTICS);
-                onOpen();
-              }}
-              key="new"
-              shortcut="⌘N"
-              description="Create a new file"
-              startContent={<AddNoteIcon />}
-            >
-              Analitics
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => {
                 setaction(ACTIONS.COPY);
                 onOpen();
               }}

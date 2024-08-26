@@ -31,14 +31,7 @@ export default function ChartsOfPost({ user }: { user: typeUser }) {
                 graphs of user posts {user.username}
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <Charts userId={user.id} />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -54,4 +47,8 @@ export default function ChartsOfPost({ user }: { user: typeUser }) {
       </Modal>
     </div>
   );
+}
+
+function Charts({ userId }: { userId: string }) {
+  return <div></div>;
 }

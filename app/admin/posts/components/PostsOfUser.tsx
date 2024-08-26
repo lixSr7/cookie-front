@@ -10,10 +10,8 @@ import {
   useDisclosure,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
   Image,
-  ScrollShadow,
   User,
 } from "@nextui-org/react";
 
@@ -62,16 +60,13 @@ function PostsOfUser({ user }: { user: typeUser }) {
                 Posts of user {user.username}
               </ModalHeader>
               <ModalBody>
-                <ScrollShadow
-                  hideScrollBar
-                  className="flex flex-col gap-4 h-[400px]"
-                >
+                <div className=" py-3 overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
                   {posts &&
                     posts.map((post) => (
                       <CardPost post={post} key={post._id} />
                     ))}
-                </ScrollShadow>
-                {posts.length === 0 && <p>No posts</p>}
+                  {posts.length === 0 && <p>No posts</p>}
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -88,7 +83,7 @@ function PostsOfUser({ user }: { user: typeUser }) {
 
 const CardPost = ({ post }: { post: typePost }) => {
   return (
-    <Card className="w-full h-full  bg-zinc-800">
+    <Card className="w-full max-h-[450px] bg-zinc-800 mb-4">
       <CardHeader>
         <User
           name={post.user.username}

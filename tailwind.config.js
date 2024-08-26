@@ -23,9 +23,14 @@ module.exports = {
         },
       },
       colors: {
-        "gradient-start": "#6EE7B7", // Ajusta estos colores a tu preferencia
+        "gradient-start": "#6EE7B7", 
         "gradient-end": "#3B82F6",
+        "custom-purple": "#6a0dad", 
+        "custom-red": "#f44336", 
       },
+       backgroundImage: {
+        'gradient-custom': 'linear-gradient(to right, #6a0dad, #f44336)', 
+      }
     },
   },
   darkMode: "class",
