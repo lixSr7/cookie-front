@@ -7,43 +7,27 @@ import {
   CardHeader,
   Avatar,
 } from "@nextui-org/react";
-import { jwtDecode } from "jwt-decode";
 
 import PostImage from "./PostImage";
 import PostFooter from "./PostFooter";
 
 import { formatTimeDifference } from "@/utils/formatedDate";
 import { Post as IPost } from "@/types/Post";
-import { userToken } from "@/types/Users";
 import OptionsPosts from "./OptionsPosts";
 
-/**
- * Componente que representa una tarjeta de publicación.
- * Muestra el contenido de la publicación, la imagen asociada (si la hay),
- * y proporciona opciones para eliminar la publicación si el usuario es el propietario
- * o un administrador.
- *
- * @param {Object} props - Las propiedades del componente.
- * @param {IPost} props.post - Los datos de la publicación que se muestra en la tarjeta.
- * @param {Function} props.updatePosts - Función para actualizar la lista de publicaciones.
- * @param {string} props.token - Token JWT del usuario para la autenticación y autorización.
- *
- * @returns {JSX.Element | null} - El componente PostCard renderizado o null si no hay usuario en la publicación.
- */
 export default function PostCard({
   post,
   updatePosts,
-  token,
 }: {
   post: IPost;
   updatePosts: () => void;
-  token: string;
-}) {
-  const decodeToken: userToken = jwtDecode(token);
-
+}): JSX.Element | null {
   if (!post.user) {
     return null;
   }
+
+  const originalUser = post.originalUser; // Usuario que creó el post original
+  const displayUser = originalUser || post.user; // Prioridad al usuario original si existe
 
   return (
     <article className="block w-full max-w-3xl p-4 m-auto rounded-lg">
@@ -53,13 +37,18 @@ export default function PostCard({
             <Avatar
               isBordered
               size="md"
-              src={post.user.image?.secure_url || ""}
+              src={displayUser.image?.secure_url || ""}
             />
             <div className="flex flex-col">
-              <strong>{post.user.fullname}</strong>
+              <strong>{displayUser.fullname}</strong>
               <span className="text-sm text-blue-500">
-                @{post.user.username || post.user.username}
+                @{displayUser.username}
               </span>
+              {originalUser && (
+                <span className="text-xs text-gray-500">
+                  Originally posted by {post.user.fullname}
+                </span>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
@@ -67,7 +56,7 @@ export default function PostCard({
           </div>
         </CardHeader>
         <CardBody className="flex flex-col items-center justify-center w-full">
-          <p className="w-full mb-3 text-sm text-zinc-700 dark:text-white dark:text-opacity-60 ">
+          <p className="w-full mb-3 text-sm text-zinc-700 dark:text-white dark:text-opacity-60  whitespace-pre-line ">
             {post.content}
           </p>
           {post.image && (
@@ -79,7 +68,11 @@ export default function PostCard({
           )}
         </CardBody>
         <CardFooter className="flex flex-col gap-4">
-          <PostFooter likes={post.likes} postId={post._id} />
+          <PostFooter
+            updatePosts={updatePosts}
+            likes={post.likes}
+            postId={post._id}
+          />
         </CardFooter>
       </Card>
     </article>

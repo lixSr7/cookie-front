@@ -73,7 +73,7 @@ function Posts() {
         ) : (
           posts.map((post: IPost) => (
             <article key={post._id}>
-              <PostCard post={post} token={token} updatePosts={allPosts} />
+              <PostCard post={post} updatePosts={allPosts} />
             </article>
           ))
         )}

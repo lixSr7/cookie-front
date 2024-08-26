@@ -1,13 +1,14 @@
 import { Image } from "./Users";
 
-type reportPost = {
+type ReportPost = {
   type: string;
   userId: string;
   postId: string;
   reason: string;
   createdAt: string;
 };
-type reportComment = {
+
+type ReportComment = {
   type: string;
   userId: string;
   postId: string;
@@ -15,12 +16,14 @@ type reportComment = {
   reason: string;
   createdAt: string;
 };
+
 type PostUser = {
   _id: string;
   username: string;
   fullname: string;
   image: Image;
 };
+
 type CommentUser = {
   _id: string;
   username: string;
@@ -39,10 +42,12 @@ export type Comment = {
   user: CommentUser;
   _id: string;
   date: string;
-  emoji?: "happy" | "ungry" | "sad" | "none";
+  emoji?: "happy" | "angry" | "sad" | "none";
   createdAt: string;
   image?: Image;
-  reports: reportComment[];
+  reports: ReportComment[];
+  repostId?: string; // Agregado en el backend
+  originalPostId?: string; // Agregado en el backend
 };
 
 export type Post = {
@@ -50,13 +55,15 @@ export type Post = {
   content: string;
   image: string;
   user: PostUser;
-  reports: reportPost[];
+  reports: ReportPost[];
   likes: Like[];
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
+  repostId?: string; // Agregado en el backend
+  originalPostId?: string; // Agregado en el backend
+  originalUser?: PostUser;
 };
-
 
 export type UserWithPosts = {
   id: string;

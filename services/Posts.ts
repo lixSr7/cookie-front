@@ -30,7 +30,7 @@ export const getAllPosts = async () => {
  * @returns {Promise<Object>} - La publicación solicitada.
  */
 export const getPostById = async (id: string) => {
-  try {   
+  try {
     const response = await axios.get(`${API_URI}/${id}`);
     return response.data;
   } catch (error) {
@@ -390,6 +390,47 @@ export const getPlatformAnalytics = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching platform analytics:", error);
+    throw error;
+  }
+};
+
+/**
+ * Reposte una publicación.
+ * @param {string} postId - ID de la publicación que se va a repostear.
+ * @param {string} [content] - Contenido adicional para el repost (opcional).
+ * @returns {Promise<Object>} - La respuesta del servidor con el mensaje de éxito y el post repostado.
+ */
+export const repostPost = async (postId: string, content?: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+
+    const response = await axios.post(
+      `${API_URI}/repost/${postId}`,
+      { customContent: content },
+      {
+        headers: {
+          "x-access-token": token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error reposting post ${postId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Obtiene todas las publicaciones reportadas.
+ * @returns {Promise<Object[]>} - La lista de publicaciones reportadas.
+ * @throws {Error} - Si ocurre un error durante la solicitud.
+ */
+export const getReportedPosts = async () => {
+  try {
+    const response = await axios.get(`${API_URI}/reports`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching reported posts:", error);
     throw error;
   }
 };

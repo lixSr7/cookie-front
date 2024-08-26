@@ -28,7 +28,7 @@ import { ConfigIcon } from "@/components/Icons";
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { deletePost, reportPost } from "@/services/Posts";
+import { deletePost } from "@/services/Posts";
 import AnalyticsPosts from "./AnalyticsPosts";
 import FormReport from "./FormReport";
 

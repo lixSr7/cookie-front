@@ -16,7 +16,15 @@ import { Like as typeLike } from "@/types/Post";
  * @param {typeLike[]} props.likes - Lista de likes asociados al post.
  * @returns {JSX.Element} - Elemento de las opciones de botones.
  */
-function PostFooter({ postId, likes }: { postId: string; likes: typeLike[] }) {
+function PostFooter({
+  postId,
+  likes,
+  updatePosts,
+}: {
+  postId: string;
+  likes: typeLike[];
+  updatePosts: () => void;
+}) {
   const [userId, setUserId] = useState<string>("");
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
@@ -46,7 +54,7 @@ function PostFooter({ postId, likes }: { postId: string; likes: typeLike[] }) {
         {/* Modal de comentarios */}
         <CommentModal postId={postId} />
         {/* Componente ShareButton para manejar el ícono de compartir */}
-        <ShareModal />
+        <ShareModal updatePosts={updatePosts} originalPostId={postId} />
       </div>
       <div>
         {/* Componente SaveButton para manejar el botón de guardar */}
