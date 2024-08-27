@@ -259,7 +259,7 @@ function NavBar() {
               <Input className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden" placeholder="Search..." startContent={<SearchIcon />} value={searchQuery} onBlur={() => setShowSearchResults(false)} onChange={(e) => handleSearch(e.target.value)} onFocus={() => searchQuery && setShowSearchResults(true)} />
               {showSearchResults && searchResults.length > 0 && (
                 <Card className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[300px]" style={{ maxHeight: "calc(5 * 4rem)" }} >
-                  <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: "auto", scrollbarWidth: "none" }} >
+                  <CardBody className="flex flex-col w-full gap-2 px-4 py-4" style={{ overflowY: "auto", scrollbarWidth: "none" }} >
                     {searchResults.slice(0, 5).map((result) => (
                       <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" role="button" tabIndex={0} onKeyPress={(e) => handleKeyPress(e, () => handleUserClick(result._id))} onMouseDown={() => handleUserClick(result._id)} >
                         <div className="flex items-center justify-start gap-4">
