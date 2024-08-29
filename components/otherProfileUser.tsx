@@ -222,7 +222,7 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
                               <p className="m-0 text-2xl font-bold flex justify-center items-center">
                                 {user.fullname}{" "}
                                 <span className="ml-2">
-                                  {user.verified === true && (
+                                  {user.verified === 'true' && (
                                     <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
                                   )}
                                 </span>

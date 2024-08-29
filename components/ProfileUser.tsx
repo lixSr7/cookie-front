@@ -603,7 +603,7 @@ function ProfileUser() {
                             <p className="m-0 text-2xl font-bold flex justify-center items-center">
                               {user.fullname}{" "}
                               <span className="ml-2">
-                                {user.verified === true && (
+                                {user.verified === 'true' && (
                                   <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
                                 )}
                               </span>
@@ -977,7 +977,7 @@ function ProfileUser() {
                             >
                               {user.fullname}
                             </span>
-                            {user.verified && (
+                            {user.verified === 'true' && (
                               <RiVerifiedBadgeFill
                                 className="text-[#dd2525]"
                                 style={{ marginLeft: "5px", flexShrink: 0 }}
@@ -1056,7 +1056,7 @@ function ProfileUser() {
                             >
                               {user.fullname}
                             </span>
-                            {user.verified && (
+                            {user.verified === 'true' && (
                               <RiVerifiedBadgeFill
                                 className="text-[#dd2525]"
                                 style={{ marginLeft: "5px", flexShrink: 0 }}
@@ -1135,7 +1135,7 @@ function ProfileUser() {
                             >
                               {user.fullname}
                             </span>
-                            {user.verified && (
+                            {user.verified === 'true' && (
                               <RiVerifiedBadgeFill
                                 className="text-[#dd2525]"
                                 style={{ marginLeft: "5px", flexShrink: 0 }}

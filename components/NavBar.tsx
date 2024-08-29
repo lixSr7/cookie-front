@@ -20,7 +20,7 @@ interface User {
   fullname: string;
   username: string;
   image?: { secure_url: string };
-  verified?: boolean;
+  verified?: string;
   role: { _id: string; name: string };
 }
 
@@ -216,7 +216,7 @@ function NavBar() {
                 <strong className="text-base m-0 flex justify-center items-center">
                   {user?.fullname}{" "}
                   <span className="ml-2">
-                    {user?.verified && (
+                    {user?.verified === 'true' && (
                       <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
                     )}
                   </span>
@@ -277,7 +277,7 @@ function NavBar() {
                                 }
                               })()}
                               <span className="ml-2">
-                                {result.verified && (
+                                {result.verified === 'true' && (
                                   <RiVerifiedBadgeFill className="text-xl text-[#dd2525]" />
                                 )}
                               </span>

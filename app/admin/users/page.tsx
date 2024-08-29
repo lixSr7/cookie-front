@@ -1,12 +1,13 @@
 'use client';
 import { capitalize } from "@/utils/Capitalize";
 import { Input, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Chip, Pagination, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, SortDescriptor, Selection, useDisclosure, ModalHeader, Modal, ModalBody, ModalContent, Image, ButtonGroup, Switch, Badge } from "@nextui-org/react";
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { columns } from "../posts/data";
-import { FaEye } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
-import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { Search as SearchIcon, ChevronDown as ChevronDownIcon, Plus as PlusIcon, MoreVertical as VerticalDotsIcon } from "@geist-ui/icons";
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { columns } from "../posts/data";
+import { MdEdit } from "react-icons/md";
+import { FaEye } from "react-icons/fa";
+import socket from "@/app/config/socketConfig";
 
 const statusColorMap: Record<'active' | 'inactive', "success" | "danger"> = {
   active: "success",
@@ -31,7 +32,7 @@ export default function Users() {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = useState("all");
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "fullname",
@@ -41,6 +42,26 @@ export default function Users() {
   const { isOpen: isEditUserOpen, onOpen: onEditUserOpen, onOpenChange: onEditUserOpenChange } = useDisclosure();
 
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("userUpdate", async () => {
+      await fetchUsers();
+    });
+
+    return () => {
+      socket.off("userUpdate");
+    };
+  });
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -104,7 +125,7 @@ export default function Users() {
               <strong className="text-base m-0 flex justify-center items-center">
                 {user?.fullname}{" "}
                 <span className="ml-2">
-                  {user?.verified && (
+                  {user?.verified === 'true' && (
                     <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
                   )}
                 </span>
@@ -152,7 +173,7 @@ export default function Users() {
           <div className="flex justify-start items-center gap-2">
             <Button color="success" size="sm" variant="flat" onClick={() => handleViewUser(user)} endContent={<FaEye />} />
             <Button color="danger" size="sm" variant="flat" onClick={() => handleEditUser(user)} endContent={<MdEdit />} />
-            <Switch />
+            <Switch isSelected={user.status === 'active'} onChange={(e) => handleChangeStatus(user._id, e.target.checked ? 'active' : 'inactive')} />
           </div>
         );
       default:
@@ -271,31 +292,31 @@ export default function Users() {
 
     if (!token) return;
 
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("https://rest-api-cookie-u-c.onrender.com/api/users/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": token,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (Array.isArray(data)) {
-            setUsers(data);
-          } else {
-            console.error('Data is not an array:', data);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-
     fetchUsers();
   }, [token]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("https://rest-api-cookie-u-c.onrender.com/api/users/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else {
+          console.error('Data is not an array:', data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   const handleViewUser = (user: User) => {
     setSelectedUser(user);
@@ -305,6 +326,102 @@ export default function Users() {
   const handleEditUser = (user: User) => {
     setSelectedUser(user);
     onEditUserOpen();
+  };
+
+  const changeRole = async (role: string) => {
+    try {
+      const response = await fetch(`https://rest-api-cookie-u-c.onrender.com/api/users/role/${selectedUser?._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+        body: JSON.stringify({
+          role,
+        }),
+      });
+
+      if (response.ok) {
+        onEditUserOpenChange();
+      } else {
+        console.error("Error changing role:", await response.text());
+        throw new Error("Error changing role");
+      }
+    } catch (error) {
+      console.error("Error changing role:", error);
+      throw new Error("Error changing role");
+    }
+  };
+
+  const handleChangeStatus = async (userId: string, status: string) => {
+    changeStatus(userId, status);
+  }
+
+  const changeStatus = async (userId: string, status: string) => {
+    try {
+      const storedToken = localStorage.getItem("token");
+
+      if (!storedToken) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await fetch(`https://rest-api-cookie-u-c.onrender.com/api/users/status/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": storedToken,
+        },
+        body: JSON.stringify({
+          status: status,
+        }),
+      });
+
+      if (response.ok) {
+      } else {
+        console.error("Error changing status:", await response.text());
+        throw new Error("Error changing status");
+      }
+    } catch (error) {
+      console.error("Error changing status:", error);
+      throw new Error("Error changing status");
+    }
+  };
+
+  const handleVerifyUser = async (userId: string, verified: string) => {
+    verifyUser(userId, verified);
+  }
+
+  const verifyUser = async (userId: string, verified: string) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await fetch(`https://rest-api-cookie-u-c.onrender.com/api/users/verified/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+        body: JSON.stringify({
+          verified: verified,
+        }),
+      });
+
+      if (response.ok) {
+        onEditUserOpenChange();
+      } else {
+        console.error("Error verifying user:", await response.text());
+        throw new Error("Error verifying user");
+      }
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      throw new Error("Error verifying user");
+    }
   };
 
   return (
@@ -338,7 +455,7 @@ export default function Users() {
                   <Image alt="User Image" className="object-cover w-40 h-40" src={selectedUser.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
                   <div className="w-full flex items-center justify-center gap-2">
                     <p className="text-2xl font-bold">{selectedUser.fullname}</p>
-                    <span>{selectedUser.verified && (<RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />)}</span>
+                    <span>{selectedUser.verified === 'true' && (<RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />)}</span>
                   </div>
                   <p className="text-xs text-gray-300">@{selectedUser.username}</p>
                   <ButtonGroup className="m-4">
@@ -359,7 +476,32 @@ export default function Users() {
             Edit User
           </ModalHeader>
           <ModalBody className="flex flex-col items-center justify-center w-full h-full">
-            <p>Edit User</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-1 flex justify-center items-center gap-4 p-2 ">
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button className="w-full min-h-full text-left">
+                      {selectedUser?.role?.name || 'Select Role'}
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem key="admin" onClick={() => changeRole('admin')}>
+                      Admin
+                    </DropdownItem>
+                    <DropdownItem key="user" onClick={() => changeRole('user')}>
+                      User
+                    </DropdownItem>
+                    <DropdownItem key="moderator" onClick={() => changeRole('moderator')}>
+                      Moderator
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              <div className="col-span-1 flex justify-center items-center gap-4 p-2 ">
+                <label htmlFor="">Verified:</label>
+                <Switch isSelected={selectedUser?.verified === 'true'} onChange={(e) => handleVerifyUser(selectedUser?._id, e.target.checked ? 'true' : 'false')} />
+              </div>
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>

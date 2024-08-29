@@ -14,7 +14,7 @@ interface Friend {
     secure_url: string;
   };
   sesion: string;
-  verified?: boolean;
+  verified?: string;
   notifications: string[];
 }
 
@@ -154,7 +154,7 @@ function FriendsCard() {
                         }
                       })()}
                       <span className="ml-2">
-                        {friend.verified && (
+                        {friend.verified === 'true' && (
                           <RiVerifiedBadgeFill className="text-xl text-[#dd2525]" />
                         )}
                       </span>
