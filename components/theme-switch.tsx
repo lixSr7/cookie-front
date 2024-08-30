@@ -41,7 +41,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 
   return (
     <button
-      className={`grid p-2 rounded-lg place-content-center bg-[#dd2525]`}
+      className={`grid p-2 rounded-lg place-content-center`}
       onClick={onChange}
     >
       <Component
@@ -76,9 +76,9 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
           })}
         >
           {!isSelected || isSSR ? (
-            <SunIcon className="fill-white stroke-white" size={22} />
+            <SunIcon className="fill-red-500 stroke-red-500" size={22} />
           ) : (
-            <MoonIcon className=" fill-white stroke-white" size={22} />
+            <MoonIcon className=" fill-red-500 stroke-red-500" size={22} />
           )}
         </div>
       </Component>
