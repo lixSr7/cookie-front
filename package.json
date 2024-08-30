@@ -28,6 +28,7 @@
     "axios": "^1.7.3",
     "chart.js": "^4.4.3",
     "clsx": "2.1.1",
+    "date-fns": "^3.6.0",
     "framer-motion": "~11.1.9",
     "intl-messageformat": "^10.5.14",
     "jwt-decode": "^4.0.0",
