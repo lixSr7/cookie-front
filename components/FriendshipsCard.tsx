@@ -18,7 +18,7 @@ interface User {
   image?: {
     secure_url: string;
   };
-  verified?: boolean;
+  verified?: string;
 }
 
 function FriendshipsCard() {
@@ -250,7 +250,7 @@ function FriendshipsCard() {
                           {" "}
                           {user.fullname}{" "}
                         </span>{" "}
-                        {user.verified && (
+                        {user.verified === 'true' && (
                           <RiVerifiedBadgeFill
                             className="text-[#dd2525]"
                             style={{ marginLeft: "5px", flexShrink: 0 }}

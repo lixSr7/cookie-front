@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardBody, Badge, Skeleton, User } from "@nextui-org/react";
+import { Card, CardBody, Badge, Skeleton, User, Avatar } from "@nextui-org/react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { Bell as BellIcon } from "@geist-ui/icons";
 import { useEffect, useState } from "react";
@@ -14,7 +14,8 @@ interface Friend {
     secure_url: string;
   };
   sesion: string;
-  verified?: boolean;
+  verified?: string;
+  notifications: string[];
 }
 
 function FriendsCard() {
@@ -81,11 +82,6 @@ function FriendsCard() {
     }
   };
 
-  const getColor = (sesion: string | undefined) => {
-    if (sesion === "true") return "success";
-    if (sesion === "false") return "default";
-  };
-
   const userSkeleton = () => (
     <div className="max-w-full w-full flex items-center gap-4 mt-2">
       <div>
@@ -134,45 +130,41 @@ function FriendsCard() {
         <Card className="w-full">
           <CardBody className="flex flex-col gap-6 px-6 py-5">
             {friends.slice(0, 8).map((friend) => (
-              <div
-                key={friend._id}
-                className="flex justify-between items-center w-full"
-              >
-                <User
-                  avatarProps={{
-                    src:
-                      friend.image?.secure_url ||
-                      "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg",
-                    isBordered: true,
-                    color: getColor(friend.sesion),
-                  }}
-                  description={`@${friend.username}`}
-                  name={
-                    <div
-                      className="flex items-center"
-                      style={{
-                        maxWidth: "150px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {" "}
-                      <span
-                        style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                      >
-                        {friend.fullname}
-                      </span>{" "}
-                      {friend.verified && (
-                        <RiVerifiedBadgeFill
-                          className="text-[#dd2525]"
-                          style={{ marginLeft: "5px", flexShrink: 0 }}
-                        />
-                      )}{" "}
-                    </div>
-                  }
-                />
-                <Badge color="danger" content={1} shape="circle" size="sm">
+              <div key={friend._id} className="flex justify-between items-center w-full" >
+                <div className="flex items-center gap-2">
+                  {friend?.sesion === "true" ? (
+                    <Badge color="success" content={''} shape="circle" size="sm">
+                      <Avatar size="md" src={friend.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
+                    </Badge>
+                  ) : (
+                    <Badge color="default" content={''} shape="circle" size="sm">
+                      <Avatar size="md" src={friend.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
+                    </Badge>
+                  )}
+                  <div className="flex flex-col">
+                    <strong className="text-base m-0 flex justify-center items-center">
+                      {(() => {
+                        const words = friend.fullname.split(" ");
+                        if (words.length === 4) {
+                          return `${words[0]} ${words[2]}`;
+                        } else if (words.length === 3) {
+                          return `${words[0]} ${words[1]}`;
+                        } else {
+                          return friend.fullname;
+                        }
+                      })()}
+                      <span className="ml-2">
+                        {friend.verified === 'true' && (
+                          <RiVerifiedBadgeFill className="text-xl text-[#dd2525]" />
+                        )}
+                      </span>
+                    </strong>
+                    <span className="text-xs text-gray-400">
+                      @{friend.username}
+                    </span>
+                  </div>
+                </div>
+                <Badge className="bg-[#dd2525]" content={1} shape="circle" size="md">
                   <BellIcon size={25} />
                 </Badge>
               </div>

@@ -217,12 +217,12 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
                               <Image
                                 isBlurred
                                 className="w-[150px] h-[150px] rounded-full border-1.5 object-cover"
-                                src={user.image?.secure_url}
+                                src={user.image?.secure_url || 'https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg'}
                               />
                               <p className="m-0 text-2xl font-bold flex justify-center items-center">
                                 {user.fullname}{" "}
                                 <span className="ml-2">
-                                  {user.verified === true && (
+                                  {user.verified === 'true' && (
                                     <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
                                   )}
                                 </span>

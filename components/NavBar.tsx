@@ -20,7 +20,7 @@ interface User {
   fullname: string;
   username: string;
   image?: { secure_url: string };
-  verified?: boolean;
+  verified?: string;
   role: { _id: string; name: string };
 }
 
@@ -216,7 +216,7 @@ function NavBar() {
                 <strong className="text-base m-0 flex justify-center items-center">
                   {user?.fullname}{" "}
                   <span className="ml-2">
-                    {user?.verified && (
+                    {user?.verified === 'true' && (
                       <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
                     )}
                   </span>
@@ -229,26 +229,22 @@ function NavBar() {
           </div>
 
           <div className="flex items-center justify-between w-full gap-4 max-w-64 max-lg:hidden">
-            <Link
-              className={`flex items-center gap-2 py-2 px-6 rounded-lg ${pathname === "/posts"
-                ? "bg-[#dd2525] text-white"
-                : "text-zinc-600 dark:text-white"
-                }`}
-              href="/posts"
-            >
+            <Link className={`flex items-center gap-2 py-2 px-6 rounded-lg ${pathname === "/posts"
+              ? "bg-[#dd2525] text-white"
+              : "text-zinc-600 dark:text-white"
+              }`}
+              href="/posts" >
               {pathname === "/posts" && <HomeIcon />}
               Home
             </Link>
 
             <ProfileUser />
 
-            <button
-              className={`py-2 px-6 rounded-lg ${pathname === "/Chats"
-                ? "bg-[#dd2525] text-white"
-                : "text-zinc-600 dark:text-white"
-                }`}
-              onClick={() => setIsChatOpen(true)}
-            >
+            <button className={`py-2 px-6 rounded-lg ${pathname === "/Chats"
+              ? "bg-[#dd2525] text-white"
+              : "text-zinc-600 dark:text-white"
+              }`}
+              onClick={() => setIsChatOpen(true)} >
               {pathname === "/Chats" && <ChatIcon />}
               Chats
             </button>
@@ -259,7 +255,7 @@ function NavBar() {
               <Input className="w-full bg-white shadow-sm max-w-44 dark:bg-zinc-900 max-md:hidden" placeholder="Search..." startContent={<SearchIcon />} value={searchQuery} onBlur={() => setShowSearchResults(false)} onChange={(e) => handleSearch(e.target.value)} onFocus={() => searchQuery && setShowSearchResults(true)} />
               {showSearchResults && searchResults.length > 0 && (
                 <Card className="absolute left-1/2 transform -translate-x-1/2 bottom-full w-[300px]" style={{ maxHeight: "calc(5 * 4rem)" }} >
-                  <CardBody className="flex flex-col w-full gap-4 px-6 py-5" style={{ overflowY: "auto", scrollbarWidth: "none" }} >
+                  <CardBody className="flex flex-col w-full gap-2 px-4 py-4" style={{ overflowY: "auto", scrollbarWidth: "none" }} >
                     {searchResults.slice(0, 5).map((result) => (
                       <div key={result._id} className="flex justify-between w-full border border-gray-800 p-2 rounded-md cursor-pointer" role="button" tabIndex={0} onKeyPress={(e) => handleKeyPress(e, () => handleUserClick(result._id))} onMouseDown={() => handleUserClick(result._id)} >
                         <div className="flex items-center justify-start gap-4">
@@ -277,7 +273,7 @@ function NavBar() {
                                 }
                               })()}
                               <span className="ml-2">
-                                {result.verified && (
+                                {result.verified === 'true' && (
                                   <RiVerifiedBadgeFill className="text-xl text-[#dd2525]" />
                                 )}
                               </span>
@@ -303,11 +299,11 @@ function NavBar() {
                 </button>
               </DropdownTrigger>
               <DropdownMenu aria-label="Link Actions">
-                <DropdownItem key="Logout" onClick={() => handleLogout()}>
-                  <div className="flex items-center gap-2">
-                    <CloseIcon className="w-5 h-5" />
-                    <span className="text-sm">Logout</span>
-                  </div>
+                <DropdownItem key="Chat" className={`${pathname === "/chats" ? "bg-danger-600 text-white" : "fill-zinc-600 dark:fill-slate-300"}`} onClick={() => setIsChatOpen(true)} >
+                  <Link href="" className="flex items-center gap-2">
+                    <ChatIcon className="w-5 h-5" />
+                    <span className="text-sm ">Chat</span>
+                  </Link>
                 </DropdownItem>
                 <DropdownItem key="Dashboard" className={`${pathname === "/dashboard" ? "bg-danger-600 text-white" : "fill-zinc-600 dark:fill-slate-300"}`} >
                   {user?.role.name === "admin" ? (
@@ -316,6 +312,12 @@ function NavBar() {
                       <span className="text-sm ">Dashboard</span>
                     </Link>
                   ) : null}
+                </DropdownItem>
+                <DropdownItem key="Logout" onClick={() => handleLogout()}>
+                  <div className="flex items-center gap-2">
+                    <CloseIcon className="w-5 h-5" />
+                    <span className="text-sm">Logout</span>
+                  </div>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
