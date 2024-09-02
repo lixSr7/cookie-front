@@ -52,3 +52,4 @@ export default function ChartsOfPost({ user }: { user: typeUser }) {
 function Charts({ userId }: { userId: string }) {
   return <div></div>;
 }
+
