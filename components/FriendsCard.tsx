@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardBody, Badge, Skeleton, User, Avatar } from "@nextui-org/react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { Bell as BellIcon } from "@geist-ui/icons";
+import { MessageSquare as MessageIcon } from "@geist-ui/icons";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import socket from "@/app/config/socketConfig";
@@ -103,10 +103,7 @@ function FriendsCard() {
         {Array(8)
           .fill(null)
           .map((_, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center w-full"
-            >
+            <div key={index} className="flex justify-between items-center w-full" >
               {userSkeleton()}
             </div>
           ))}
@@ -164,9 +161,9 @@ function FriendsCard() {
                     </span>
                   </div>
                 </div>
-                <Badge className="bg-[#dd2525]" content={1} shape="circle" size="md">
-                  <BellIcon size={25} />
-                </Badge>
+                <button>
+                  <MessageIcon size={25} />
+                </button>
               </div>
             ))}
           </CardBody>
