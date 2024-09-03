@@ -7,6 +7,9 @@ import BarChart from "./components/charts/Bar";
 import { GenderPieChart } from "./components/charts/Pie";
 import { LineChart } from "./components/charts/chats/charts";
 import { ChatsLineChart } from "./chats/components/firstChart";
+
+import { PostsByMonthChart } from "./posts/components/ChartsPlatform";
+
 import PieChart from "./chats/components/secondChart";
 import Counters from "./components/Counters";
 
@@ -16,12 +19,16 @@ function Dashboard() {
       <Card className="col-span-4 col-start-5 row-span-2 row-start-1 p-4 rounded-xl">
         <LineChart />
       </Card>
-      <Card className="flex items-center justify-between col-span-4 col-start-5 row-span-2 row-start-3 gap-4 p-4 rounded-xl">
-        <Counters />
+
+      <Card className="col-span-4 col-start-5 row-span-4 row-start-3 flex flex-col gap-4 p-4 rounded-xl">
+        <div className="flex-1">
+          <PostsByMonthChart />
+        </div>
+        <div className="flex-1">
+          <ChatsLineChart />
+        </div>
       </Card>
-      <Card className="col-span-4 col-start-5 row-span-2 row-start-5 p-4 rounded-xl">
-        <ChatsLineChart />
-      </Card>
+
       <Card className="col-span-4 col-start-1 row-span-3 row-start-1 p-4 rounded-xl">
         <BarChart />
       </Card>
