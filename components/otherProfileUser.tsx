@@ -1,20 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  useDisclosure,
-  Spinner,
-  Image,
-  ButtonGroup,
-  Tab,
-  Tabs,
-  Card,
-  CardFooter,
-  ScrollShadow,
-} from "@nextui-org/react";
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Spinner, Image, ButtonGroup, Tab, Tabs, Card, CardFooter, ScrollShadow, } from "@nextui-org/react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 interface OtherProfileUserProps {
@@ -22,10 +7,7 @@ interface OtherProfileUserProps {
   onClose: () => void;
 }
 
-const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
-  userId,
-  onClose,
-}) => {
+const OtherProfileUser: React.FC<OtherProfileUserProps> = ({ userId, onClose, }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [token, setToken] = useState<string>("");
   const [user, setUser] = useState<any>(null);
@@ -185,24 +167,14 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
 
   return (
     <div>
-      <Modal
-        backdrop="blur"
-        isOpen={isOpen}
-        placement="center"
-        scrollBehavior="inside"
-        size="5xl"
-        onClose={onClose}
-      >
+      <Modal backdrop="blur" isOpen={isOpen} placement="center" scrollBehavior="inside" size="5xl" onClose={onClose} >
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1 justify-center items-center">
               {user?.fullname}
             </ModalHeader>
             <ModalBody>
-              <ScrollShadow
-                hideScrollBar
-                className="w-full h-full overflow-y-auto flex flex-col m-auto"
-              >
+              <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto" >
                 {loading ? (
                   <div className="flex justify-center items-center h-full">
                     <Spinner color="danger" size="lg" />
@@ -214,13 +186,9 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
                         <div className="flex flex-col items-center w-full h-max">
                           {user && (
                             <>
-                              <Image
-                                isBlurred
-                                className="w-[150px] h-[150px] rounded-full border-1.5 object-cover"
-                                src={user.image?.secure_url || 'https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg'}
-                              />
+                              <Image className="w-[150px] h-[150px] rounded-full border-1.5 object-cover" src={user.image?.secure_url || 'https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg'} />
                               <p className="m-0 text-2xl font-bold flex justify-center items-center">
-                                {user.fullname}{" "}
+                                {user.fullname}
                                 <span className="ml-2">
                                   {user.verified === 'true' && (
                                     <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
@@ -249,18 +217,10 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
                               </Button>
                             </ButtonGroup>
                             <ButtonGroup>
-                              <Button
-                                className="transition-transform transform hover:scale-105 hover:shadow-lg"
-                                color="danger"
-                                variant="light"
-                              >
+                              <Button className="transition-transform transform hover:scale-105 hover:shadow-lg" color="danger" variant="light" >
                                 Follow
                               </Button>
-                              <Button
-                                className="transition-transform transform hover:scale-105 hover:shadow-lg"
-                                color="secondary"
-                                variant="light"
-                              >
+                              <Button className="transition-transform transform hover:scale-105 hover:shadow-lg" color="secondary" variant="light" >
                                 Add Friend
                               </Button>
                             </ButtonGroup>
@@ -270,30 +230,15 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
                             <Tab key="posts" title="Posts">
                               <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
                                 {posts.map((post, index) => (
-                                  <Card
-                                    key={index}
-                                    isFooterBlurred
-                                    className="border-none"
-                                    radius="lg"
-                                  >
+                                  <Card key={index} isFooterBlurred className="border-none" radius="lg" >
                                     {post.image && (
-                                      <Image
-                                        isZoomed
-                                        className="object-cover w-[200px] h-[200px]"
-                                        src={post.image}
-                                      />
+                                      <Image isZoomed className="object-cover w-[200px] h-[200px]" src={post.image} />
                                     )}
                                     <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
                                       <p className="text-tiny text-white/80">
                                         {post.content}
                                       </p>
-                                      <Button
-                                        className="text-tiny text-white bg-black/20"
-                                        color="default"
-                                        radius="lg"
-                                        size="sm"
-                                        variant="flat"
-                                      >
+                                      <Button className="text-tiny text-white bg-black/20" color="default" radius="lg" size="sm" variant="flat" >
                                         {new Date(
                                           post.createdAt
                                         ).toLocaleDateString()}
@@ -303,33 +248,19 @@ const OtherProfileUser: React.FC<OtherProfileUserProps> = ({
                                 ))}
                               </div>
                             </Tab>
+
                             <Tab key="likes" title="Likes">
                               <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
                                 {likes.map((like, index) => (
-                                  <Card
-                                    key={index}
-                                    isFooterBlurred
-                                    className="border-none"
-                                    radius="lg"
-                                  >
+                                  <Card key={index} isFooterBlurred className="border-none" radius="lg" >
                                     {like.image && (
-                                      <Image
-                                        isZoomed
-                                        className="object-cover w-[200px] h-[200px]"
-                                        src={like.image}
-                                      />
+                                      <Image isZoomed className="object-cover w-[200px] h-[200px]" src={like.image} />
                                     )}
                                     <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
                                       <p className="text-tiny text-white/80">
                                         {like.content}
                                       </p>
-                                      <Button
-                                        className="text-tiny text-white bg-black/20"
-                                        color="default"
-                                        radius="lg"
-                                        size="sm"
-                                        variant="flat"
-                                      >
+                                      <Button className="text-tiny text-white bg-black/20" color="default" radius="lg" size="sm" variant="flat" >
                                         {new Date(
                                           like.createdAt
                                         ).toLocaleDateString()}
