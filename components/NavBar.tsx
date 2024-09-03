@@ -4,7 +4,7 @@ import { useEffect, useState, KeyboardEvent } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Avatar, Input, Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, User, Card, CardBody, ButtonGroup, } from "@nextui-org/react";
 import Link from "next/link";
-import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon, PieChart as ChartIcon } from "@geist-ui/icons";
+import { MessageCircle as ChatIcon, Home as HomeIcon, Search as SearchIcon, Menu as MenuIcon, ArrowLeftCircle as CloseIcon, PieChart as ChartIcon, MessageSquare as MessageIcon, User as UserIcon } from "@geist-ui/icons";
 import { TiUserAdd } from "react-icons/ti";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 
@@ -221,7 +221,7 @@ function NavBar() {
                     )}
                   </span>
                 </strong>
-                <span className="font-medium text-[#dd2525] text-[70%] m-0">
+                <span className="font-extrabold text-[#dd2525] text-xs m-0">
                   @{user?.username}
                 </span>
               </div>
@@ -238,14 +238,18 @@ function NavBar() {
               Home
             </Link>
 
-            <ProfileUser />
+            <button className="py-2 rounded-lg flex gap-1">
+              <UserIcon />
+              <ProfileUser />
+            </button>
 
-            <button className={`py-2 px-6 rounded-lg ${pathname === "/Chats"
+            <button className={`py-2 rounded-lg flex gap-2 ${pathname === "/Chats"
               ? "bg-[#dd2525] text-white"
               : "text-zinc-600 dark:text-white"
               }`}
               onClick={() => setIsChatOpen(true)} >
-              {pathname === "/Chats" && <ChatIcon />}
+              {pathname === "/Chats" && <MessageIcon />}
+              <MessageIcon />
               Chats
             </button>
           </div>

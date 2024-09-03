@@ -65,9 +65,9 @@ export const GenderPieChart = () => {
         {
           data: [genderCounts.male, genderCounts.female, genderCounts.notBinary],
           backgroundColor: [
-            "rgba(75, 192, 192, 0.6)",
-            "rgba(255, 99, 132, 0.6)",
-            "rgba(153, 102, 255, 0.6)",
+            "rgba(75, 192, 192)",
+            "rgba(255, 99, 132)",
+            "rgba(153, 102, 255)",
           ],
           borderColor: [
             "rgba(75, 192, 192, 1)",

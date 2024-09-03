@@ -222,50 +222,33 @@ function FriendshipsCard() {
             <CardBody className="flex flex-col w-full gap-4 px-6 py-3">
               <div className="flex justify-between items-center w-full">
                 <div className="flex items-center">
-                  <NextUser
-                    avatarProps={{
-                      src:
-                        user.image?.secure_url ||
-                        "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg",
-                      size: "lg",
-                    }}
-                    description={`@${user.username}`}
-                    name={
-                      <div
-                        className="flex items-center"
-                        style={{
-                          maxWidth: "150px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {" "}
-                        <span
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {" "}
-                          {user.fullname}{" "}
-                        </span>{" "}
-                        {user.verified === 'true' && (
-                          <RiVerifiedBadgeFill
-                            className="text-[#dd2525]"
-                            style={{ marginLeft: "5px", flexShrink: 0 }}
-                          />
-                        )}{" "}
-                      </div>
-                    }
+                  <NextUser avatarProps={{ src: user.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg", size: "lg", }} description={`@${user.username}`} name={
+                    <div className="flex items-center" style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", }} >
+                      {" "}
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", }} >
+                        {(() => {
+                          const words = user.fullname.split(" ");
+                          if (words.length === 4) {
+                            return `${words[0]} ${words[2]}`;
+                          } else if (words.length === 3) {
+                            return `${words[0]} ${words[1]}`;
+                          } else {
+                            return user.fullname;
+                          }
+                        })()}
+                      </span>{" "}
+                      {user.verified === 'true' && (
+                        <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />
+                      )}{" "}
+                    </div>
+                  }
                   />
                 </div>
                 <Button
-                  className={`${
-                    followed[index]
-                      ? "bg-[#dd2525] text-white shadow"
-                      : "bg-transparent border border-[#dd2525] text-[#dd2525]"
-                  }`}
+                  className={`${followed[index]
+                    ? "bg-[#dd2525] text-white shadow"
+                    : "bg-transparent border border-[#dd2525] text-[#dd2525]"
+                    }`}
                   variant={followed[index] ? "shadow" : "ghost"}
                   onClick={() => handleFollowToggle(index)}
                 >
