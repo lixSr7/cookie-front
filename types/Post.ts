@@ -1,6 +1,7 @@
 import { Image } from "./Users";
 
-type ReportPost = {
+export type ReportPost = {
+  _id: string;
   type: string;
   userId: string;
   postId: string;

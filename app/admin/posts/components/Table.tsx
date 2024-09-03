@@ -21,6 +21,7 @@ import {
 } from "@nextui-org/react";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AlertCircle as AlertIcon } from "@geist-ui/icons";
+import ButtonReports from "./ButtonReports";
 
 import ChartsOfPost from "./ChartsOfPost";
 import PostsOfUser from "./PostsOfUser";
@@ -36,7 +37,7 @@ import { getAllUsersWithPosts } from "@/services/Posts";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
-  paused: "danger",
+  inactive: "danger",
   vacation: "warning",
 };
 
@@ -170,7 +171,7 @@ export default function TableUserWithPosts() {
         return (
           <div className=" flex justify-center items-center gap-2">
             <PostsOfUser user={user} />
-            <ChartsOfPost user={user} />
+            {/* <ChartsOfPost user={user} /> */}
           </div>
         );
       default:
@@ -274,9 +275,7 @@ export default function TableUserWithPosts() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="danger" startContent={<AlertIcon />}>
-              Reports
-            </Button>
+            <ButtonReports />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -364,7 +363,6 @@ export default function TableUserWithPosts() {
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>

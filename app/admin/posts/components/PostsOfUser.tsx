@@ -14,6 +14,7 @@ import {
   Image,
   User,
 } from "@nextui-org/react";
+import OptionsPosts from "@/app/posts/components/OptionsPosts";
 
 import { Image as ImageIcon } from "@geist-ui/icons";
 import { UserWithPosts as typeUser, Post as typePost } from "@/types/Post";
@@ -29,7 +30,7 @@ function PostsOfUser({ user }: { user: typeUser }) {
     getAllPosts()
       .then((data: typePost[]) => {
         const fillteredPosts = data.filter((post) => post.user._id === user.id);
-        setPosts(fillteredPosts);
+        setPosts(fillteredPosts.reverse());
       })
       .catch((error) => {
         console.error("Failed to fetch posts:", error);
@@ -60,7 +61,7 @@ function PostsOfUser({ user }: { user: typeUser }) {
                 Posts of user {user.username}
               </ModalHeader>
               <ModalBody>
-                <div className=" py-3 overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                <div className=" py-3 px-2 overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
                   {posts &&
                     posts.map((post) => (
                       <CardPost post={post} key={post._id} />
@@ -81,10 +82,10 @@ function PostsOfUser({ user }: { user: typeUser }) {
   );
 }
 
-const CardPost = ({ post }: { post: typePost }) => {
+export const CardPost = ({ post }: { post: typePost }) => {
   return (
-    <Card className="w-full max-h-[450px] bg-zinc-800 mb-4">
-      <CardHeader>
+    <Card className="w-full max-h-[450px] dark:bg-zinc-800 mb-4">
+      <CardHeader className="flex justify-between gap-1">
         <User
           name={post.user.username}
           description={post.user.fullname}
@@ -92,6 +93,7 @@ const CardPost = ({ post }: { post: typePost }) => {
             src: post.user.image.secure_url,
           }}
         />
+        <OptionsPosts postId={post._id} />
       </CardHeader>
       <div className=" flex flex-col gap-3 p-4 w-full">
         <span className="text-md">{post.content}</span>

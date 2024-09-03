@@ -13,8 +13,6 @@ import {
   useDisclosure,
   ModalContent,
   Spinner,
-  Textarea,
-  Checkbox,
 } from "@nextui-org/react";
 
 import {
@@ -47,7 +45,7 @@ const Actions = ({
 }: {
   action: string;
   postId: string;
-  updatePosts: () => void;
+  updatePosts?: () => void; // Hacer updatePosts opcional
   onClose: () => void;
 }) => {
   const [isSending, setIsSending] = useState(false);
@@ -56,7 +54,10 @@ const Actions = ({
     setIsSending(true);
     try {
       await deletePost(postId);
-      updatePosts();
+      // Llamar a updatePosts solo si está definido
+      if (updatePosts) {
+        updatePosts();
+      }
       toast.success("Post deleted successfully");
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -101,7 +102,7 @@ function OptionsPosts({
   updatePosts,
 }: {
   postId: string;
-  updatePosts: () => void;
+  updatePosts?: () => void; // Hacer updatePosts opcional
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [action, setaction] = useState("");
@@ -198,7 +199,7 @@ function OptionsPosts({
                     <Actions
                       action={action}
                       postId={postId}
-                      updatePosts={updatePosts}
+                      updatePosts={updatePosts} // Pasar updatePosts, que ahora es opcional
                       onClose={onClose}
                     />
                   </div>

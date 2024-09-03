@@ -29,7 +29,7 @@ const REPORT_REASONS = [
  *
  * @param {string} postId - The ID of the post to be reported.
  * @param {() => void} onClose - Function to close the modal.
- * @param {() => void} updatePosts - Function to update the list of posts after reporting.
+ * @param {() => void} [updatePosts] - Optional function to update the list of posts after reporting.
  * @returns {JSX.Element} The rendered FormReport component.
  */
 const FormReport = ({
@@ -39,7 +39,7 @@ const FormReport = ({
 }: {
   postId: string;
   onClose: () => void;
-  updatePosts: () => void;
+  updatePosts?: () => void; // Hacer updatePosts opcional
 }) => {
   // State to track selected reasons for reporting
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
@@ -78,7 +78,9 @@ const FormReport = ({
     try {
       // Attempt to report the post with the combined reasons
       await reportPost(postId, reason);
-      updatePosts(); // Update the posts list after reporting
+      if (updatePosts) {
+        updatePosts(); // Update the posts list after reporting if updatePosts is defined
+      }
       toast.success("Post reported successfully");
       onClose(); // Close the modal
     } catch (error) {

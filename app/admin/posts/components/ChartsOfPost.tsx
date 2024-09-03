@@ -11,10 +11,26 @@ import {
 
 import { PieChart as PieIcon } from "@geist-ui/icons";
 import { UserWithPosts as typeUser } from "@/types/Post";
-import { getPostAnalytics } from "@/services/Posts";
+
+import { getPostAnalytics } from "@/services/Posts"; // param is the user._id
+import { useEffect } from "react";
 
 export default function ChartsOfPost({ user }: { user: typeUser }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  function fechData() {
+    getPostAnalytics(user.id)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch posts:", error);
+      });
+  }
+
+  useEffect(() => {
+    fechData();
+  }, []);
 
   return (
     <div>
@@ -52,4 +68,3 @@ export default function ChartsOfPost({ user }: { user: typeUser }) {
 function Charts({ userId }: { userId: string }) {
   return <div></div>;
 }
-
