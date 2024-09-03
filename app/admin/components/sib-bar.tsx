@@ -98,7 +98,7 @@ export default function Sidebar() {
                 <Link href="/posts">
                   <button><ArrowLeft /></button>
                 </Link>
-                <span className="text-sm">Back to home</span>
+                <span className="text-sm">Back to Feed</span>
               </div>
               <ThemeSwitch />
             </div>

@@ -92,12 +92,12 @@ export default function Users() {
 
     if (statusFilter !== "all") {
       filteredUsers = filteredUsers.filter(user =>
-        user.role.name.toLowerCase() === statusFilter.toLowerCase()
+        user.status.toLowerCase() === statusFilter.toLowerCase()
       );
-    }    
+    }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [users, filterValue, statusFilter, roleFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -133,7 +133,16 @@ export default function Users() {
           <div className="flex items-center justify-start gap-4">
             <div className="flex flex-col">
               <strong className="text-base m-0 flex justify-center items-center">
-                {user?.fullname}{" "}
+                {(() => {
+                  const words = user.fullname.split(" ");
+                  if (words.length === 4) {
+                    return `${words[0]} ${words[2]}`;
+                  } else if (words.length === 3) {
+                    return `${words[0]} ${words[1]}`;
+                  } else {
+                    return user.fullname;
+                  }
+                })()}
                 <span className="ml-2">
                   {user?.verified === 'true' && (
                     <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
@@ -234,7 +243,7 @@ export default function Users() {
                   Role
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu disallowEmptySelection aria-label="Filter by Role" closeOnSelect={true} selectedKeys={new Set([statusFilter])} selectionMode="single" onSelectionChange={(keys) => setStatusFilter(Array.from(keys).join(""))} >
+              <DropdownMenu disallowEmptySelection aria-label="Filter by Role" closeOnSelect={true} selectedKeys={new Set([roleFilter])} selectionMode="single" onSelectionChange={(keys) => setRoleFilter(Array.from(keys).join(""))} >
                 <DropdownItem key="all">All</DropdownItem>
                 <DropdownItem key="user">User</DropdownItem>
                 <DropdownItem key="moderator">Moderator</DropdownItem>
