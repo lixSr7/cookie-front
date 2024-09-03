@@ -221,7 +221,7 @@ function NavBar() {
                     )}
                   </span>
                 </strong>
-                <span className="font-medium text-[#dd2525] text-[70%] m-0">
+                <span className="font-extrabold text-[#dd2525] text-xs m-0">
                   @{user?.username}
                 </span>
               </div>
