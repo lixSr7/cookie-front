@@ -1,59 +1,19 @@
-import {
-  Button,
-  ButtonGroup,
-  Modal,
-  ModalContent,
-  ModalBody,
-  useDisclosure,
-  Tabs,
-  Tab,
-  Card,
-  Image,
-  ScrollShadow,
-  CardHeader,
-  CardFooter,
-  User as NextUser,
-  ModalHeader,
-  Input,
-  ModalFooter,
-  Pagination,
-  Dropdown,
-  DropdownTrigger,
-  DropdownItem,
-  DropdownMenu,
-} from "@nextui-org/react";
+import { Button, ButtonGroup, Modal, ModalContent, ModalBody, useDisclosure, Tabs, Tab, Card, Image, ScrollShadow, CardHeader, CardFooter, User as NextUser, ModalHeader, Input, ModalFooter, Pagination, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu, } from "@nextui-org/react";
 import React, { useState, useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
-import { MdEdit } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { Settings as MdEdit } from "@geist-ui/icons";
 
 import socket from "@/app/config/socketConfig";
 
 function ProfileUser() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onOpenChange: onEditOpenChange,
-    onClose: onEditClose,
-  } = useDisclosure();
-  const {
-    isOpen: isFollowersOpen,
-    onOpen: onFollowersOpen,
-    onOpenChange: onFollowersOpenChange,
-  } = useDisclosure();
-  const {
-    isOpen: isFollowingOpen,
-    onOpen: onFollowingOpen,
-    onOpenChange: onFollowingOpenChange,
-  } = useDisclosure();
-  const {
-    isOpen: isFriendsOpen,
-    onOpen: onFriendsOpen,
-    onOpenChange: onFriendsOpenChange,
-  } = useDisclosure();
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange, onClose: onEditClose, } = useDisclosure();
+  const { isOpen: isFollowersOpen, onOpen: onFollowersOpen, onOpenChange: onFollowersOpenChange, } = useDisclosure();
+  const { isOpen: isFollowingOpen, onOpen: onFollowingOpen, onOpenChange: onFollowingOpenChange, } = useDisclosure();
+  const { isOpen: isFriendsOpen, onOpen: onFriendsOpen, onOpenChange: onFriendsOpenChange, } = useDisclosure();
   const [token, setToken] = useState<string>("");
   const [user, setUser] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
@@ -524,6 +484,7 @@ function ProfileUser() {
   const postsWithImages = posts.filter(
     (post) => post.userId === userId && post.image
   );
+
   const postsWithoutImages = posts.filter(
     (post) => post.userId === userId && !post.image
   );
@@ -534,9 +495,9 @@ function ProfileUser() {
     : 0;
   const currentFollowingData = Array.isArray(following)
     ? following.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-      )
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    )
     : [];
 
   const totalFollowersPages = Array.isArray(followers)
@@ -544,9 +505,9 @@ function ProfileUser() {
     : 0;
   const currentFollowersData = Array.isArray(followers)
     ? followers.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-      )
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    )
     : [];
 
   const totalFriendsPages = Array.isArray(friends)
@@ -554,301 +515,175 @@ function ProfileUser() {
     : 0;
   const currentFriendsData = Array.isArray(friends)
     ? friends.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-      )
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    )
     : [];
 
   return (
     <>
       <ToastContainer />
       <div>
-        <button
-          className="flex flex-col items-center justify-center gap-0 h-max"
-          onClick={onOpen}
-        >
+        <button className="flex flex-col items-center justify-center gap-0 h-max" onClick={onOpen} >
           Profile
         </button>
-        <Modal
-          backdrop="blur"
-          isOpen={isOpen}
-          placement="center"
-          scrollBehavior="inside"
-          size="5xl"
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalBody className="flex flex-col items-center justify-center pt-10 w-full min-h-full">
-                  <ScrollShadow
-                    hideScrollBar
-                    className="w-full h-full overflow-y-auto flex flex-col m-auto"
-                  >
-                    <Button
-                      className="absolute left-10 top-14 transition-transform transform hover:scale-105 hover:shadow-lg"
-                      onClick={onEditOpen}
-                    >
-                      <MdEdit /> settings
-                    </Button>
-                    <div className="flex flex-col items-center w-full h-full">
-                      <div className="flex flex-col items-center w-full h-max">
-                        {user && (
-                          <>
-                            <Image
-                              isBlurred
-                              className="w-[150px] h-[150px] rounded-full border-1.5 object-cover"
-                              src={user.image?.secure_url}
-                            />
-                            <p className="m-0 text-2xl font-bold flex justify-center items-center">
-                              {user.fullname}{" "}
-                              <span className="ml-2">
-                                {user.verified === 'true' && (
-                                  <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
-                                )}
-                              </span>
-                            </p>
-                            <p className="text-xs text-gray-300">
-                              @{user.username}
-                            </p>
-                            <p className="text-sm font-bold mt-5">
-                              {user.description}
-                            </p>
-                          </>
-                        )}
-                      </div>
-                      <ButtonGroup className="m-2">
-                        <Button
-                          className="transition-transform transform hover:scale-105 hover:shadow-lg"
-                          onClick={onFollowingOpen}
-                        >
-                          Following <span>{following.length}</span>
-                        </Button>
-                        <Button
-                          className="transition-transform transform hover:scale-105 hover:shadow-lg"
-                          onClick={onFollowersOpen}
-                        >
-                          Followers <span>{followers.length}</span>
-                        </Button>
-                        <Button
-                          className="transition-transform transform hover:scale-105 hover:shadow-lg"
-                          onClick={onFriendsOpen}
-                        >
-                          Friends <span>{friends.length}</span>
-                        </Button>
-                      </ButtonGroup>
-                      <Tabs aria-label="Options" className="m-2">
-                        <Tab key="posts" title="Posts">
-                          <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
-                            {postsWithImages.map((post, index) => (
-                              <Card
-                                key={index}
-                                isFooterBlurred
-                                className="border-none"
-                                radius="lg"
-                              >
-                                {post.image && (
-                                  <Image
-                                    isZoomed
-                                    className="object-cover w-[200px] h-[200px]"
-                                    src={post.image}
-                                  />
-                                )}
-                                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                                  <p className="text-tiny text-white/80">
-                                    {post.content}
-                                  </p>
-                                  <Button
-                                    className="text-tiny text-white bg-black/20"
-                                    color="default"
-                                    radius="lg"
-                                    size="sm"
-                                    variant="flat"
-                                  >
-                                    {new Date(
-                                      post.createdAt
-                                    ).toLocaleDateString()}
-                                  </Button>
-                                </CardFooter>
-                              </Card>
-                            ))}
-                            {postsWithoutImages.map((post, index) => (
-                              <Card
-                                key={index}
-                                isFooterBlurred
-                                className="border-none"
-                                radius="lg"
-                              >
-                                <CardHeader className="w-[200px] h-[200px] flex items-center justify-center">
-                                  <p>{post.content}</p>
-                                </CardHeader>
-                                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                                  <p className="text-tiny text-white/80">
-                                    {post.content}
-                                  </p>
-                                  <Button
-                                    className="text-tiny text-white bg-black/20"
-                                    color="default"
-                                    radius="lg"
-                                    size="sm"
-                                    variant="flat"
-                                  >
-                                    {new Date(
-                                      post.createdAt
-                                    ).toLocaleDateString()}
-                                  </Button>
-                                </CardFooter>
-                              </Card>
-                            ))}
-                          </div>
-                        </Tab>
-
-                        <Tab key="save" title="Save">
-                          <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
-                            {savedPosts.map((post, index) => (
-                              <Card
-                                key={index}
-                                isFooterBlurred
-                                className="border-none"
-                                radius="lg"
-                              >
-                                {post.image && (
-                                  <Image
-                                    isZoomed
-                                    className="object-cover w-[200px] h-[200px]"
-                                    src={post.image}
-                                  />
-                                )}
-                                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                                  <p className="text-tiny text-white/80">
-                                    {post.content}
-                                  </p>
-                                  <Button
-                                    className="text-tiny text-white bg-black/20"
-                                    color="default"
-                                    radius="lg"
-                                    size="sm"
-                                    variant="flat"
-                                  >
-                                    {new Date(
-                                      post.createdAt
-                                    ).toLocaleDateString()}
-                                  </Button>
-                                </CardFooter>
-                              </Card>
-                            ))}
-                          </div>
-                        </Tab>
-                        <Tab key="likes" title="Likes">
-                          <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
-                            {likes.map((like, index) => (
-                              <Card
-                                key={index}
-                                isFooterBlurred
-                                className="border-none"
-                                radius="lg"
-                              >
-                                {like.image && (
-                                  <Image
-                                    isZoomed
-                                    className="object-cover w-[200px] h-[200px]"
-                                    src={like.image}
-                                  />
-                                )}
-                                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                                  <p className="text-tiny text-white/80">
-                                    {like.content}
-                                  </p>
-                                  <Button
-                                    className="text-tiny text-white bg-black/20"
-                                    color="default"
-                                    radius="lg"
-                                    size="sm"
-                                    variant="flat"
-                                  >
-                                    {new Date(
-                                      like.createdAt
-                                    ).toLocaleDateString()}
-                                  </Button>
-                                </CardFooter>
-                              </Card>
-                            ))}
-                          </div>
-                        </Tab>
-                      </Tabs>
-                    </div>
-                  </ScrollShadow>
-                </ModalBody>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
       </div>
 
-      <Modal
-        isOpen={isEditOpen}
-        scrollBehavior="inside"
-        size="lg"
-        onOpenChange={onEditOpenChange}
-      >
+      <Modal backdrop="blur" isOpen={isOpen} placement="center" scrollBehavior="inside" size="5xl" onOpenChange={onOpenChange} >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody className="flex flex-col items-center justify-center pt-10 w-full min-h-full">
+                <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto" >
+                  <button className="absolute left-10 top-14 transition-transform transform hover:scale-105" onClick={onEditOpen} >
+                    <MdEdit />
+                  </button>
+                  <div className="flex flex-col items-center w-full h-full">
+                    <div className="flex flex-col items-center w-full h-max">
+                      {user && (
+                        <>
+                          <Image className="w-[150px] h-[150px] rounded-full border-1.5 object-cover" src={user.image?.secure_url} />
+                          <p className="m-0 text-2xl font-bold flex justify-center items-center">
+                            {user.fullname}{" "}
+                            <span className="ml-2">
+                              {user.verified === 'true' && (
+                                <RiVerifiedBadgeFill className="text-2xl text-[#dd2525]" />
+                              )}
+                            </span>
+                          </p>
+                          <p className="text-xs text-gray-300">
+                            @{user.username}
+                          </p>
+                          <p className="text-sm font-bold mt-5">
+                            {user.description}
+                          </p>
+                        </>
+                      )}
+                    </div>
+                    <ButtonGroup className="m-2">
+                      <Button className="transition-transform transform hover:scale-105 hover:shadow-lg" onClick={onFollowingOpen} >
+                        Following <span>{following.length}</span>
+                      </Button>
+                      <Button className="transition-transform transform hover:scale-105 hover:shadow-lg" onClick={onFollowersOpen} >
+                        Followers <span>{followers.length}</span>
+                      </Button>
+                      <Button className="transition-transform transform hover:scale-105 hover:shadow-lg" onClick={onFriendsOpen} >
+                        Friends <span>{friends.length}</span>
+                      </Button>
+                    </ButtonGroup>
+                    <Tabs aria-label="Options" className="m-2">
+                      <Tab key="posts" title="Posts">
+                        <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
+                          {postsWithImages.map((post, index) => (
+                            <Card key={index} isFooterBlurred className="border-none" radius="lg" >
+                              {post.image && (
+                                <Image isZoomed className="object-cover w-[200px] h-[200px]" src={post.image} />
+                              )}
+                              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                                <p className="text-tiny text-white/80">
+                                  {post.content}
+                                </p>
+                                <Button className="text-tiny text-white bg-black/20" color="default" radius="lg" size="sm" variant="flat" >
+                                  {new Date(
+                                    post.createdAt
+                                  ).toLocaleDateString()}
+                                </Button>
+                              </CardFooter>
+                            </Card>
+                          ))}
+                          {postsWithoutImages.map((post, index) => (
+                            <Card key={index} isFooterBlurred className="border-none" radius="lg" >
+                              <CardHeader className="w-[200px] h-[200px] flex items-center justify-center">
+                                <p>{post.content}</p>
+                              </CardHeader>
+                              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                                <p className="text-tiny text-white/80">
+                                  {post.content}
+                                </p>
+                                <Button className="text-tiny text-white bg-black/20" color="default" radius="lg" size="sm" variant="flat" >
+                                  {new Date(
+                                    post.createdAt
+                                  ).toLocaleDateString()}
+                                </Button>
+                              </CardFooter>
+                            </Card>
+                          ))}
+                        </div>
+                      </Tab>
+
+                      <Tab key="save" title="Save">
+                        <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
+                          {savedPosts.map((post, index) => (
+                            <Card key={index} isFooterBlurred className="border-none" radius="lg" >
+                              {post.image && (
+                                <Image isZoomed className="object-cover w-[200px] h-[200px]" src={post.image} />
+                              )}
+                              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                                <p className="text-tiny text-white/80">
+                                  {post.content}
+                                </p>
+                                <Button className="text-tiny text-white bg-black/20" color="default" radius="lg" size="sm" variant="flat" >
+                                  {new Date(
+                                    post.createdAt
+                                  ).toLocaleDateString()}
+                                </Button>
+                              </CardFooter>
+                            </Card>
+                          ))}
+                        </div>
+                      </Tab>
+
+                      <Tab key="likes" title="Likes">
+                        <div className="grid grid-cols-3 gap-10 sm:grid-cols-3">
+                          {likes.map((like, index) => (
+                            <Card key={index} isFooterBlurred className="border-none" radius="lg" >
+                              {like.image && (
+                                <Image isZoomed className="object-cover w-[200px] h-[200px]" src={like.image} />
+                              )}
+                              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                                <p className="text-tiny text-white/80">
+                                  {like.content}
+                                </p>
+                                <Button className="text-tiny text-white bg-black/20" color="default" radius="lg" size="sm" variant="flat" >
+                                  {new Date(
+                                    like.createdAt
+                                  ).toLocaleDateString()}
+                                </Button>
+                              </CardFooter>
+                            </Card>
+                          ))}
+                        </div>
+                      </Tab>
+                    </Tabs>
+                  </div>
+                </ScrollShadow>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isEditOpen} scrollBehavior="inside" size="lg" onOpenChange={onEditOpenChange} >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col items-center gap-1">
-                Edit Profile
+                Update Profile
               </ModalHeader>
               <ModalBody className="flex flex-col items-center justify-center w-full min-h-full">
-                <ScrollShadow
-                  hideScrollBar
-                  className="w-full h-full overflow-y-auto flex flex-col m-auto"
-                >
+                <ScrollShadow hideScrollBar className="w-full h-full overflow-y-auto flex flex-col m-auto" >
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 p-2">
                     <div className="col-span-2 flex justify-center items-center">
-                      <input
-                        ref={fileInputRef}
-                        style={{ display: "none" }}
-                        type="file"
-                        onChange={handleImageChange}
-                      />
-                      <button
-                        style={{ cursor: "pointer" }}
-                        onClick={handleImageClick}
-                      >
-                        <Image
-                          isZoomed
-                          alt="Profile Image"
-                          className="object-cover w-[150px] h-[150px]"
-                          src={
-                            previewImage ||
-                            user.image?.secure_url ||
-                            "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"
-                          }
-                        />
+                      <input ref={fileInputRef} style={{ display: "none" }} type="file" onChange={handleImageChange} />
+                      <button style={{ cursor: "pointer" }} onClick={handleImageClick} >
+                        <Image isZoomed alt="Profile Image" className="object-cover w-[150px] h-[150px]" src={previewImage || user.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg"} />
                       </button>
                     </div>
                     <div className="col-span-2">
-                      <Input
-                        label="fullname"
-                        placeholder={user.fullname}
-                        type="text"
-                        value={fullname}
-                        onChange={(e) => setFullname(e.target.value)}
-                      />
+                      <Input label="fullname" placeholder={user.fullname} type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} />
                     </div>
-                    <Input
-                      label="username"
-                      placeholder={user.username}
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <Input
-                      label="email"
-                      placeholder={user.email}
-                      type="text"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
+                    <Input label="username" placeholder={user.username} type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <Input label="email" placeholder={user.email} type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className="relative">
                       <Dropdown>
                         <DropdownTrigger>
@@ -857,79 +692,42 @@ function ProfileUser() {
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Select Gender">
-                          <DropdownItem
-                            key="male"
-                            onClick={() => handleGenderChange("male")}
-                          >
+                          <DropdownItem key="male" onClick={() => handleGenderChange("male")} >
                             Male
                           </DropdownItem>
-                          <DropdownItem
-                            key="female"
-                            onClick={() => handleGenderChange("female")}
-                          >
+                          <DropdownItem key="female" onClick={() => handleGenderChange("female")} >
                             Female
                           </DropdownItem>
-                          <DropdownItem
-                            key="not binary"
-                            onClick={() => handleGenderChange("not binary")}
-                          >
+                          <DropdownItem key="not binary" onClick={() => handleGenderChange("not binary")} >
                             Not Binary
                           </DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
                     </div>
-                    <Input
-                      label="phone_number"
-                      placeholder={user.phone_number}
-                      type="text"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
+                    <Input label="phone_number" placeholder={user.phone_number} type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                     <div className="col-span-2">
-                      <Input
-                        label="description"
-                        placeholder={user.description}
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                      />
+                      <Input label="description" placeholder={user.description} type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
                     </div>
+
                     <div className="col-span-2 flex justify-center items-center py-5">
                       <p>CHANGE PASSWORD</p>
                     </div>
-                    <Input
-                      label="old password"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                    />
-                    <Input
-                      label="new password"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
+                    <Input label="old password" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+                    <Input label="new password" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
                     <div className="col-span-2">
-                      <Button
-                        color="danger"
-                        variant="light"
-                        onPress={changePassword}
-                      >
-                        {" "}
-                        Change{" "}
+                      <Button className="bg-transparent text-[#dd2525] font-bold" onPress={changePassword} >
+                        Change
                       </Button>
                     </div>
                   </div>
                 </ScrollShadow>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  {" "}
-                  Close{" "}
+                <Button className="text-[#dd2525] bg-transparent font-bold" onPress={onClose}>
+                  Close
                 </Button>
-                <Button color="primary" onClick={editProfile}>
-                  {" "}
-                  Edit{" "}
+                <Button className="bg-[#dd2525] text-white font-bold" onClick={editProfile}>
+                  save changes
                 </Button>
               </ModalFooter>
             </>
@@ -948,49 +746,26 @@ function ProfileUser() {
                 <div className="flex flex-col w-full gap-6 px-6 py-5">
                   {currentFollowingData.map((user) => (
                     <div key={user._id} className="flex justify-between w-full">
-                      <NextUser
-                        key={user._id}
-                        avatarProps={{
-                          src:
-                            user.image?.secure_url ||
-                            "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg",
-                          isBordered: true,
-                          color: "danger",
-                        }}
-                        description={`@${user.username}`}
-                        name={
-                          <div
-                            className="flex items-center"
-                            style={{
-                              maxWidth: "150px",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {" "}
-                            <span
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {user.fullname}
-                            </span>
-                            {user.verified === 'true' && (
-                              <RiVerifiedBadgeFill
-                                className="text-[#dd2525]"
-                                style={{ marginLeft: "5px", flexShrink: 0 }}
-                              />
-                            )}
-                          </div>
-                        }
-                      />
-                      <Button
-                        color="danger"
-                        variant="shadow"
-                        onClick={() => unfollow(user._id)}
-                      >
+                      <NextUser key={user._id} avatarProps={{ src: user.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg" }} description={`@${user.username}`} name={
+                        <div className="flex items-center" >
+                          <span >
+                            {(() => {
+                              const words = user.fullname.split(" ");
+                              if (words.length === 4) {
+                                return `${words[0]} ${words[2]}`;
+                              } else if (words.length === 3) {
+                                return `${words[0]} ${words[1]}`;
+                              } else {
+                                return user.fullname;
+                              }
+                            })()}
+                          </span>
+                          {user.verified === 'true' && (
+                            <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />
+                          )}
+                        </div>
+                      } />
+                      <Button className="bg-[#dd2525] text-white font-bold" onClick={() => unfollow(user._id)} >
                         Unfollow
                       </Button>
                     </div>
@@ -1002,21 +777,12 @@ function ProfileUser() {
             )}
           </ModalBody>
           <ModalFooter className="flex justify-center items-center">
-            <Pagination
-              color="danger"
-              initialPage={1}
-              total={totalFollowingPages}
-              onChange={(page) => setCurrentPage(page)}
-            />
+            <Pagination color="default" initialPage={1} total={totalFollowingPages} onChange={(page) => setCurrentPage(page)} />
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <Modal
-        isOpen={isFollowersOpen}
-        scrollBehavior="inside"
-        onOpenChange={onFollowersOpenChange}
-      >
+      <Modal isOpen={isFollowersOpen} scrollBehavior="inside" onOpenChange={onFollowersOpenChange} >
         <ModalContent>
           <ModalHeader className="flex flex-col items-center gap-1">
             Followers
@@ -1027,49 +793,26 @@ function ProfileUser() {
                 <div className="flex flex-col w-full gap-6 px-6 py-5">
                   {currentFollowersData.map((user) => (
                     <div key={user._id} className="flex justify-between w-full">
-                      <NextUser
-                        key={user._id}
-                        avatarProps={{
-                          src:
-                            user.image?.secure_url ||
-                            "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg",
-                          isBordered: true,
-                          color: "danger",
-                        }}
-                        description={`@${user.username}`}
-                        name={
-                          <div
-                            className="flex items-center"
-                            style={{
-                              maxWidth: "150px",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {" "}
-                            <span
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {user.fullname}
-                            </span>
-                            {user.verified === 'true' && (
-                              <RiVerifiedBadgeFill
-                                className="text-[#dd2525]"
-                                style={{ marginLeft: "5px", flexShrink: 0 }}
-                              />
-                            )}
-                          </div>
-                        }
-                      />
-                      <Button
-                        color="danger"
-                        variant="shadow"
-                        onClick={() => addFriend(user._id)}
-                      >
+                      <NextUser key={user._id} avatarProps={{ src: user.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg", }} description={`@${user.username}`} name={
+                        <div className="flex items-center" >
+                          <span >
+                            {(() => {
+                              const words = user.fullname.split(" ");
+                              if (words.length === 4) {
+                                return `${words[0]} ${words[2]}`;
+                              } else if (words.length === 3) {
+                                return `${words[0]} ${words[1]}`;
+                              } else {
+                                return user.fullname;
+                              }
+                            })()}
+                          </span>
+                          {user.verified === 'true' && (
+                            <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />
+                          )}
+                        </div>
+                      } />
+                      <Button className="bg-[#dd2525] text-white font-bold" onClick={() => addFriend(user._id)} >
                         add to friends
                       </Button>
                     </div>
@@ -1081,21 +824,12 @@ function ProfileUser() {
             )}
           </ModalBody>
           <ModalFooter className="flex justify-center items-center">
-            <Pagination
-              color="danger"
-              initialPage={1}
-              total={totalFollowersPages}
-              onChange={(page) => setCurrentPage(page)}
-            />
+            <Pagination color="default" initialPage={1} total={totalFollowersPages} onChange={(page) => setCurrentPage(page)} />
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <Modal
-        isOpen={isFriendsOpen}
-        scrollBehavior="inside"
-        onOpenChange={onFriendsOpenChange}
-      >
+      <Modal isOpen={isFriendsOpen} scrollBehavior="inside" onOpenChange={onFriendsOpenChange} >
         <ModalContent>
           <ModalHeader className="flex flex-col items-center gap-1">
             Friends
@@ -1106,49 +840,26 @@ function ProfileUser() {
                 <div className="flex flex-col w-full gap-6 px-6 py-5">
                   {currentFriendsData.map((user) => (
                     <div key={user._id} className="flex justify-between w-full">
-                      <NextUser
-                        key={user._id}
-                        avatarProps={{
-                          src:
-                            user.image?.secure_url ||
-                            "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg",
-                          isBordered: true,
-                          color: "danger",
-                        }}
-                        description={`@${user.username}`}
-                        name={
-                          <div
-                            className="flex items-center"
-                            style={{
-                              maxWidth: "150px",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {" "}
-                            <span
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {user.fullname}
-                            </span>
-                            {user.verified === 'true' && (
-                              <RiVerifiedBadgeFill
-                                className="text-[#dd2525]"
-                                style={{ marginLeft: "5px", flexShrink: 0 }}
-                              />
-                            )}
-                          </div>
-                        }
-                      />
-                      <Button
-                        color="danger"
-                        variant="shadow"
-                        onClick={() => removeFriend(user._id)}
-                      >
+                      <NextUser key={user._id} avatarProps={{ src: user.image?.secure_url || "https://i.pinimg.com/474x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg" }} description={`@${user.username}`} name={
+                        <div className="flex items-center"  >
+                          <span >
+                            {(() => {
+                              const words = user.fullname.split(" ");
+                              if (words.length === 4) {
+                                return `${words[0]} ${words[2]}`;
+                              } else if (words.length === 3) {
+                                return `${words[0]} ${words[1]}`;
+                              } else {
+                                return user.fullname;
+                              }
+                            })()}
+                          </span>
+                          {user.verified === 'true' && (
+                            <RiVerifiedBadgeFill className="text-[#dd2525]" style={{ marginLeft: "5px", flexShrink: 0 }} />
+                          )}
+                        </div>
+                      } />
+                      <Button className="bg-[#dd2525] text-white font-bold" onClick={() => removeFriend(user._id)} >
                         remove friend
                       </Button>
                     </div>
@@ -1160,12 +871,7 @@ function ProfileUser() {
             )}
           </ModalBody>
           <ModalFooter className="flex justify-center items-center">
-            <Pagination
-              color="danger"
-              initialPage={1}
-              total={totalFriendsPages}
-              onChange={(page) => setCurrentPage(page)}
-            />
+            <Pagination color="default" initialPage={1} total={totalFriendsPages} onChange={(page) => setCurrentPage(page)} />
           </ModalFooter>
         </ModalContent>
       </Modal>

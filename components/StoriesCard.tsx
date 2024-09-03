@@ -410,14 +410,14 @@ function StoriesCard() {
                     <div className="flex flex-col items-center justify-center w-full h-full text-gray-500">
                       <CloudIcon className="w-20 h-20 stroke-[#dd2525]" />
                     </div>
-                  )};
+                  )}
                 </label>
               </ModalBody>
               <ModalFooter>
                 <Button className="text-[#dd2525] bg-transparent" onPress={onClose}>
                   Close
                 </Button>
-                <Button className="bg-[#dd2525]" onPress={handleCreateStory}>
+                <Button className="bg-[#dd2525] text-white font-bold" onPress={handleCreateStory}>
                   Create
                 </Button>
               </ModalFooter>
@@ -436,7 +436,7 @@ function StoriesCard() {
                   <Button isIconOnly aria-label="Delete Post" variant="ghost" onClick={() => deleteStory(selectedUserStories[currentSlide]._id)}>
                     <TrashIcon className="w-5 h-5 opacity-65" />
                   </Button>
-                )};
+                )}
               </div>
             )}
           </ModalHeader>
@@ -457,7 +457,7 @@ function StoriesCard() {
                         <div className="w-full h-full flex items-center justify-center rounded-xl">
                           <p className="text-white text-center">{story.content}</p>
                         </div>
-                      )};
+                      )}
                     </div>
                   ))};
                 </div>
@@ -475,9 +475,9 @@ function StoriesCard() {
                 <div>
                   {selectedUserStories[0].userId._id === userId && (
                     renderViewersDropdown()
-                  )};
+                  )}
                 </div>
-              )};
+              )}
             </div>
           </ModalFooter>
         </ModalContent>
