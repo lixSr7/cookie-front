@@ -1,13 +1,12 @@
 "use client";
-import React, { useState } from "react";
 import { Input, Checkbox, Image, Button, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ScrollShadow } from "@nextui-org/react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Eye as EyeFilledIcon, EyeOff as EyeSlashFilledIcon, User as UserIcon, Mail as EmailIcon } from "@geist-ui/icons";
+import { ThemeSwitch } from "../../../components/theme-switch";
 import { ToastContainer, toast } from "react-toastify";
-
-import { EyeSlashFilledIcon } from "../utils/EyeSlashFilledIcon";
-import { EyeFilledIcon } from "../utils/EyeFilledIcon";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import Link from "next/link";
 
 export default function SIGNUP() {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -106,40 +105,53 @@ export default function SIGNUP() {
         <Image alt="NextUI hero Image" className="p-1 bg-white rounded-full" height={250} src="/img/cookie_register.png" width={250} />
         <p className="font-bold">COOKIE, The new social network for people</p>
         <p className="font-bold">with visual disabilities.</p>
+        <Link className="fixed top-0 left-0 flex items-center justify-center w-full h-full m-4 rounded-full cursor-pointer max-w-6 max-h-6" href="/" >
+          <svg className="w-8 h-8 p-2 font-bold text-white" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+            <path d="M15.75 19.5 8.25 12l7.5-7.5" strokeLinejoin="round" />
+          </svg>
+        </Link>
       </div>
-      <div className="flex flex-col items-center justify-center w-1/2 text-black bg-white">
+      <div className="flex flex-col items-center justify-center w-1/2 text-black bg-white dark:bg-black">
         <div className="flex flex-col items-center justify-center m-6 h-1/4 max-h-1/4 min-h-1/4">
           <h1 className="text-5xl font-bold text-[#dd2525] ">WELCOME</h1>
           <hr className="w-1/2" />
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-black font-medium dark:text-white">
             Sign up to access all features
           </p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4 mb-4 h-2/3 max-h-2/3 min-h-2/3">
-          <Input required isDisabled={isSending} label="Username" type="text" value={username} variant="bordered" onChange={(e) => setUsername(e.target.value)} />
-          <Input required isDisabled={isSending} label="Email" type="text" value={email} variant="bordered" onChange={(e) => setEmail(e.target.value)} />
-          <Input required className="text-black" endContent={
-            <button className="focus:outline-none" type="button" onClick={toggleVisibility} >
+          <Input required isDisabled={isSending} label="Username" type="text" value={username} variant="bordered" onChange={(e) => setUsername(e.target.value)} endContent={
+            <button className="focus:outline-none text-gray-400 dark:text-white" type="button">
+              <UserIcon className="text-2xl pointer-events-none text-default-400" />
+            </button>
+          } />
+          <Input required isDisabled={isSending} label="Email" type="text" value={email} variant="bordered" onChange={(e) => setEmail(e.target.value)} endContent={
+            <button className="focus:outline-none text-gray-400 dark:text-white" type="button">
+              <EmailIcon className="text-2xl pointer-events-none text-default-400" />
+            </button>
+          } />
+          <Input required isDisabled={isSending} label="Password" type={isVisible ? "text" : "password"} value={password} variant="bordered" onChange={(e) => setPassword(e.target.value)} endContent={
+            <button className="focus:outline-none text-gray-400 dark:text-white" type="button" onClick={toggleVisibility} >
               {isVisible ? (
                 <EyeSlashFilledIcon className="text-2xl pointer-events-none text-default-400" />
               ) : (
                 <EyeFilledIcon className="text-2xl pointer-events-none text-default-400" />
               )}
             </button>
-          } isDisabled={isSending} label="Password" placeholder="Enter your password" type={isVisible ? "text" : "password"} value={password} variant="bordered" onChange={(e) => setPassword(e.target.value)} />
-          <Input required className="text-black" endContent={
-            <button className="focus:outline-none" type="button" onClick={toggleVisibility} >
+          } />
+          <Input required isDisabled={isSending} label="Confirm Password" type={isVisible ? "text" : "password"} value={confirmPassword} variant="bordered" onChange={(e) => setConfirmPassword(e.target.value)} endContent={
+            <button className="focus:outline-none text-gray-400 dark:text-white" type="button" onClick={toggleVisibility} >
               {isVisible ? (
                 <EyeSlashFilledIcon className="text-2xl pointer-events-none text-default-400" />
               ) : (
                 <EyeFilledIcon className="text-2xl pointer-events-none text-default-400" />
               )}
             </button>
-          } isDisabled={isSending} label="Confirm Password" placeholder="Confirm your password" type={isVisible ? "text" : "password"} value={confirmPassword} variant="bordered" onChange={(e) => setConfirmPassword(e.target.value)} />
+          } />
           <div className="w-full flex justify-start items-center gap-4">
             <div className="flex items-center justify-center gap-2 text-xs p-0 m-0">
               <Checkbox radius="sm" color="default" isSelected={isAccepted} onValueChange={setIsAccepted} />
-              <p>I agree to the</p>
+              <p className="text-xs text-black font-medium dark:text-white">I agree to the</p>
               <button className="font-bold text-[#dd2525]" onClick={onOpen}>Terms and Conditions</button>
             </div>
           </div>
@@ -147,7 +159,7 @@ export default function SIGNUP() {
             Register
           </Button>
           <div className="flex flex-col items-center justify-center gap-0 m-0">
-            <p className="text-xs text-black">
+            <p className="text-xs text-black font-medium dark:text-white">
               already have an account?{" "}
               <a className="font-bold text-[#dd2525]" href="/auth/signin">
                 {" "}
@@ -155,17 +167,15 @@ export default function SIGNUP() {
               </a>
             </p>
           </div>
-          <Link className="fixed top-0 flex items-center justify-center w-full h-full m-4 rounded-full cursor-pointer hover:bg-zinc-100 max-w-6 max-h-6 left-1/2" href="/" >
-            <svg className="w-8 h-8 p-2 font-bold text-[#dd2525]" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
-              <path d="M15.75 19.5 8.25 12l7.5-7.5" strokeLinejoin="round" />
-            </svg>
-          </Link>
         </div>
         <div className="flex flex-col items-center justify-center mb-3 h-1/4 max-h-1/4 min-h-1/4">
           <hr className="w-1/5" />
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-black font-medium dark:text-white">
             politics of privacy and security - All rights reserved ©
           </p>
+        </div>
+        <div className="fixed bottom-0 right-0 m-2 flex items-center justify-center border bg-white rounded-md">
+          <ThemeSwitch />
         </div>
       </div>
       <ToastContainer limit={5} />
