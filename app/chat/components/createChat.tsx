@@ -71,6 +71,7 @@ const CreateChat: React.FC = () => {
 
     // Usar FormData para enviar los datos correctamente
     const formData = new FormData();
+
     formData.append("name", selectedUsers.length > 1 ? chatName : "");
     formData.append("users", JSON.stringify(usersToSend)); // Serializar el array de usuarios
 
